@@ -1,11 +1,14 @@
+import { Button } from "@/components/ui/button"
+
 import { CountButton } from "~features/count-button"
 
 import "~style.css"
 
 function IndexPopup() {
   return (
-    <div className="plasmo-flex plasmo-items-center plasmo-justify-center plasmo-h-16 plasmo-w-40">
-      <CountButton />1
+    <div className="w-[500px] h-[500px]">
+      <CountButton />
+      <Button variant="outline">Outline</Button>
     </div>
   )
 }
