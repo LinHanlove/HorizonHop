@@ -4,28 +4,18 @@ import { Button } from '~components/ui/button'
 import { cn } from "@/utils/shadcn"
 
 import {
-  Search,
-  Settings,
   Plus,
-  X,
-  ChevronRight,
   ChevronLeft,
-  Camera,
-  Code,
-  FileText,
-  Zap,
-  RefreshCw,
-  Download,
   Menu,
 } from "lucide-react"
-import { defaultShortcuts, menuList } from '~constants'
+import { defaultShortcuts, menuList, POPUP_TYPE } from '~constants'
+import { sendMessage } from '~utils'
 
 
 
 export default function Content() {
   const [searchQuery, setSearchQuery] = useState("")
   const [shortcuts, setShortcuts] = useState(defaultShortcuts)
-  const [isAddingShortcut, setIsAddingShortcut] = useState(false)
   const [newShortcut, setNewShortcut] = useState({ name: "", url: "", icon: "🔗", category: "other" })
   const [showSettings, setShowSettings] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
@@ -60,6 +50,17 @@ export default function Content() {
    // Handle shortcut click
   const handleShortcutClick = (url: string) => {
     window.open(url, "_blank")
+  }
+
+  /**
+   * @function 添加快捷方式
+   */
+  const onAddShortcut = () => {
+    sendMessage({
+      type: POPUP_TYPE.addNewShortcut,
+      origin: "popup",
+      chrome
+    })
   }
 
   return (
@@ -154,7 +155,7 @@ export default function Content() {
 
         {/* S 右边内容 - 快捷搜索 */}
         <div className="flex-1 flex flex-col bg-white/70 backdrop-blur-sm">
-          {/* Category Pills */}
+          {/* S 分类栏 */}
           <div className="p-2 border-b border-slate-200/50">
             <div className="flex space-x-2 overflow-x-auto scrollbar-hide">
               <button
@@ -188,8 +189,8 @@ export default function Content() {
               ))}
             </div>
           </div>
-
-          {/* Shortcuts Grid */}
+          {/* E 分类栏 */}
+          {/* S 快捷搜索 */}
           <div className="flex-1 p-4 overflow-y-auto">
             <div className="grid grid-cols-4 gap-2">
               {displayedShortcuts.map((shortcut, index) => (
@@ -206,16 +207,16 @@ export default function Content() {
                     {shortcut.alias}
                   </span>
 
-                  {/* Gradient overlay on hover */}
+                  {/* 悬浮 */}
                   <div className="absolute inset-0 rounded-[4px] bg-gradient-to-br from-slate-500/5 to-slate-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </motion.button>
               ))}
 
-              {/* Add new shortcut button */}
+              {/* 添加 */}
               <motion.button
                 transition={{ duration: 0.3, delay: displayedShortcuts.length * 0.05 }}
                 className="group relative flex flex-col items-center justify-center p-2 rounded-[4px] transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-slate-500/15 focus:outline-none bg-white/60 backdrop-blur-sm border border-slate-200/50 border-dashed"
-                onClick={() => setIsAddingShortcut(true)}
+                onClick={onAddShortcut}
               >
                 <div className="flex items-center justify-center w-6 h-6 mb-2 rounded-full bg-slate-100 text-slate-400 transition-all group-hover:text-slate-600 group-hover:bg-slate-200 group-hover:scale-110">
                   <Plus className="h-6 w-6" />
@@ -224,6 +225,7 @@ export default function Content() {
               </motion.button>
             </div>
           </div>
+          {/* E 快捷搜索 */}
         </div>
         {/* E 右边内容 - 快捷搜索 */}
       </div>

@@ -48,6 +48,13 @@ export const sendMessageRuntime = (option: TYPE.SendMessage) => {
 }
 
 /**
+ * @function content 监听通知消息
+ */
+export const onListenerMessage = (callback: (message: TYPE.ListenerMessageOption, sender: chrome.runtime.MessageSender, sendResponse: (response?: any) => void) => void) => {
+  chrome.runtime.onMessage.addListener(callback);
+}
+
+/**
  * @function 系统通知信息
  * @param option {message,type,iconUrl}
  * @returns
