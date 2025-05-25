@@ -22,4 +22,16 @@ declare namespace TYPE {
     timeout?: number // 显示时间
   }
 
+  // json formatter
+  interface IFormatOption {
+    indent: number // 缩进空格数
+    lineNumbers: boolean // 是否用 <ol> 标签包裹 HTML 以支持行号
+    linkUrls: boolean // 是否为URL创建锚点标签
+    linksNewTab: boolean // 是否给锚点标签添加 target=_blank 属性
+    quoteKeys: boolean // 是否总是为键名使用双引号
+    trailingCommas: boolean // 是否在数组和对象的最后一个项目后追加逗号
+  }
+  type FormatOptions = Partial<TYPE.IFormatOption>
+  type JsonType = "key" | "string" | "number" | "boolean" | "null" | "mark"
+
 }

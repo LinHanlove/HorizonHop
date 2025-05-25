@@ -1,4 +1,5 @@
 import { Biohazard, Code, Component, DiamondMinus, Earth, FileText, Github, LibraryBig, Package, Search, Settings, Smartphone, Trash2, WandSparkles } from "lucide-react"
+import { createTab, openGitHubDev } from "~utils";
 
 /**
  * @constant 插件的配置常量
@@ -117,25 +118,40 @@ export const menuList:TYPE.FunctionMenu[] = [
     title: "JsonFormatter",
     icon: Code,
     description: "JSON格式化",
-    event: () => {}
+    event: () => {
+      createTab({
+        chrome,
+        url: "JsonFormatter"
+      })
+    }
   },
   {
     title: "CompressHero",
     icon: FileText,
     description: "图片压缩",
-    event: () => {}
+    event: () => {
+      createTab({
+        chrome,
+        url: "CompressHero"
+      })
+    }
   },
   {
     title: "GithubDev",
     icon: Github,
     description: "github源码查看",
-    event: () => {}
+    event: () => openGitHubDev()
   },
   {
     title: "TableMarkdown",
     icon: DiamondMinus,
     description: "语雀表格Json",
-    event: () => {}
+    event: () => {
+      createTab({
+        chrome,
+        url: "TableMarkdown"
+      })
+    }
   },
   {
     title: "删除预设",

@@ -10,12 +10,16 @@
     "package": "plasmo package"
   },
   "dependencies": {
+    "@iconify/react": "^6.0.0",
     "@radix-ui/react-slot": "^1.2.3",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-react": "^1.0.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.12.2",
     "lodash-es": "^4.17.21",
     "lucide-react": "^0.511.0",
+    "pako": "^2.1.0",
     "plasmo": "0.90.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
