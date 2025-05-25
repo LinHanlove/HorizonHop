@@ -11,7 +11,7 @@ export const CONFIG = {
 /**
  * @constant 默认搜索配置
  */
-export const defaultShortcuts: TYPE.DefaultShortcuts[] = [
+export const defaultShortcuts: TYPE.Shortcuts[] = [
   {
     alias: "baidu",
     icon: Search,

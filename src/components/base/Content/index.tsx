@@ -201,8 +201,9 @@ export default function Content() {
                   onClick={() => handleShortcutClick(shortcut.prefix)}
                 >
                   <div className="flex items-center justify-center w-6 h-6 mb-2 text-2xl transition-transform group-hover:scale-110 group-hover:rotate-12">
-                    <shortcut.icon  className={cn('h-4 w-4')} style={{ color: shortcut.iconColor }} />
+                    {typeof shortcut.icon !== 'string' ? (<shortcut.icon className={cn('h-4 w-4')} style={{ color: shortcut.iconColor }} />) : (<span className='h-4 w-4' >shortcut.icon</span>)}
                   </div>
+
                   <span className="text-[12px] font-medium text-slate-700 group-hover:text-slate-900 truncate w-full text-center transition-colors">
                     {shortcut.alias}
                   </span>

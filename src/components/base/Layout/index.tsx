@@ -2,6 +2,7 @@ import React from 'react'
 import Header from '../Header'
 import Content from '../Content'
 
+
 export default function Layout() {
   return (
     <div className="flex flex-col h-auto w-[360px] overflow-hidden bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100">
@@ -12,6 +13,7 @@ export default function Layout() {
        {/* S 内容部分 */}
        <Content/>
        {/* E 内容部分 */}
+
     </div>
   )
 }

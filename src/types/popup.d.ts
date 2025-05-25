@@ -2,9 +2,9 @@ declare namespace TYPE {
   /**
    * @type 默认搜索配置
    */
-  interface DefaultShortcuts {
+  interface Shortcuts {
     alias:string; // 别名
-    icon:ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; // 图标
+    icon:ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>> | string; // 图标
     iconColor?:string; // 图标颜色
     prefix:string; // 前缀
     suffix:string; // 后缀

@@ -5,6 +5,8 @@ import { POPUP_TYPE } from "~constants"
 import './style'
 import NewAddShortcut from "~components/base/NewAddShortcut"
 import Setting from "~components/base/Setting"
+import { Toaster } from "@/components/ui/sonner"
+
 
 
 export const config: PlasmoCSConfig = {
@@ -12,8 +14,8 @@ export const config: PlasmoCSConfig = {
 }
 
 export default function IndexContent () {
-  const [dialogName, setDialogName] = useState<string | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dialogName, setDialogName] = useState<string | null>(POPUP_TYPE.addNewShortcut);
+  const [isDialogOpen, setIsDialogOpen] = useState(true);
 
   useEffect(() => {
     const handleMessage = (message: TYPE.ListenerMessageOption, sender: chrome.runtime.MessageSender, sendResponse: (response?: any) => void) => {
@@ -48,6 +50,8 @@ export default function IndexContent () {
       {/* S 设置 */}
       {dialogName === POPUP_TYPE.setting && (<Setting open={isDialogOpen} setOpen={(flag)=>closeDialog(flag)}/>)}
       {/* E 设置 */}
+
+      <Toaster />
     </>
   )
 }
