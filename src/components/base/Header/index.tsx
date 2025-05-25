@@ -2,10 +2,22 @@ import { Search, Settings } from 'lucide-react'
 import React, { useState } from 'react'
 import { Button } from '~components/ui/button'
 import { Input } from '~components/ui/input'
-import { CONFIG } from '~constants'
+import { CONFIG, POPUP_TYPE } from '~constants'
+import { sendMessage } from '~utils'
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("")
+
+  /**
+   * @function 添加快捷方式
+   */
+  const openSetting = () => {
+    sendMessage({
+      type: POPUP_TYPE.setting,
+      origin: "popup",
+      chrome
+    })
+  }
 
   return (
     <div className="relative bg-white/95 backdrop-blur-sm border-b border-slate-200/60">
@@ -22,6 +34,7 @@ export default function Header() {
             variant="ghost"
             size="icon"
             className="w-8 h-8 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100/80"
+            onClick={openSetting}
           >
             <Settings className="w-4 h-4" />
           </Button>
