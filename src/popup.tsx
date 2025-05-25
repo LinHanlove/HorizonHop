@@ -1,16 +1,8 @@
-import { Button } from "@/components/ui/button"
-
-import { CountButton } from "~features/count-button"
-
+import Layout from "~components/base/Layout"
 import "~style.css"
 
-function IndexPopup() {
+export default function IndexPopup() {
   return (
-    <div className="w-[500px] h-[500px]">
-      <CountButton />
-      <Button variant="outline">Outline</Button>
-    </div>
+   <Layout/>
   )
 }
-
-export default IndexPopup

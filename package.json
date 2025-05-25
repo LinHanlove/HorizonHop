@@ -13,6 +13,8 @@
     "@radix-ui/react-slot": "^1.2.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.12.2",
+    "lodash-es": "^4.17.21",
     "lucide-react": "^0.511.0",
     "plasmo": "0.90.5",
     "react": "18.2.0",
