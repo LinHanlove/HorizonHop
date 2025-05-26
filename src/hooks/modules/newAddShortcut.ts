@@ -1,7 +1,5 @@
 import { useState } from "react"
 
-import "../../style"
-
 export const useNewAddShortcut = () => {
   // 新增的快捷方式
   const [newShortcut, setNewShortcut] = useState<TYPE.Shortcuts>({
