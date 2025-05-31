@@ -1,22 +1,21 @@
-import React, { useState } from 'react'
-import { motion, AnimatePresence } from "framer-motion"
-import { Button } from '~components/ui/button'
 import { cn } from "@/utils/shadcn"
+import { AnimatePresence, motion } from "framer-motion"
+import { ChevronLeft, Menu, Plus } from "lucide-react"
+import React, { useState } from "react"
 
-import {
-  Plus,
-  ChevronLeft,
-  Menu,
-} from "lucide-react"
-import { defaultShortcuts, menuList, POPUP_TYPE } from '~constants'
-import { sendMessage } from '~utils'
-
-
+import { Button } from "~components/ui/button"
+import { defaultShortcuts, menuList, POPUP_TYPE } from "~constants"
+import { sendMessage } from "~utils"
 
 export default function Content() {
   const [searchQuery, setSearchQuery] = useState("")
   const [shortcuts, setShortcuts] = useState(defaultShortcuts)
-  const [newShortcut, setNewShortcut] = useState({ name: "", url: "", icon: "🔗", category: "other" })
+  const [newShortcut, setNewShortcut] = useState({
+    name: "",
+    url: "",
+    icon: "🔗",
+    category: "other"
+  })
   const [showSettings, setShowSettings] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   // 是否展开左侧面板
@@ -24,30 +23,30 @@ export default function Content() {
   // 当前鼠标悬停的快捷方式索引
   const [hoveredFunction, setHoveredFunction] = useState<number | null>(null)
 
-   const filteredShortcuts = shortcuts.filter(
+  const filteredShortcuts = shortcuts.filter(
     (shortcut) =>
       shortcut.alias.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      shortcut.alias.toLowerCase().includes(searchQuery.toLowerCase()),
+      shortcut.alias.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   /**
    * @ array 按分类的快捷方式
    */
-  const categories = Array.from(new Set(filteredShortcuts.map((s) => s.category))) as string[]
+  const categories = Array.from(
+    new Set(filteredShortcuts.map((s) => s.category))
+  ) as string[]
 
   // Get shortcuts for active category or all if no category is selected
   const displayedShortcuts = activeCategory
     ? filteredShortcuts.filter((s) => s.category === activeCategory)
     : filteredShortcuts
 
-
-
   // Handle function button click
   const handleFunctionClick = (event: () => void) => {
-      event(); // Execute the function directly
+    event() // Execute the function directly
   }
 
-   // Handle shortcut click
+  // Handle shortcut click
   const handleShortcutClick = (url: string) => {
     window.open(url, "_blank")
   }
@@ -64,171 +63,177 @@ export default function Content() {
   }
 
   return (
-     <div className="flex-1 flex overflow-hidden">
-        {/* S 侧边栏 - 功能菜单 */}
-        <motion.div
-          animate={{ width: leftPanelExpanded ? 160 : 60 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="relative bg-white/90 backdrop-blur-sm border-r border-slate-200/60 shadow-sm z-10"
-        >
-          {/* S 背景 */}
-          <div className="absolute inset-0 opacity-[0.02]">
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: `radial-gradient(circle at 1px 1px, rgb(71 85 105) 1px, transparent 0)`,
-                backgroundSize: "20px 20px",
-              }}
-            ></div>
+    <div className="lh-flex-1 lh-flex lh-overflow-hidden">
+      {/* S 侧边栏 - 功能菜单 */}
+      <motion.div
+        animate={{ width: leftPanelExpanded ? 160 : 60 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="lh-relative lh-bg-white/90 lh-backdrop-blur-sm lh-border-r lh-border-slate-200/60 lh-shadow-sm lh-z-10">
+        {/* S 背景 */}
+        <div className="lh-absolute lh-inset-0 lh-opacity-[0.02]">
+          <div
+            className="lh-absolute lh-inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 1px 1px, rgb(71 85 105) 1px, transparent 0)`,
+              backgroundSize: "20px 20px"
+            }}></div>
+        </div>
+        {/* E 背景 */}
+
+        <div className="lh-relative lh-z-10 lh-flex lh-flex-col lh-h-full">
+          {/* S 切换键 */}
+          <div className="lh-flex lh-justify-end lh-p-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lh-w-6 lh-h-6 lh-rounded-md lh-text-slate-400 lh-hover:text-slate-600 lh-hover:bg-slate-100/80"
+              onClick={() => setLeftPanelExpanded(!leftPanelExpanded)}>
+              {leftPanelExpanded ? (
+                <ChevronLeft className="lh-w-3 lh-h-3" />
+              ) : (
+                <Menu className="lh-w-3 lh-h-3" />
+              )}
+            </Button>
           </div>
-          {/* E 背景 */}
+          {/* E 切换键 */}
 
-          <div className="relative z-10 flex flex-col h-full">
-            {/* S 切换键 */}
-            <div className="flex justify-end p-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="w-6 h-6 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100/80"
-                onClick={() => setLeftPanelExpanded(!leftPanelExpanded)}
-              >
-                {leftPanelExpanded ? <ChevronLeft className="w-3 h-3" /> : <Menu className="w-3 h-3" />}
-              </Button>
-            </div>
-            {/* E 切换键 */}
+          {/* S 功能按钮 */}
+          <div className="lh-flex-1 lh-px-2 lh-pb-3">
+            <div className="lh-space-y-1">
+              {menuList.map((func, index) => (
+                <motion.button
+                  key={func.title}
+                  transition={{ duration: 0.2, delay: index * 0.05 }}
+                  className="lh-group lh-relative lh-w-full lh-flex lh-items-center lh-p-2 lh-rounded-lg lh-transition-all lh-duration-200 lh-hover:bg-slate-100/80 lh-focus:outline-none"
+                  onClick={func.event}
+                  onMouseEnter={() => setHoveredFunction(index)}
+                  onMouseLeave={() => setHoveredFunction(null)}>
+                  {!leftPanelExpanded && (
+                    <div className="lh-flex lh-items-center lh-justify-center lh-w-7 lh-h-7 lh-rounded-lg lh-bg-slate-100/80 lh-text-slate-500 lh-group-hover:text-slate-700 lh-group-hover:bg-slate-200/80 lh-transition-all lh-shadow-sm">
+                      <func.icon className="lh-h-4 lh-w-4" />
+                    </div>
+                  )}
 
-            {/* S 功能按钮 */}
-            <div className="flex-1 px-2 pb-3">
-              <div className="space-y-1">
-                {menuList.map((func, index) => (
-                  <motion.button
-                    key={func.title}
-                    transition={{ duration: 0.2, delay: index * 0.05 }}
-                    className="group relative w-full flex items-center p-2 rounded-lg transition-all duration-200 hover:bg-slate-100/80 focus:outline-none"
-                    onClick={func.event}
-                    onMouseEnter={() => setHoveredFunction(index)}
-                    onMouseLeave={() => setHoveredFunction(null)}
-                  >
-                    {
-                      !leftPanelExpanded && 
-                      <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100/80 text-slate-500 group-hover:text-slate-700 group-hover:bg-slate-200/80 transition-all shadow-sm">
-                        <func.icon className="h-4 w-4" />
-                      </div>
-                    }
+                  <AnimatePresence>
+                    {leftPanelExpanded && (
+                      <motion.div
+                        transition={{ duration: 0.15 }}
+                        className="lh-flex-1 lh-text-left">
+                        <div className="lh-text-sm lh-font-medium lh-text-slate-700 lh-group-hover:text-slate-900">
+                          {func.title}
+                        </div>
+                        <div className="lh-text-xs lh-text-slate-500 lh-group-hover:text-slate-600 lh-leading-tight">
+                          {func.description}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
-                    <AnimatePresence>
-                      {leftPanelExpanded && (
-                        <motion.div
-                          transition={{ duration: 0.15 }}
-                          className="flex-1 text-left"
-                        >
-                          <div className="text-sm font-medium text-slate-700 group-hover:text-slate-900">
-                            {func.title}
-                          </div>
-                          <div className="text-xs text-slate-500 group-hover:text-slate-600 leading-tight">
-                            {func.description}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    {/* S 鼠标悬浮提示 */}
-                    {!leftPanelExpanded && hoveredFunction === index && (
+                  {/* S 鼠标悬浮提示 */}
+                  {!leftPanelExpanded && hoveredFunction === index && (
                     <AnimatePresence>
                       <motion.div
                         exit={{ opacity: 0, x: -5 }}
-                        className="absolute left-full ml-2 px-3 py-2 bg-slate-800 text-white text-sm rounded-lg shadow-lg z-50 whitespace-nowrap border border-slate-700 pointer-events-none"
-                      >
+                        className="lh-absolute lh-left-full lh-ml-2 lh-px-3 lh-py-2 lh-bg-slate-800 lh-text-white lh-text-sm lh-rounded-lg lh-shadow-lg lh-z-50 lh-whitespace-nowrap lh-border lh-border-slate-700 lh-pointer-events-none">
                         {func.description}
-                        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-slate-800 rotate-45 border-l border-b border-slate-700"></div>
+                        <div className="lh-absolute lh-left-0 lh-top-1/2 lh-transform lh--translate-y-1/2 lh--translate-x-1 lh-w-2 lh-h-2 lh-bg-slate-800 lh-rotate-45 lh-border-l lh-border-b lh-border-slate-700"></div>
                       </motion.div>
-                    </AnimatePresence>)}
-                    {/* E 鼠标悬浮提示 */}
-                  </motion.button>
-                ))}
-              </div>
-            </div>
-            {/* E 功能按钮 */}
-          </div>
-        </motion.div>
-        {/* E 侧边栏 */}
-
-        {/* S 右边内容 - 快捷搜索 */}
-        <div className="flex-1 flex flex-col bg-white/70 backdrop-blur-sm">
-          {/* S 分类栏 */}
-          <div className="p-2 border-b border-slate-200/50">
-            <div className="flex space-x-2 overflow-x-auto scrollbar-hide">
-              <button
-                className={cn(
-                  "px-3 py-1 rounded-[4px] tex-lg font-medium whitespace-nowrap transition-all shadow-sm",
-                  activeCategory === null
-                    ? "bg-slate-800 text-white shadow-slate-800/25"
-                    : "bg-white/90 text-slate-600 hover:bg-white hover:shadow-md border border-slate-200/50",
-                )}
-                onClick={() => setActiveCategory(null)}
-              >
-                全部
-              </button>
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  className={cn(
-                    "px-3 py-1 rounded-[4px] tex-lg  font-medium whitespace-nowrap transition-all shadow-sm",
-                    activeCategory === category
-                      ? "bg-slate-800 text-white shadow-slate-800/25"
-                      : "bg-white/90 text-slate-600 hover:bg-white hover:shadow-md border border-slate-200/50",
+                    </AnimatePresence>
                   )}
-                  onClick={() => setActiveCategory(category)}
-                >
-                  {category === "dev" && "开发"}
-                  {category === "search" && "搜索"}
-                  {category === "tools" && "工具"}
-                  {category === "design" && "设计"}
-                  {category === "other" && "其他"}
-                </button>
-              ))}
-            </div>
-          </div>
-          {/* E 分类栏 */}
-          {/* S 快捷搜索 */}
-          <div className="flex-1 p-4 overflow-y-auto">
-            <div className="grid grid-cols-4 gap-2">
-              {displayedShortcuts.map((shortcut, index) => (
-                <motion.button
-                  key={shortcut.alias}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="group relative flex flex-col items-center justify-center p-2 rounded-[4px] transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-slate-500/15 focus:outline-none bg-white/90 backdrop-blur-sm border border-slate-200/50"
-                  onClick={() => handleShortcutClick(shortcut.prefix)}
-                >
-                  <div className="flex items-center justify-center w-6 h-6 mb-2 text-2xl transition-transform group-hover:scale-110 group-hover:rotate-12">
-                    {typeof shortcut.icon !== 'string' ? (<shortcut.icon className={cn('h-4 w-4')} style={{ color: shortcut.iconColor }} />) : (<span className='h-4 w-4' >shortcut.icon</span>)}
-                  </div>
-
-                  <span className="text-[12px] font-medium text-slate-700 group-hover:text-slate-900 truncate w-full text-center transition-colors">
-                    {shortcut.alias}
-                  </span>
-
-                  {/* 悬浮 */}
-                  <div className="absolute inset-0 rounded-[4px] bg-gradient-to-br from-slate-500/5 to-slate-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  {/* E 鼠标悬浮提示 */}
                 </motion.button>
               ))}
-
-              {/* 添加 */}
-              <motion.button
-                transition={{ duration: 0.3, delay: displayedShortcuts.length * 0.05 }}
-                className="group relative flex flex-col items-center justify-center p-2 rounded-[4px] transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-slate-500/15 focus:outline-none bg-white/60 backdrop-blur-sm border border-slate-200/50 border-dashed"
-                onClick={onAddShortcut}
-              >
-                <div className="flex items-center justify-center w-6 h-6 mb-2 rounded-full bg-slate-100 text-slate-400 transition-all group-hover:text-slate-600 group-hover:bg-slate-200 group-hover:scale-110">
-                  <Plus className="h-6 w-6" />
-                </div>
-                <span className="text-[10px] text-nowrap font-medium text-slate-400 group-hover:text-slate-600">添加</span>
-              </motion.button>
             </div>
           </div>
-          {/* E 快捷搜索 */}
+          {/* E 功能按钮 */}
         </div>
-        {/* E 右边内容 - 快捷搜索 */}
+      </motion.div>
+      {/* E 侧边栏 */}
+
+      {/* S 右边内容 - 快捷搜索 */}
+      <div className="lh-flex-1 lh-flex lh-flex-col lh-bg-white/70 lh-backdrop-blur-sm">
+        {/* S 分类栏 */}
+        <div className="lh-p-2 lh-border-b lh-border-slate-200/50">
+          <div className="lh-flex lh-space-x-2 lh-overflow-x-auto lh-scrollbar-hide">
+            <button
+              className={cn(
+                "lh-px-3 lh-py-1 lh-rounded-[4px] lh-tex-lg lh-font-medium lh-whitespace-nowrap lh-transition-all lh-shadow-sm",
+                activeCategory === null
+                  ? "lh-bg-slate-800 lh-text-white lh-shadow-slate-800/25"
+                  : "lh-bg-white/90 lh-text-slate-600 lh-hover:bg-white lh-hover:shadow-md lh-border lh-border-slate-200/50"
+              )}
+              onClick={() => setActiveCategory(null)}>
+              全部
+            </button>
+            {categories.map((category) => (
+              <button
+                key={category}
+                className={cn(
+                  "lh-px-3 lh-py-1 lh-rounded-[4px] lh-tex-lg  lh-font-medium lh-whitespace-nowrap lh-transition-all lh-shadow-sm",
+                  activeCategory === category
+                    ? "lh-bg-slate-800 lh-text-white lh-shadow-slate-800/25"
+                    : "lh-bg-white/90 lh-text-slate-600 lh-hover:bg-white lh-hover:shadow-md lh-border lh-border-200/50"
+                )}
+                onClick={() => setActiveCategory(category)}>
+                {category === "dev" && "开发"}
+                {category === "search" && "搜索"}
+                {category === "tools" && "工具"}
+                {category === "design" && "设计"}
+                {category === "other" && "其他"}
+              </button>
+            ))}
+          </div>
+        </div>
+        {/* E 分类栏 */}
+        {/* S 快捷搜索 */}
+        <div className="lh-flex-1 lh-p-4 lh-overflow-y-auto">
+          <div className="lh-grid lh-grid-cols-4 lh-gap-2">
+            {displayedShortcuts.map((shortcut, index) => (
+              <motion.button
+                key={shortcut.alias}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className="lh-group lh-relative lh-flex lh-flex-col lh-items-center lh-justify-center lh-p-2 lh-rounded-[4px] lh-transition-all lh-duration-300 lh-hover:scale-105 lh-hover:shadow-lg lh-hover:shadow-slate-500/15 lh-focus:outline-none lh-bg-white/90 lh-backdrop-blur-sm lh-border lh-border-slate-200/50"
+                onClick={() => handleShortcutClick(shortcut.prefix)}>
+                <div className="lh-flex lh-items-center lh-justify-center lh-w-6 lh-h-6 lh-mb-2 lh-text-2xl lh-transition-transform lh-group-hover:scale-110 lh-group-hover:rotate-12">
+                  {typeof shortcut.icon !== "string" ? (
+                    <shortcut.icon
+                      className={cn("lh-h-4 lh-w-4")}
+                      style={{ color: shortcut.iconColor }}
+                    />
+                  ) : (
+                    <span className="lh-h-4 lh-w-4">shortcut.icon</span>
+                  )}
+                </div>
+
+                <span className="lh-text-[12px] lh-font-medium lh-text-slate-700 lh-group-hover:text-slate-900 lh-truncate lh-w-full lh-text-center lh-transition-colors">
+                  {shortcut.alias}
+                </span>
+
+                {/* 悬浮 */}
+                <div className="lh-absolute lh-inset-0 lh-rounded-[4px] lh-bg-gradient-to-br lh-from-slate-500/5 lh-to-slate-600/5 lh-opacity-0 lh-group-hover:opacity-100 lh-transition-opacity lh-duration-300"></div>
+              </motion.button>
+            ))}
+
+            {/* 添加 */}
+            <motion.button
+              transition={{
+                duration: 0.3,
+                delay: displayedShortcuts.length * 0.05
+              }}
+              className="lh-group lh-relative lh-flex lh-flex-col lh-items-center lh-justify-center lh-p-2 lh-rounded-[4px] lh-transition-all lh-duration-300 lh-hover:scale-105 lh-hover:shadow-lg lh-hover:shadow-slate-500/15 lh-focus:outline-none lh-bg-white/60 lh-backdrop-blur-sm lh-border lh-border-slate-200/50 lh-border-dashed"
+              onClick={onAddShortcut}>
+              <div className="lh-flex lh-items-center lh-justify-center lh-w-6 lh-h-6 lh-mb-2 lh-rounded-full lh-bg-slate-100 lh-text-slate-400 lh-transition-all lh-group-hover:text-slate-600 lh-group-hover:bg-slate-200 lh-group-hover:scale-110">
+                <Plus className="lh-h-6 lh-w-6" />
+              </div>
+              <span className="lh-text-[10px] lh-text-nowrap lh-font-medium lh-text-slate-400 lh-group-hover:text-slate-600">
+                添加
+              </span>
+            </motion.button>
+          </div>
+        </div>
+        {/* E 快捷搜索 */}
       </div>
+      {/* E 右边内容 - 快捷搜索 */}
+    </div>
   )
 }

@@ -1,9 +1,10 @@
-import { Search, Settings } from 'lucide-react'
-import React, { useState } from 'react'
-import { Button } from '~components/ui/button'
-import { Input } from '~components/ui/input'
-import { CONFIG, POPUP_TYPE } from '~constants'
-import { sendMessage } from '~utils'
+import { Search, Settings } from "lucide-react"
+import React, { useState } from "react"
+
+import { Button } from "~components/ui/button"
+import { Input } from "~components/ui/input"
+import { CONFIG, POPUP_TYPE } from "~constants"
+import { sendMessage } from "~utils"
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -20,37 +21,34 @@ export default function Header() {
   }
 
   return (
-    <div className="relative bg-white/95 backdrop-blur-sm border-b border-slate-200/60">
+    <div className="lh-relative lh-bg-white/95 lh-backdrop-blur-sm lh-border-b lh-border-slate-200/60">
       {/* 背景 */}
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-600/3 via-gray-600/3 to-slate-600/3"></div>
-      <div className="relative z-10 px-2 py-4">
+      <div className="lh-absolute lh-inset-0 lh-bg-gradient-to-r lh-from-slate-600/3 lh-via-gray-600/3 lh-to-slate-600/3"></div>
+      <div className="lh-relative lh-z-10 lh-px-2 lh-py-4">
         {/* S 名称 */}
-        <div className="flex items-center justify-between">
-          <h1 className="flex-1 text-2xl text-center font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-slate-700 via-gray-700 to-slate-800">
+        <div className="lh-flex lh-items-center lh-justify-between">
+          <h1 className="lh-flex-1 lh-text-2xl lh-text-center lh-font-bold lh-tracking-tight lh-text-transparent lh-bg-clip-text lh-bg-gradient-to-r lh-from-slate-700 lh-via-gray-700 lh-to-slate-800">
             {CONFIG.name}
           </h1>
           {/* S 设置 */}
           <Button
             variant="ghost"
             size="icon"
-            className="w-8 h-8 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100/80"
-            onClick={openSetting}
-          >
-            <Settings className="w-4 h-4" />
+            className="lh-w-8 lh-h-8 lh-rounded-lg lh-text-slate-500 lh-hover:text-slate-700 lh-hover:bg-slate-100/80"
+            onClick={openSetting}>
+            <Settings className="lh-w-4 lh-h-4" />
           </Button>
           {/* E 设置 */}
-
         </div>
         {/* E 名称 */}
 
-
         {/* S 搜索框 */}
-        <div className="mt-2">
-          <div className='flex items-center'>
+        <div className="lh-mt-2">
+          <div className="lh-flex lh-items-center">
             <Input
               id="search-input"
               placeholder="输入内容，按下回车搜索..."
-              className="w-full h-8 pr-4 text-sm rounded-lg border-0 bg-white/80 backdrop-blur-sm shadow-sm shadow-slate-500/5 text-slate-700 placeholder:text-slate-400 focus:ring-2 focus-visible:ring-1 focus:border-2 focus:ring-slate-400/30 focus:bg-white/95 transition-all"
+              className="lh-w-full lh-h-8 lh-pr-4 lh-text-sm lh-rounded-lg lh-border-0 lh-bg-white/80 lh-backdrop-blur-sm lh-shadow-sm lh-shadow-slate-500/5 lh-text-slate-700 lh-placeholder:text-slate-400 lh-focus:ring-2 lh-focus-visible:ring-1 lh-focus:border-2 lh-focus:ring-slate-400/30 lh-focus:bg-white/95 lh-transition-all"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />

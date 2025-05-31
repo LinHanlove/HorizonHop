@@ -15,7 +15,7 @@ export const config: PlasmoCSConfig = {
 
 export default function IndexContent() {
   const [dialogName, setDialogName] = useState<string | null>(
-    POPUP_TYPE.addNewShortcut
+    POPUP_TYPE.setting
   )
   const [isDialogOpen, setIsDialogOpen] = useState(true)
 
