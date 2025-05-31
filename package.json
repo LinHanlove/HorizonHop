@@ -42,7 +42,52 @@
   },
   "manifest": {
     "host_permissions": [
-      "https://*/*"
-    ]
+      "https://*/*",
+      "<all_urls>"
+    ],
+    "content_security_policy": {
+      "extension_pages": "script-src 'self' ; object-src 'self'"
+    },
+    "permissions": [
+      "activeTab",
+      "tabs",
+      "storage",
+      "contextMenus",
+      "notifications"
+    ],
+    "commands": {
+      "jsonFormatter": {
+        "suggested_key": {
+          "default": "Alt+J",
+          "mac": "Alt+J",
+          "windows": "Alt+J"
+        },
+        "description": "Json Formatter"
+      },
+      "openGitHubDev": {
+        "suggested_key": {
+          "default": "Alt+G",
+          "mac": "Alt+G",
+          "windows": "Alt+G"
+        },
+        "description": "激活githubDev"
+      },
+      "compressHero": {
+        "suggested_key": {
+          "default": "Alt+C",
+          "mac": "Alt+C",
+          "windows": "Alt+C"
+        },
+        "description": "图片压缩"
+      },
+      "tableMarkdown": {
+        "suggested_key": {
+          "default": "Alt+T",
+          "mac": "Alt+T",
+          "windows": "Alt+T"
+        },
+        "description": "md表格格式转换"
+      }
+    }
   }
 }

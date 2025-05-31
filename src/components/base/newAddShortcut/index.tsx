@@ -16,8 +16,9 @@ import { SHORTCUT_TYPE_MAP } from "./config"
 
 export default function NewAddShortcut({ ...props }) {
   const { open, setOpen } = props
+
   const { newShortcut, setNewShortcut, onSubmitNewShortcut } =
-    useNewAddShortcut()
+    useNewAddShortcut({ chrome })
   return (
     <>
       <Dialog open={open} onOpenChange={() => setOpen(false)}>

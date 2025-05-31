@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 
 import NewAddShortcut from "~components/base/NewAddShortcut"
 import Setting from "~components/base/Setting"
+import { SonnerProvider } from "~components/base/Sonner"
 import { POPUP_TYPE } from "~constants"
 import { onListenerMessage } from "~utils"
 
@@ -33,6 +34,7 @@ export default function IndexContent() {
   const [dialogName, setDialogName] = useState<string | null>(
     POPUP_TYPE.addNewShortcut
   )
+
   const [isDialogOpen, setIsDialogOpen] = useState(true)
 
   useEffect(() => {
@@ -64,7 +66,7 @@ export default function IndexContent() {
   }
 
   return (
-    <>
+    <SonnerProvider>
       {/* S 新增快捷方式 */}
       {dialogName === POPUP_TYPE.addNewShortcut && (
         <NewAddShortcut
@@ -79,6 +81,6 @@ export default function IndexContent() {
         <Setting open={isDialogOpen} setOpen={(flag) => closeDialog(flag)} />
       )}
       {/* E 设置 */}
-    </>
+    </SonnerProvider>
   )
 }

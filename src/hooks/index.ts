@@ -1,1 +1,1 @@
-export * from './modules/newAddShortcut'
+export * from "./modules/newAddShortcut"
