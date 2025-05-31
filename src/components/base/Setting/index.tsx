@@ -15,7 +15,7 @@ export default function Setting({ ...props }) {
   const { open, setOpen } = props
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
-      <DialogContent className="lh-sm:max-w-[425px]">
+      <DialogContent className="sm:lh-max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Setting</DialogTitle>
           <DialogDescription>

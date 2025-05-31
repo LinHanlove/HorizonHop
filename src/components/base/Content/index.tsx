@@ -86,7 +86,7 @@ export default function Content() {
             <Button
               variant="ghost"
               size="icon"
-              className="lh-w-6 lh-h-6 lh-rounded-md lh-text-slate-400 lh-hover:text-slate-600 lh-hover:bg-slate-100/80"
+              className="lh-w-6 lh-h-6 lh-rounded-md lh-text-slate-400 hover:lh-text-slate-600 hover:lh-bg-slate-100/80"
               onClick={() => setLeftPanelExpanded(!leftPanelExpanded)}>
               {leftPanelExpanded ? (
                 <ChevronLeft className="lh-w-3 lh-h-3" />
@@ -104,12 +104,12 @@ export default function Content() {
                 <motion.button
                   key={func.title}
                   transition={{ duration: 0.2, delay: index * 0.05 }}
-                  className="lh-group lh-relative lh-w-full lh-flex lh-items-center lh-p-2 lh-rounded-lg lh-transition-all lh-duration-200 lh-hover:bg-slate-100/80 lh-focus:outline-none"
+                  className="lh-group lh-relative lh-w-full lh-flex lh-items-center lh-p-2 lh-rounded-lg lh-transition-all lh-duration-200 hover:lh-bg-slate-100/80 focus:lh-outline-none"
                   onClick={func.event}
                   onMouseEnter={() => setHoveredFunction(index)}
                   onMouseLeave={() => setHoveredFunction(null)}>
                   {!leftPanelExpanded && (
-                    <div className="lh-flex lh-items-center lh-justify-center lh-w-7 lh-h-7 lh-rounded-lg lh-bg-slate-100/80 lh-text-slate-500 lh-group-hover:text-slate-700 lh-group-hover:bg-slate-200/80 lh-transition-all lh-shadow-sm">
+                    <div className="lh-flex lh-items-center lh-justify-center lh-w-7 lh-h-7 lh-rounded-lg lh-bg-slate-100/80 lh-text-slate-500 group-hover:lh-text-slate-700 group-hover:lh-bg-slate-200/80 lh-transition-all lh-shadow-sm">
                       <func.icon className="lh-h-4 lh-w-4" />
                     </div>
                   )}
@@ -119,10 +119,10 @@ export default function Content() {
                       <motion.div
                         transition={{ duration: 0.15 }}
                         className="lh-flex-1 lh-text-left">
-                        <div className="lh-text-sm lh-font-medium lh-text-slate-700 lh-group-hover:text-slate-900">
+                        <div className="lh-text-sm lh-font-medium lh-text-slate-700 group-hover:lh-text-slate-900">
                           {func.title}
                         </div>
-                        <div className="lh-text-xs lh-text-slate-500 lh-group-hover:text-slate-600 lh-leading-tight">
+                        <div className="lh-text-xs lh-text-slate-500 group-hover:lh-text-slate-600 lh-leading-tight">
                           {func.description}
                         </div>
                       </motion.div>
@@ -160,7 +160,7 @@ export default function Content() {
                 "lh-px-3 lh-py-1 lh-rounded-[4px] lh-tex-lg lh-font-medium lh-whitespace-nowrap lh-transition-all lh-shadow-sm",
                 activeCategory === null
                   ? "lh-bg-slate-800 lh-text-white lh-shadow-slate-800/25"
-                  : "lh-bg-white/90 lh-text-slate-600 lh-hover:bg-white lh-hover:shadow-md lh-border lh-border-slate-200/50"
+                  : "lh-bg-white/90 lh-text-slate-600 hover:lh-bg-white hover:lh-shadow-md lh-border lh-border-slate-200/50"
               )}
               onClick={() => setActiveCategory(null)}>
               全部
@@ -172,7 +172,7 @@ export default function Content() {
                   "lh-px-3 lh-py-1 lh-rounded-[4px] lh-tex-lg  lh-font-medium lh-whitespace-nowrap lh-transition-all lh-shadow-sm",
                   activeCategory === category
                     ? "lh-bg-slate-800 lh-text-white lh-shadow-slate-800/25"
-                    : "lh-bg-white/90 lh-text-slate-600 lh-hover:bg-white lh-hover:shadow-md lh-border lh-border-200/50"
+                    : "lh-bg-white/90 lh-text-slate-600 hover:lh-bg-white hover:lh-shadow-md lh-border lh-border-200/50"
                 )}
                 onClick={() => setActiveCategory(category)}>
                 {category === "dev" && "开发"}
@@ -192,9 +192,9 @@ export default function Content() {
               <motion.button
                 key={shortcut.alias}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="lh-group lh-relative lh-flex lh-flex-col lh-items-center lh-justify-center lh-p-2 lh-rounded-[4px] lh-transition-all lh-duration-300 lh-hover:scale-105 lh-hover:shadow-lg lh-hover:shadow-slate-500/15 lh-focus:outline-none lh-bg-white/90 lh-backdrop-blur-sm lh-border lh-border-slate-200/50"
+                className="lh-group lh-relative lh-flex lh-flex-col lh-items-center lh-justify-center lh-p-2 lh-rounded-[4px] lh-transition-all lh-duration-300 hover:lh-scale-105 hover:lh-shadow-lg hover:lh-shadow-slate-500/15 focus:lh-outline-none lh-bg-white/90 lh-backdrop-blur-sm lh-border lh-border-slate-200/50"
                 onClick={() => handleShortcutClick(shortcut.prefix)}>
-                <div className="lh-flex lh-items-center lh-justify-center lh-w-6 lh-h-6 lh-mb-2 lh-text-2xl lh-transition-transform lh-group-hover:scale-110 lh-group-hover:rotate-12">
+                <div className="lh-flex lh-items-center lh-justify-center lh-w-6 lh-h-6 lh-mb-2 lh-text-2xl lh-transition-transform lh-group-hover:scale-110 group-hover:lh-rotate-12">
                   {typeof shortcut.icon !== "string" ? (
                     <shortcut.icon
                       className={cn("lh-h-4 lh-w-4")}
@@ -205,12 +205,12 @@ export default function Content() {
                   )}
                 </div>
 
-                <span className="lh-text-[12px] lh-font-medium lh-text-slate-700 lh-group-hover:text-slate-900 lh-truncate lh-w-full lh-text-center lh-transition-colors">
+                <span className="lh-text-[12px] lh-font-medium lh-text-slate-700 group-hover:lh-text-slate-900 lh-truncate lh-w-full lh-text-center lh-transition-colors">
                   {shortcut.alias}
                 </span>
 
                 {/* 悬浮 */}
-                <div className="lh-absolute lh-inset-0 lh-rounded-[4px] lh-bg-gradient-to-br lh-from-slate-500/5 lh-to-slate-600/5 lh-opacity-0 lh-group-hover:opacity-100 lh-transition-opacity lh-duration-300"></div>
+                <div className="lh-absolute lh-inset-0 lh-rounded-[4px] lh-bg-gradient-to-br lh-from-slate-500/5 lh-to-slate-600/5 lh-opacity-0 group-hover:lh-opacity-100 lh-transition-opacity lh-duration-300"></div>
               </motion.button>
             ))}
 
@@ -220,12 +220,12 @@ export default function Content() {
                 duration: 0.3,
                 delay: displayedShortcuts.length * 0.05
               }}
-              className="lh-group lh-relative lh-flex lh-flex-col lh-items-center lh-justify-center lh-p-2 lh-rounded-[4px] lh-transition-all lh-duration-300 lh-hover:scale-105 lh-hover:shadow-lg lh-hover:shadow-slate-500/15 lh-focus:outline-none lh-bg-white/60 lh-backdrop-blur-sm lh-border lh-border-slate-200/50 lh-border-dashed"
+              className="lh-group lh-relative lh-flex lh-flex-col lh-items-center lh-justify-center lh-p-2 lh-rounded-[4px] lh-transition-all lh-duration-300 hover:lh-scale-105 hover:lh-shadow-lg hover:lh-shadow-slate-500/15 focus:lh-outline-none lh-bg-white/60 lh-backdrop-blur-sm lh-border lh-border-slate-200/50 lh-border-dashed"
               onClick={onAddShortcut}>
-              <div className="lh-flex lh-items-center lh-justify-center lh-w-6 lh-h-6 lh-mb-2 lh-rounded-full lh-bg-slate-100 lh-text-slate-400 lh-transition-all lh-group-hover:text-slate-600 lh-group-hover:bg-slate-200 lh-group-hover:scale-110">
+              <div className="lh-flex lh-items-center lh-justify-center lh-w-6 lh-h-6 lh-mb-2 lh-rounded-full lh-bg-slate-100 lh-text-slate-400 lh-transition-all group-hover:lh-text-slate-600 group-hover:lh-bg-slate-200 group-hover:lh-scale-110">
                 <Plus className="lh-h-6 lh-w-6" />
               </div>
-              <span className="lh-text-[10px] lh-text-nowrap lh-font-medium lh-text-slate-400 lh-group-hover:text-slate-600">
+              <span className="lh-text-[10px] lh-text-nowrap lh-font-medium lh-text-slate-400 group-hover:lh-text-slate-600">
                 添加
               </span>
             </motion.button>

@@ -15,8 +15,6 @@ import { cn } from "~utils/shadcn"
 
 import { SHORTCUT_TYPE_MAP } from "./config"
 
-import "../../../style"
-
 export default function NewAddShortcut({ ...props }) {
   const { open, setOpen } = props
   const { newShortcut, setNewShortcut, onSubmitNewShortcut } =
@@ -24,7 +22,7 @@ export default function NewAddShortcut({ ...props }) {
   return (
     <>
       <Dialog open={open} onOpenChange={() => setOpen(false)}>
-        <DialogContent className="lh-sm:max-w-[425px]">
+        <DialogContent className="sm:lh-max-w-[425px]">
           <DialogHeader>
             <DialogTitle>
               <div className="lh-flex lh-items-center lh-justify-center">
@@ -53,7 +51,7 @@ export default function NewAddShortcut({ ...props }) {
                 onChange={(e) =>
                   setNewShortcut({ ...newShortcut, alias: e.target.value })
                 }
-                className="lh-h-8 lh-rounded-lg lh-border-slate-200 lh-bg-white/80 lh-focus:border-slate-400 lh-focus:ring lh-focus:ring-slate-200 lh-focus:ring-opacity-50"
+                className="lh-h-8 lh-rounded-lg lh-border-slate-200 lh-bg-white/80 focus:lh-border-slate-400 focus:lh-ring focus:lh-ring-slate-200 focus:lh-ring-opacity-50"
               />
             </div>
 
@@ -67,7 +65,7 @@ export default function NewAddShortcut({ ...props }) {
                 onChange={(e) =>
                   setNewShortcut({ ...newShortcut, prefix: e.target.value })
                 }
-                className="lh-h-8 lh-rounded-lg lh-border-slate-200 lh-bg-white/80 lh-focus:border-slate-400 lh-focus:ring lh-focus:ring-slate-200 lh-focus:ring-opacity-50"
+                className="lh-h-8 lh-rounded-lg lh-border-slate-200 lh-bg-white/80 focus:lh-border-slate-400 focus:lh-ring focus:lh-ring-slate-200 focus:lh-ring-opacity-50"
               />
             </div>
 
@@ -81,7 +79,7 @@ export default function NewAddShortcut({ ...props }) {
                 onChange={(e) =>
                   setNewShortcut({ ...newShortcut, suffix: e.target.value })
                 }
-                className="lh-h-8 lh-rounded-lg lh-border-slate-200 lh-bg-white/80 lh-focus:border-slate-400 lh-focus:ring lh-focus:ring-slate-200 lh-focus:ring-opacity-50"
+                className="lh-h-8 lh-rounded-lg lh-border-slate-200 lh-bg-white/80 focus:lh-border-slate-400 focus:lh-ring focus:lh-ring-slate-200 focus:lh-ring-opacity-50"
               />
             </div>
 
@@ -114,7 +112,7 @@ export default function NewAddShortcut({ ...props }) {
                       "lh-flex lh-items-center lh-justify-center lh-h-10 lh-rounded-lg lh-transition-all",
                       newShortcut.icon === icon
                         ? "lh-bg-slate-800 lh-text-white lh-shadow-md"
-                        : "lh-bg-slate-100 lh-text-slate-700 lh-hover:bg-slate-200"
+                        : "lh-bg-slate-100 lh-text-slate-700 hover:lh-bg-slate-200"
                     )}
                     onClick={() => setNewShortcut({ ...newShortcut, icon })}>
                     {icon}
@@ -135,7 +133,7 @@ export default function NewAddShortcut({ ...props }) {
                       "lh-py-2 lh-px-3 lh-rounded-lg lh-text-sm lh-font-medium lh-transition-all",
                       newShortcut.category === value
                         ? "lh-bg-slate-800 lh-text-white lh-shadow-md"
-                        : "lh-bg-slate-100 lh-text-slate-700 lh-hover:bg-slate-200"
+                        : "lh-bg-slate-100 lh-text-slate-700 hover:lh-bg-slate-200"
                     )}
                     onClick={() =>
                       setNewShortcut({ ...newShortcut, category: value })
