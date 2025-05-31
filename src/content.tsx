@@ -1,4 +1,4 @@
-import cssText from "data-text:~style.css"
+import cssText from "data-text:~/style.css"
 import type { PlasmoCSConfig } from "plasmo"
 import { useEffect, useState } from "react"
 
@@ -31,7 +31,7 @@ export const getStyle = (): HTMLStyleElement => {
 
 export default function IndexContent() {
   const [dialogName, setDialogName] = useState<string | null>(
-    POPUP_TYPE.setting
+    POPUP_TYPE.addNewShortcut
   )
   const [isDialogOpen, setIsDialogOpen] = useState(true)
 

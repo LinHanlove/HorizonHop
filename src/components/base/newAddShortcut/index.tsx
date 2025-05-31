@@ -1,12 +1,11 @@
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
+import Dialog, {
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle
-} from "@/components/ui/dialog"
+} from "@/components/base/Dialog"
+import { Button } from "@/components/ui/button"
 import React from "react"
 
 import { Input } from "~components/ui/input"
@@ -25,28 +24,28 @@ export default function NewAddShortcut({ ...props }) {
         <DialogContent className="sm:lh-max-w-[425px]">
           <DialogHeader>
             <DialogTitle>
-              <div className="lh-flex lh-items-center lh-justify-center">
-                <h2 className="lh-text-xl lh-font-bold lh-text-slate-800">
+              <div className="lh-flex lh-items-center lh-justify-center ">
+                <h2 className="lh-text-xl lh-font-bold lh-text-slate-800 lh-text-center">
                   添加快捷方式
                 </h2>
               </div>
             </DialogTitle>
-            <DialogDescription>
-              <p className="lh-text-sm lh-text-slate-500">
-                可添加url地址栏通过拼接参数来搜索的网址 示例：
-              </p>
-              <p className="lh-text-sm lh-text-slate-500 lh-mt-1 lh-p-1 lh-bg-slate-100 lh-rounded-[6px]">
-                https://github.com/search?q=搜索值&type=repositories
-              </p>
-            </DialogDescription>
           </DialogHeader>
+          <DialogDescription>
+            <p className="lh-text-sm lh-text-slate-500">
+              可添加通过url地址栏拼接参数来搜索的网址 示例：
+            </p>
+            <p className="lh-text-sm lh-text-slate-500 lh-mt-1 lh-p-1 lh-bg-slate-100 lh-rounded-[6px]">
+              https://github.com/search?q=搜索值&type=repositories
+            </p>
+          </DialogDescription>
           <div className="lh-space-y-4">
             <div>
               <label className="lh-block lh-text-sm lh-font-medium lh-text-slate-700 lh-mb-2">
                 名称
               </label>
               <Input
-                placeholder="输入名称"
+                placeholder="输入网址名称"
                 value={newShortcut.alias}
                 onChange={(e) =>
                   setNewShortcut({ ...newShortcut, alias: e.target.value })
@@ -74,7 +73,7 @@ export default function NewAddShortcut({ ...props }) {
                 后缀
               </label>
               <Input
-                placeholder="...,没有可不填"
+                placeholder="... 没有可不填"
                 value={newShortcut.suffix}
                 onChange={(e) =>
                   setNewShortcut({ ...newShortcut, suffix: e.target.value })
