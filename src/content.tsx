@@ -32,29 +32,36 @@ export const getStyle = (): HTMLStyleElement => {
 }
 
 export default function IndexContent() {
-  const [dialogName, setDialogName] = useState<string | null>(
-    MODEL_TYPE.deleteShortcut
-  )
+  // 弹窗名称
+  const [dialogName, setDialogName] = useState<string | null>(null)
 
+  // 弹窗是否打开
   const [isDialogOpen, setIsDialogOpen] = useState(true)
 
   useEffect(() => {
-    const handleMessage = (
+    const onMessage = (
       message: TYPE.ListenerMessageOption,
       sender: chrome.runtime.MessageSender,
       sendResponse: (response?: any) => void
     ) => {
-      if (!!message.type) {
+      // 弹窗事件
+      const isOpenModel = [
+        MODEL_TYPE.addNewShortcut,
+        MODEL_TYPE.setting,
+        MODEL_TYPE.deleteShortcut
+      ].includes(message.type)
+      // 打开弹窗
+      if (!!message.type && isOpenModel) {
         setDialogName(message.type)
         setIsDialogOpen(true)
       }
     }
 
-    onListenerMessage(handleMessage)
+    onListenerMessage(onMessage)
 
     // 清理函数，在组件卸载时移除监听器
     return () => {
-      chrome.runtime.onMessage.removeListener(handleMessage)
+      chrome.runtime.onMessage.removeListener(onMessage)
     }
   })
 

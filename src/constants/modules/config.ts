@@ -1,8 +1,9 @@
 import { Code, DiamondMinus, FileText, Github, Trash2 } from "lucide-react"
 
-import { createTab, getUUID, openGitHubDev } from "~utils"
+import { createTab, getUUID, openGitHubDev, sendMessage } from "~utils"
 
 import packageJson from "../../../package.json"
+import { MODEL_TYPE } from "./enum"
 
 /**
  * @constant 插件的配置常量
@@ -333,6 +334,12 @@ export const menuList: TYPE.FunctionMenu[] = [
     title: "删除预设",
     icon: Trash2,
     description: "删除预设",
-    event: () => {}
+    event: () => {
+      sendMessage({
+        type: MODEL_TYPE.deleteShortcut,
+        origin: "popup",
+        chrome
+      })
+    }
   }
 ]
