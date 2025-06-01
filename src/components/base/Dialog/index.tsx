@@ -35,7 +35,7 @@ export default function Dialog({ open, onOpenChange, children }: DialogProps) {
     <DialogContext.Provider value={{ open, setOpen }}>
       {open && (
         <div
-          className="lh-fixed lh-inset-0 lh-z-50 lh-flex lh-items-center lh-justify-center lh-bg-black/50 lh-backdrop-blur-sm"
+          className=" lh-w-auto lh-fixed lh-inset-0 lh-z-50 lh-flex lh-items-center lh-justify-center lh-bg-black/50 lh-backdrop-blur-sm"
           onClick={() => setOpen(false)} // 点击背景关闭
         >
           {/* Content is now rendered by DialogContent */}
@@ -59,7 +59,7 @@ export function DialogContent({ children, className }: DialogContentProps) {
   return (
     <div
       className={cn(
-        "lh-bg-white lh-rounded-lg lh-shadow-lg lh-p-4 lh-max-w-sm lh-w-full lh-m-4 lh-flex lh-flex-col lh-gap-4",
+        "lh-bg-white lh-rounded-lg lh-shadow-lg lh-p-4 lh-m-4 lh-flex lh-flex-col lh-gap-4",
         className
       )}
       onClick={(e) => e.stopPropagation()} // 阻止点击内容区域关闭
@@ -134,7 +134,5 @@ interface DialogFooterProps {
 }
 
 export function DialogFooter({ children, className }: DialogFooterProps) {
-  return (
-    <div className={cn("lh-flex lh-justify-end", className)}>{children}</div>
-  )
+  return <div className={cn(className)}>{children}</div>
 }

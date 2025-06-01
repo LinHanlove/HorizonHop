@@ -10,6 +10,7 @@
     "./**/*.d.ts"
   ],
   "compilerOptions": {
+    "resolveJsonModule": true,
     "paths": {
       "~*": [
         "./src/*"

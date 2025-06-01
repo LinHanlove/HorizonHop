@@ -9,16 +9,16 @@ declare namespace TYPE {
     chrome?: any // chrome
   }
 
-   /**
-    * @Type 系统通知弹窗
-    */
+  /**
+   * @Type 系统通知弹窗
+   */
   interface ChromeMessage {
     // 消息类型 [https://developer.chrome.com/docs/extensions/reference/api/notifications?hl=zh-cn#type-TemplateType]
     type?: "basic" | "image" | "list" | "progress"
     title?: string // 标题
     message: string // 内容
     iconUrl?: string // 图标
-    chrome?: any  
+    chrome?: any
     timeout?: number // 显示时间
   }
 
@@ -33,5 +33,9 @@ declare namespace TYPE {
   }
   type FormatOptions = Partial<TYPE.IFormatOption>
   type JsonType = "key" | "string" | "number" | "boolean" | "null" | "mark"
+}
 
+declare module "*.json" {
+  const value: any
+  export default value
 }

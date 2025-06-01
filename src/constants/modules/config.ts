@@ -1,11 +1,30 @@
-import { Biohazard, Code, Component, DiamondMinus, Earth, FileText, Github, LibraryBig, Package, Search, Settings, Smartphone, Trash2, WandSparkles } from "lucide-react"
-import { createTab, openGitHubDev } from "~utils";
+import {
+  Biohazard,
+  Code,
+  Component,
+  DiamondMinus,
+  Earth,
+  FileText,
+  Github,
+  LibraryBig,
+  Package,
+  Search,
+  Settings,
+  Smartphone,
+  Trash2,
+  WandSparkles
+} from "lucide-react"
+
+import { createTab, openGitHubDev } from "~utils"
+
+import packageJson from "../../../package.json"
 
 /**
  * @constant 插件的配置常量
  */
 export const CONFIG = {
-  name:'Horizon-Hop'
+  name: "Horizon-Hop",
+  version: packageJson.version
 }
 
 /**
@@ -15,23 +34,24 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
   {
     alias: "baidu",
     icon: Search,
-    iconColor: "#ff0000", 
+    iconColor: "#ff0000",
     prefix: "https://www.baidu.com/s?ie=utf-8&tn=25017023_17_dg&wd=",
     suffix: "",
-    category: "search" 
+    category: "search"
   },
   {
     alias: "google",
     icon: Earth,
-    iconColor: "#4285f4", 
+    iconColor: "#4285f4",
     prefix: "https://www.google.com/search?q=",
-    suffix: "&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIGCAEQRRg8MgYIAhBFGDwyBggDEEUYPDIGCAQQRRg8MgYIBRBFGEEyBggGEEUYPDIGCAcQRRhB0gEINTUyNWowajmoAgCwAgE&sourceid=chrome&ie=UTF-8",
+    suffix:
+      "&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIGCAEQRRg8MgYIAhBFGDwyBggDEEUYPDIGCAQQRRg8MgYIBRBFGEEyBggGEEUYPDIGCAcQRRhB0gEINTUyNWowajmoAgCwAgE&sourceid=chrome&ie=UTF-8",
     category: "search"
   },
-  { 
+  {
     alias: "npm",
     icon: Package,
-    iconColor: "#c12127", 
+    iconColor: "#c12127",
     prefix: "https://www.npmjs.com/search?q=",
     suffix: "",
     category: "dev"
@@ -39,7 +59,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
   {
     alias: "github",
     icon: Github,
-    iconColor: "#181717", 
+    iconColor: "#181717",
     prefix: "https://github.com/search?q=",
     suffix: "&type=repositories",
     category: "dev"
@@ -47,7 +67,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
   {
     alias: "csdn",
     icon: LibraryBig,
-    iconColor: "#ff6600", 
+    iconColor: "#ff6600",
     prefix: "https://so.csdn.net/so/search?spm=1000.2115.3001.4498&q=",
     suffix: "&t=&u=",
     category: "dev"
@@ -55,7 +75,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
   {
     alias: "juejin",
     icon: LibraryBig,
-    iconColor: "#f0ad4e", 
+    iconColor: "#f0ad4e",
     prefix: "https://juejin.cn/search?query=",
     suffix: "&fromSeo=0&fromHistory=0&fromSuggest=0",
     category: "dev"
@@ -63,7 +83,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
   {
     alias: "vant",
     icon: Smartphone,
-    iconColor: "#00b4ff", 
+    iconColor: "#00b4ff",
     prefix: "https://vant.pro/vant-weapp/#/",
     suffix: "",
     category: "dev"
@@ -71,7 +91,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
   {
     alias: "element2",
     icon: Biohazard,
-    iconColor: "#409eff", 
+    iconColor: "#409eff",
     prefix: "https://element.eleme.cn/#/zh-CN/component/",
     suffix: "",
     category: "dev"
@@ -79,7 +99,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
   {
     alias: "element3",
     icon: Biohazard,
-    iconColor: "#409eff", 
+    iconColor: "#409eff",
     prefix: "https://element-plus.org/zh-CN/component/",
     suffix: ".html",
     category: "dev"
@@ -87,7 +107,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
   {
     alias: "antdV",
     icon: Component,
-    iconColor: "#1677ff", 
+    iconColor: "#1677ff",
     prefix: "https://www.antdv.com/components/",
     suffix: "-cn",
     category: "dev"
@@ -95,7 +115,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
   {
     alias: "antdR",
     icon: Component,
-    iconColor: "#1677ff", 
+    iconColor: "#1677ff",
     prefix: "https://ant.design/components/",
     suffix: "-cn",
     category: "dev"
@@ -107,13 +127,13 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
     prefix: "https://icon-sets.iconify.design/?query=",
     suffix: "",
     category: "design"
-  },
-];
+  }
+]
 
 /**
  * @constant 功能菜单配置
  */
-export const menuList:TYPE.FunctionMenu[] = [
+export const menuList: TYPE.FunctionMenu[] = [
   {
     title: "JsonFormatter",
     icon: Code,

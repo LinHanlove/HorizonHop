@@ -6,28 +6,173 @@ import Dialog, {
   DialogTitle
 } from "@/components/base/Dialog"
 import { Button } from "@/components/ui/button"
-import React from "react"
+import { Switch } from "@/components/ui/switch"
+import { ChevronRight } from "lucide-react"
+import React, { useState } from "react"
+
+import { CONFIG } from "~constants"
 
 export default function Setting({ ...props }) {
   console.log("设置弹窗", props)
 
   const { open, setOpen } = props
+
+  const [isLightModeEnabled, setIsLightModeEnabled] = useState(false)
+  const [isGlassEffectEnabled, setIsGlassEffectEnabled] = useState(true)
+  const [isAnimationEnabled, setIsAnimationEnabled] = useState(true)
+  const [isPanelExpanded, setIsPanelExpanded] = useState(false)
+  const [isShowDescriptionEnabled, setIsShowDescriptionEnabled] = useState(true)
+  const [isCustomFunctionEnabled, setIsCustomFunctionEnabled] = useState(false)
+  const [isOpenInNewTabEnabled, setIsOpenInNewTabEnabled] = useState(true)
+
+  /**
+   * @constants 开关类设置的配map
+   */
+  const switchConfigMap = [
+    {
+      title: "外观",
+      items: [
+        {
+          title: "明亮模式",
+          description: "当前主题模式",
+          checked: isLightModeEnabled,
+          onChange: setIsLightModeEnabled
+        },
+        {
+          title: "毛玻璃效果",
+          description: "启用背景模糊效果",
+          checked: isGlassEffectEnabled,
+          onChange: setIsGlassEffectEnabled
+        },
+        {
+          title: "动画效果",
+          description: "启用动画效果",
+          checked: isAnimationEnabled,
+          onChange: setIsAnimationEnabled
+        }
+      ]
+    },
+    {
+      title: "功能",
+      items: [
+        {
+          title: "显示描述",
+          description: "在卡片上显示描述",
+          checked: isShowDescriptionEnabled,
+          onChange: setIsShowDescriptionEnabled
+        }
+      ]
+    },
+    {
+      title: "行为",
+      items: [
+        {
+          title: "在新标签页中打开",
+          description: "在浏览器的新标签页中打开链接",
+          checked: isOpenInNewTabEnabled,
+          onChange: setIsOpenInNewTabEnabled
+        }
+      ]
+    }
+  ]
+
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
-      <DialogContent className="tw-sm:max-w-[425px]">
+      <DialogContent className="lh-w-[420px] lh-flex lh-flex-col lh-max-h-[80vh]">
         <DialogHeader>
-          <DialogTitle>Setting</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DialogDescription>
+          <DialogTitle>设置</DialogTitle>
         </DialogHeader>
-        <div className="tw-grid tw-gap-4 tw-py-4">
-          <div className="tw-grid tw-grid-cols-4 tw-items-center tw-gap-4"></div>
-          <div className="tw-grid tw-grid-cols-4 tw-items-center tw-gap-4"></div>
+        <DialogDescription>自定义设置以适应你的工作流程。</DialogDescription>
+        <div className="lh-space-y-6 lh-overflow-y-auto lh-py-4 lh-pr-2 lh-flex-1">
+          {switchConfigMap.map((item) => {
+            return (
+              <div key={item.title}>
+                <h3 className="lh-text-lg lh-font-medium lh-text-slate-800 lh-mb-4">
+                  {item.title}
+                </h3>
+                <div className="lh-space-y-4">
+                  {item.items.map((item) => {
+                    return (
+                      <div
+                        key={item.title}
+                        className="lh-flex lh-items-center lh-justify-between">
+                        <div>
+                          <span className="lh-text-sm lh-font-medium lh-text-slate-700">
+                            {item.title}
+                          </span>
+                          <p className="lh-text-xs lh-text-slate-500 lh-mt-0.5">
+                            {item.description}
+                          </p>
+                        </div>
+                        <Switch
+                          checked={item.checked}
+                          onCheckedChange={item.onChange}
+                        />
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })}
+
+          <div>
+            <h3 className="lh-text-lg lh-font-medium lh-text-slate-800 lh-mb-4">
+              数据
+            </h3>
+            <div className="lh-space-y-3">
+              <button className="lh-flex lh-items-center lh-justify-between lh-w-full lh-px-4 lh-py-3 lh-rounded-lg lh-bg-slate-50 hover:lh-bg-slate-100 lh-text-left lh-transition-colors">
+                <span className="lh-text-sm lh-font-medium lh-text-slate-700">
+                  导出数据
+                </span>
+                <ChevronRight className="lh-h-4 lh-w-4 lh-text-slate-400" />
+              </button>
+              <button className="lh-flex lh-items-center lh-justify-between lh-w-full lh-px-4 lh-py-3 lh-rounded-lg lh-bg-slate-50 hover:lh-bg-slate-100 lh-text-left lh-transition-colors">
+                <span className="lh-text-sm lh-font-medium lh-text-slate-700">
+                  导入数据
+                </span>
+                <ChevronRight className="lh-h-4 lh-w-4 lh-text-slate-400" />
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="lh-text-lg lh-font-medium lh-text-slate-800 lh-mb-4">
+              关于
+            </h3>
+            <div className="lh-w-[86%] lh-m-auto lh-bg-gradient-to-br lh-from-slate-50 lh-to-slate-100 lh-rounded-xl lh-p-4 lh-border lh-border-slate-200">
+              <div className="lh-flex lh-items-center lh-justify-center lh-mb-4">
+                <div className="lh-w-16 lh-h-16 lh-rounded-xl lh-bg-slate-800 lh-flex lh-items-center lh-justify-center lh-text-white lh-text-3xl lh-shadow-lg">
+                  🍯
+                </div>
+              </div>
+              <div className="lh-text-center lh-space-y-2">
+                <p className="lh-font-medium lh-text-lg lh-text-slate-800">
+                  Atom Honeycomb
+                </p>
+                <p className="lh-text-slate-600">版本 2.0</p>
+                <div className="lh-w-16 lh-h-0.5 lh-bg-slate-800 lh-mx-auto lh-my-4"></div>
+                <p className="lh-text-slate-500 lh-text-sm lh-flex lh-items-center lh-justify-center">
+                  © 2025 LinHanPro
+                  <a
+                    className="lh-text-slate-600 lh-font-medium lh-underline lh-pl-2"
+                    href="https://github.com/LinHanPro/lin-han-pro"
+                    target="_blank">
+                    使用教程
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter>
+
+        <div className="lh-pt-4 lh-border-t lh-border-slate-200">
+          <Button
+            className="lh-w-full lh-h-12 lh-rounded-xl lh-bg-slate-800 hover:lh-bg-slate-900 lh-text-white lh-shadow-lg lh-transition-all"
+            onClick={() => setOpen(false)}>
+            完成
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   )
