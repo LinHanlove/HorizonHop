@@ -10,11 +10,9 @@ import { Icon } from "@iconify/react"
 import React from "react"
 
 import { Input } from "~components/ui/input"
-import { presetIcons } from "~constants"
+import { presetIcons, SHORTCUT_TYPE_MAP } from "~constants"
 import { useNewAddShortcut, useSearch } from "~hooks"
 import { cn } from "~utils/shadcn"
-
-import { SHORTCUT_TYPE_MAP } from "./config"
 
 export default function NewAddShortcut({ ...props }) {
   const { open, setOpen } = props

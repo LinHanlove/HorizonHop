@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 
+import { SEND_FROM } from "~constants"
 import { getLocal, sendMessage, setLocal } from "~utils"
 
 export const useSearch = () => {
@@ -50,7 +51,7 @@ export const useSearch = () => {
     })
     sendMessage({
       type: "categoryChange",
-      origin: "popup",
+      origin: SEND_FROM.popup,
       chrome
     })
   }, [searchTarget, activeCategory])

@@ -6,11 +6,9 @@ import React, { useEffect, useState } from "react"
 
 import { useSearchContext } from "~components/base/Layout"
 import { Button } from "~components/ui/button"
-import { menuList, MODEL_TYPE } from "~constants"
+import { menuList, MODEL_TYPE, SEND_FROM, SHORTCUT_TYPE_MAP } from "~constants"
 import { useSetting } from "~hooks"
 import { sendMessage } from "~utils"
-
-import { SHORTCUT_TYPE_MAP } from "../NewAddShortcut/config"
 
 export default function Content() {
   const { shortcuts, importData, loadShortcutsToDelete } = useSetting()
@@ -66,7 +64,7 @@ export default function Content() {
   const onAddShortcut = () => {
     sendMessage({
       type: MODEL_TYPE.addNewShortcut,
-      origin: "popup",
+      origin: SEND_FROM.popup,
       chrome
     })
   }

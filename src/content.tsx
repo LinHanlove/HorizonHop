@@ -3,6 +3,7 @@ import type { PlasmoCSConfig } from "plasmo"
 import { useEffect, useState } from "react"
 
 import DeleteShortcut from "~components/base/DeleteShortcut"
+import FunctionArea from "~components/base/FunctionArea"
 import NewAddShortcut from "~components/base/NewAddShortcut"
 import Setting from "~components/base/Setting"
 import { SonnerProvider } from "~components/base/Sonner"
@@ -50,7 +51,8 @@ export default function IndexContent() {
       const isOpenModel = [
         MODEL_TYPE.addNewShortcut,
         MODEL_TYPE.setting,
-        MODEL_TYPE.deleteShortcut
+        MODEL_TYPE.deleteShortcut,
+        MODEL_TYPE.functionArea
       ].includes(message.type)
 
       if (message.origin === "popup") {
@@ -61,8 +63,7 @@ export default function IndexContent() {
         }
         // 切换类目
         if (message.type === "categoryChange") {
-          setDialogName(null)
-          setIsDialogOpen(false)
+          closeDialog(false)
         }
       }
     }
@@ -108,6 +109,15 @@ export default function IndexContent() {
         />
       )}
       {/* S 删除 */}
+
+      {/* S 功能选区 */}
+      {dialogName === MODEL_TYPE.functionArea && (
+        <FunctionArea
+          open={isDialogOpen}
+          setOpen={(flag) => closeDialog(flag)}
+        />
+      )}
+      {/* E 功能选区 */}
     </SonnerProvider>
   )
 }

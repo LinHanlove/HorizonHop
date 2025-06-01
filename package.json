@@ -47,7 +47,6 @@
   },
   "manifest": {
     "host_permissions": [
-      "https://*/*",
       "<all_urls>"
     ],
     "content_security_policy": {

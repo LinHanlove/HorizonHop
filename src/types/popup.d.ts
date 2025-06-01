@@ -17,21 +17,21 @@ declare namespace TYPE {
   }
 
   /**
-   * @type 功能菜单配置
-   */
-  interface FunctionMenu {
-    title: string // 标题
-    icon: ForwardRefExoticComponent<
-      Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-    > // 图标
-    description: string // 描述
-    event: () => void // 事件
-  }
-
-  /**
    * @type 初始化配置
    */
   interface InitConfig {
     chrome: any // chrome对象
+  }
+
+  /**
+   * @type 功能菜单配置
+   */
+  interface FunctionMenu {
+    id: string // id
+    title: string
+    icon: LucideIcon
+    description: string
+    category: string
+    event: (chrome?: any) => void
   }
 }

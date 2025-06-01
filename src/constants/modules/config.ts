@@ -3,7 +3,8 @@ import { Code, DiamondMinus, FileText, Github, Trash2 } from "lucide-react"
 import { createTab, getUUID, openGitHubDev, sendMessage } from "~utils"
 
 import packageJson from "../../../package.json"
-import { MODEL_TYPE } from "./enum"
+import { SHORTCUT_TYPE } from "./common"
+import { MODEL_TYPE, SEND_FROM } from "./enum"
 
 /**
  * @constant 插件的配置常量
@@ -314,10 +315,14 @@ export const presetIcons: string[] = [
  */
 export const menuList: TYPE.FunctionMenu[] = [
   {
+    id: getUUID(),
     title: "JsonFormatter",
     icon: Code,
     description: "JSON格式化",
+    category: SHORTCUT_TYPE.dev,
     event: () => {
+      console.log("JSON格式化", chrome)
+
       createTab({
         chrome,
         url: "JsonFormatter"
@@ -325,9 +330,11 @@ export const menuList: TYPE.FunctionMenu[] = [
     }
   },
   {
+    id: getUUID(),
     title: "CompressHero",
     icon: FileText,
     description: "图片压缩",
+    category: SHORTCUT_TYPE.dev,
     event: () => {
       createTab({
         chrome,
@@ -336,15 +343,19 @@ export const menuList: TYPE.FunctionMenu[] = [
     }
   },
   {
+    id: getUUID(),
     title: "GithubDev",
     icon: Github,
     description: "github源码查看",
+    category: SHORTCUT_TYPE.dev,
     event: () => openGitHubDev()
   },
   {
+    id: getUUID(),
     title: "TableMarkdown",
     icon: DiamondMinus,
     description: "语雀表格Json",
+    category: SHORTCUT_TYPE.dev,
     event: () => {
       createTab({
         chrome,
@@ -353,13 +364,15 @@ export const menuList: TYPE.FunctionMenu[] = [
     }
   },
   {
+    id: getUUID(),
     title: "DeleteShortcut",
     icon: Trash2,
     description: "删除预设",
+    category: SHORTCUT_TYPE.other,
     event: () => {
       sendMessage({
         type: MODEL_TYPE.deleteShortcut,
-        origin: "popup",
+        origin: SEND_FROM.popup,
         chrome
       })
     }

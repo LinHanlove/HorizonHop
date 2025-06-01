@@ -1,6 +1,8 @@
+import { SEND_FROM } from "~constants"
+import Compressor from "~utils/ability/Compressor"
+import UPNG from "~utils/ability/UPNG"
+
 import { notify, sendMessageRuntime } from "./chrome.tools"
-import Compressor from "~utils/ability/Compressor";
-import UPNG from "~utils/ability/UPNG";
 
 /**
  * @function 打开githubDev 线上查看github项目
@@ -12,11 +14,10 @@ export const openGitHubDev = () => {
   })
   sendMessageRuntime({
     type: "lightIcon",
-    origin: "content",
+    origin: SEND_FROM.content,
     chrome
   })
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-
     const url = tabs[0].url
     const reg = /^(https?:\/\/)?(www\.)?github\.com\/(.*)\/(.*)/
 
@@ -49,7 +50,7 @@ export const blobToFile = (blob, extraData) => {
 export const UPNG_PNG = async (file: File, quality: number): Promise<File> => {
   const arrayBuffer = await file.arrayBuffer()
   const decoded = UPNG.decode(arrayBuffer)
-  console.log(decoded,'decoded');
+  console.log(decoded, "decoded")
   const rgba8 = UPNG.toRGBA8(decoded)
 
   // 这里 保持宽高不变，保持80%的质量（接近于 tinypng 的压缩效果）
@@ -75,15 +76,15 @@ export const Compressor_PNG = async (
 ): Promise<File> => {
   return new Promise((resolve, reject) => {
     console.log(file, quality)
-     new Compressor(file, {
-       quality,
-       success(result) {
-         resolve(result)
-       },
-       error(err) {
-         reject(err)
-       }
-     })
+    new Compressor(file, {
+      quality,
+      success(result) {
+        resolve(result)
+      },
+      error(err) {
+        reject(err)
+      }
+    })
   })
 }
 

@@ -33,6 +33,8 @@ export const sendMessage = (option: TYPE.SendMessage) => {
  */
 export const sendMessageRuntime = (option: TYPE.SendMessage) => {
   const { type, origin, data, chrome } = option
+  console.log(option)
+
   return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage(
       {
