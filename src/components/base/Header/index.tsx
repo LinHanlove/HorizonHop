@@ -1,18 +1,19 @@
 import { Search, Settings } from "lucide-react"
 import React, { useState } from "react"
 
+import { useSearchContext } from "~components/base/Layout"
 import { Button } from "~components/ui/button"
 import { Input } from "~components/ui/input"
 import { CONFIG, MODEL_TYPE } from "~constants"
 import { sendMessage } from "~utils"
 
 export default function Header() {
-  const [searchQuery, setSearchQuery] = useState("")
+  const { searchQuery, setSearchQuery, onEnterSearch } = useSearchContext()
 
   /**
    * @function 添加快捷方式
    */
-  const openSetting = () => {
+  const openSetting = async () => {
     sendMessage({
       type: MODEL_TYPE.setting,
       origin: "popup",
@@ -41,16 +42,16 @@ export default function Header() {
           {/* E 设置 */}
         </div>
         {/* E 名称 */}
-
         {/* S 搜索框 */}
         <div className="lh-mt-2">
           <div className="lh-flex lh-items-center">
             <Input
               id="search-input"
-              placeholder="输入内容，按下回车搜索..."
+              placeholder="选择目标后输入内容，按下回车搜索..."
               className="lh-w-full lh-h-8 lh-px-4 lh-text-sm lh-rounded-lg lh-border-0 lh-bg-white/80 lh-backdrop-blur-sm lh-shadow-sm lh-shadow-slate-500/5 lh-text-slate-700 placeholder:lh-text-slate-400 focus:lh-ring-2 focus-visible:lh-ring-1 focus:lh-border-2 focus:lh-ring-slate-400/30 focus:lh-bg-white/95 lh-transition-all"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => onEnterSearch(e)}
             />
           </div>
         </div>
