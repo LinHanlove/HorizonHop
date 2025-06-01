@@ -22,7 +22,7 @@ export default function Setting({ ...props }) {
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
-      <DialogContent className="lh-w-[420px] lh-flex lh-flex-col lh-max-h-[60vh]">
+      <DialogContent className="lh-w-[420px] lh-flex lh-flex-col lh-max-h-[60vh] lh-backdrop-blur-sm lh-hide-scrollbar">
         <DialogHeader>
           <DialogTitle>设置</DialogTitle>
         </DialogHeader>

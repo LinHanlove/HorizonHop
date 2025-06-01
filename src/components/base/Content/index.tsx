@@ -9,9 +9,20 @@ import { menuList, MODEL_TYPE } from "~constants"
 import { useSetting } from "~hooks"
 import { sendMessage } from "~utils"
 
+import { SHORTCUT_TYPE_MAP } from "../NewAddShortcut/config"
+
 export default function Content() {
   const { shortcuts, importData, loadShortcutsToDelete } = useSetting()
   const [searchQuery, setSearchQuery] = useState("")
+
+  // 页面宽度
+  const [pageWidth, setPageWidth] = useState<{
+    sideBarWidth: number
+    contentWidth: number
+  }>({
+    sideBarWidth: 60,
+    contentWidth: 300
+  })
 
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   // 是否展开左侧面板
@@ -30,6 +41,20 @@ export default function Content() {
       loadShortcutsToDelete()
     }
   }, [open, loadShortcutsToDelete])
+
+  useEffect(() => {
+    if (leftPanelExpanded) {
+      setPageWidth({
+        sideBarWidth: 160,
+        contentWidth: 200
+      })
+    } else {
+      setPageWidth({
+        sideBarWidth: 60,
+        contentWidth: 300
+      })
+    }
+  }, [leftPanelExpanded])
 
   /**
    * @ array 按分类的快捷方式
@@ -66,7 +91,7 @@ export default function Content() {
     <div className="lh-flex-1 lh-flex lh-overflow-hidden">
       {/* S 侧边栏 - 功能菜单 */}
       <motion.div
-        animate={{ width: leftPanelExpanded ? 160 : 60 }}
+        animate={{ width: pageWidth.sideBarWidth }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className="lh-relative lh-bg-white/90 lh-backdrop-blur-sm lh-border-r lh-border-slate-200/60 lh-shadow-sm lh-z-10">
         {/* S 背景 */}
@@ -151,55 +176,64 @@ export default function Content() {
       {/* E 侧边栏 */}
 
       {/* S 右边内容 - 快捷搜索 */}
-      <div className="lh-flex-1 lh-flex lh-flex-col lh-bg-white/70 lh-backdrop-blur-sm">
+      <div
+        className="lh-flex-1 lh-flex lh-flex-col lh-bg-white/70 lh-backdrop-blur-sm "
+        style={{ width: pageWidth.contentWidth }}>
         {/* S 分类栏 */}
-        <div className="lh-p-2 lh-border-b lh-border-slate-200/50">
-          <div className="lh-flex lh-space-x-2 lh-overflow-x-auto lh-scrollbar-hide">
-            <button
-              className={cn(
-                "lh-px-3 lh-py-1 lh-rounded-[4px] lh-tex-lg lh-font-medium lh-whitespace-nowrap lh-transition-all lh-shadow-sm",
-                activeCategory === null
-                  ? "lh-bg-slate-800 lh-text-white lh-shadow-slate-800/25"
-                  : "lh-bg-white/90 lh-text-slate-600 hover:lh-bg-white hover:lh-shadow-md lh-border lh-border-slate-200/50"
-              )}
-              onClick={() => setActiveCategory(null)}>
-              全部
-            </button>
-            {categories.map((category) => (
+        <div className="lh-p-2  lh-border-b lh-border-slate-200/50 ">
+          {!shortcuts.length ? (
+            <p className="lh-text-slate-500">还没有快捷方式，快快试试导入吧</p>
+          ) : (
+            <div className="lh-flex lh-space-x-2 lh-overflow-x-scroll lh-w-full">
               <button
-                key={category}
                 className={cn(
-                  "lh-px-3 lh-py-1 lh-rounded-[4px] lh-tex-lg  lh-font-medium lh-whitespace-nowrap lh-transition-all lh-shadow-sm",
-                  activeCategory === category
+                  "lh-px-3 lh-py-1 lh-rounded-[4px] lh-tex-lg lh-font-medium lh-whitespace-nowrap lh-transition-all lh-shadow-sm",
+                  activeCategory === null
                     ? "lh-bg-slate-800 lh-text-white lh-shadow-slate-800/25"
-                    : "lh-bg-white/90 lh-text-slate-600 hover:lh-bg-white hover:lh-shadow-md lh-border lh-border-200/50"
+                    : "lh-bg-white/90 lh-text-slate-600 hover:lh-bg-white hover:lh-shadow-md lh-border lh-border-slate-200/50"
                 )}
-                onClick={() => setActiveCategory(category)}>
-                {category === "dev" && "开发"}
-                {category === "search" && "搜索"}
-                {category === "tools" && "工具"}
-                {category === "design" && "设计"}
-                {category === "other" && "其他"}
+                onClick={() => setActiveCategory(null)}>
+                全部
               </button>
-            ))}
-          </div>
+              {SHORTCUT_TYPE_MAP.map((category) => (
+                <button
+                  key={category.value}
+                  className={cn(
+                    "lh-px-3 lh-py-1 lh-rounded-[4px] lh-tex-lg  lh-font-medium lh-whitespace-nowrap lh-transition-all lh-shadow-sm",
+                    activeCategory === category.value
+                      ? "lh-bg-slate-800 lh-text-white lh-shadow-slate-800/25"
+                      : "lh-bg-white/90 lh-text-slate-600 hover:lh-bg-white hover:lh-shadow-md lh-border lh-border-200/50"
+                  )}
+                  onClick={() => setActiveCategory(category.value)}>
+                  {category.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         {/* E 分类栏 */}
         {/* S 快捷搜索 */}
         <div className="lh-flex-1 lh-p-4 lh-overflow-y-auto">
           {!shortcuts.length ? (
             // 当没有快捷方式时显示导入按钮
-            <div className="lh-flex lh-flex-col lh-items-center lh-justify-center lh-h-full">
-              <p className="lh-text-slate-500 lh-mb-4">还没有快捷方式，</p>
-              <button
-                onClick={() => importData()}
-                className="lh-px-6 lh-py-3 lh-rounded-md lh-bg-slate-800 hover:lh-bg-slate-900 lh-text-white lh-font-medium lh-transition-colors">
+            <div className="lh-flex lh-items-center lh-justify-center lh-h-full lh-underline">
+              <p
+                className=" lh-font-bold lh-text-sm lh-cursor-pointer "
+                onClick={() => importData()}>
                 一键导入预设
-              </button>
+              </p>
+              <Icon
+                icon="mdi:import"
+                className=" lh-text-slate-600 lh-w-[16px] lh-h-[16px] lh-ml-1"
+              />
             </div>
           ) : (
             // 当有快捷方式时显示网格
-            <div className="lh-grid lh-grid-cols-4 lh-gap-2">
+            <div
+              className={cn(
+                "lh-grid lh-gap-2",
+                leftPanelExpanded ? "lh-grid-cols-3" : "lh-grid-cols-4"
+              )}>
               {displayedShortcuts.map((shortcut, index) => (
                 <motion.button
                   key={shortcut.alias}

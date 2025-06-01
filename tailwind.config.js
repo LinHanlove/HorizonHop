@@ -72,7 +72,27 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    function({ addUtilities }) {
+      addUtilities({
+        '.scrollbar-hide': {
+          '&::-webkit-scrollbar': {
+            width: 0,
+            display: 'none'
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'transparent'
+          },
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: 'transparent'
+          },
+          '-ms-overflow-style': 'none',
+          'scrollbar-width': 'none'
+        }
+      })
+    }
+  ],
   immediate: true,
   prefix: "lh-",
 }

@@ -12,6 +12,8 @@ import React, { useEffect } from "react"
 import { useSetting } from "~hooks"
 import { cn } from "~utils/shadcn"
 
+import "@/assets/style/base.scss"
+
 export default function DeleteShortcut({ ...props }) {
   const { shortcuts, loadShortcutsToDelete, deleteShortcut } = useSetting()
   const { open, setOpen } = props
@@ -23,7 +25,7 @@ export default function DeleteShortcut({ ...props }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="lh-w-[400px] lh-flex lh-flex-col lh-max-h-[80vh]">
+      <DialogContent className="lh-w-[400px] lh-flex lh-flex-col lh-max-h-[70vh] lh-hide-scrollbar">
         <DialogHeader>
           <DialogTitle>删除预设快捷方式</DialogTitle>
         </DialogHeader>
