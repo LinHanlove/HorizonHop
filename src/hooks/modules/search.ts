@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 
-import { getLocal, setLocal } from "~utils"
+import { getLocal, sendMessage, setLocal } from "~utils"
 
 export const useSearch = () => {
   // 搜索值
@@ -27,6 +27,13 @@ export const useSearch = () => {
       setSearchTarget(data || {})
       console.log("读取数据searchTarget", data, searchTarget)
     })
+
+    getLocal({
+      key: "activeCategory",
+      chrome
+    }).then((data) => {
+      setActiveCategory(data || null)
+    })
   }, [chrome])
 
   // 监听搜索值变化
@@ -36,7 +43,17 @@ export const useSearch = () => {
       value: JSON.stringify(searchTarget),
       chrome
     })
-  }, [searchTarget])
+    setLocal({
+      key: "activeCategory",
+      value: JSON.stringify(activeCategory),
+      chrome
+    })
+    sendMessage({
+      type: "categoryChange",
+      origin: "popup",
+      chrome
+    })
+  }, [searchTarget, activeCategory])
 
   /**
    * @function 选中快捷方式

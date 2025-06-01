@@ -130,6 +130,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
  * @constant 预设的一些图标
  */
 export const presetIcons: string[] = [
+  // 可爱/有趣
   "mdi:robot-outline",
   "ph:ghost",
   "mdi:space-station",
@@ -142,6 +143,35 @@ export const presetIcons: string[] = [
   "ph:sunglasses",
   "mdi:dog",
   "ph:pizza",
+  "ph:cat",
+  "ph:dog",
+  "ph:bird",
+  "ph:fish",
+  "ph:butterfly",
+  "ph:rainbow",
+  "ph:cloud",
+  "ph:cloud-rain",
+  "ph:cloud-lightning",
+  "ph:cloud-snow",
+  "ph:cloud-fog",
+  "ph:sun",
+  "ph:moon",
+  "ph:star",
+  "ph:star-half",
+  "ph:star-four",
+  "ph:heart",
+  "ph:heart-break",
+  "ph:heart-straight",
+  "ph:heart-straight-break",
+  "ph:heartbeat",
+  "ph:sparkle",
+  "ph:fire",
+  "ph:fire-simple",
+  "ph:flame",
+  "ph:lightning",
+  "ph:lightning-slash",
+
+  // 社交媒体
   "ri:baidu-fill",
   "devicon:google",
   "logos:facebook",
@@ -155,6 +185,16 @@ export const presetIcons: string[] = [
   "logos:spotify-icon",
   "logos:apple-app-store",
   "logos:figma",
+  "logos:dribbble-icon",
+  "logos:behance",
+  "logos:linkedin-icon",
+  "logos:medium-icon",
+  "logos:hashnode-icon",
+  "logos:codepen-icon",
+  "logos:codesandbox-icon",
+  "logos:stackblitz-icon",
+
+  // 开发工具
   "logos:docker-icon",
   "logos:kubernetes",
   "logos:nodejs-icon",
@@ -185,14 +225,8 @@ export const presetIcons: string[] = [
   "logos:bootstrap",
   "logos:material-ui",
   "logos:ant-design",
-  "logos:dribbble-icon",
-  "logos:behance",
-  "logos:linkedin-icon",
-  "logos:medium-icon",
-  "logos:hashnode-icon",
-  "logos:codepen-icon",
-  "logos:codesandbox-icon",
-  "logos:stackblitz-icon",
+
+  // 协作工具
   "logos:jira",
   "logos:confluence",
   "logos:trello",
@@ -203,6 +237,8 @@ export const presetIcons: string[] = [
   "logos:google-meet",
   "logos:google-drive",
   "logos:dropbox",
+
+  // 设计工具
   "logos:adobe-photoshop",
   "logos:adobe-illustrator",
   "logos:adobe-xd",
@@ -213,12 +249,16 @@ export const presetIcons: string[] = [
   "logos:miro",
   "logos:asana",
   "logos:linear",
+
+  // 监控工具
   "logos:sentry-icon",
   "logos:datadog",
   "logos:new-relic",
   "logos:grafana",
   "logos:prometheus",
   "logos:splunk",
+
+  // 云服务
   "logos:aws",
   "logos:azure",
   "logos:google-cloud",
@@ -229,6 +269,8 @@ export const presetIcons: string[] = [
   "logos:netlify",
   "logos:vercel",
   "logos:cloudflare-icon",
+
+  // 支付/区块链
   "logos:paypal",
   "logos:ethereum",
   "logos:web3js",
@@ -242,6 +284,8 @@ export const presetIcons: string[] = [
   "logos:flutter",
   "logos:electron",
   "logos:qt",
+
+  // 游戏/3D
   "logos:unity",
   "logos:godot",
   "logos:blender",
@@ -262,29 +306,7 @@ export const presetIcons: string[] = [
   "logos:processing",
   "logos:arduino",
   "logos:raspberry-pi",
-  "logos:ros",
-  "logos:godot-icon",
-  "logos:invision-icon",
-  "logos:miro-icon",
-  "logos:asana-icon",
-  "logos:linear-icon",
-  "logos:sentry-icon",
-  "logos:datadog-icon",
-  "logos:new-relic-icon",
-  "logos:azure-icon",
-  "logos:digital-ocean-icon",
-  "logos:vultr-icon",
-  "logos:heroku-icon",
-  "logos:netlify-icon",
-  "logos:vercel-icon",
-  "logos:cloudflare-icon",
-  "logos:pytorch-icon",
-  "logos:pandas-icon",
-  "logos:seaborn-icon",
-  "logos:p5js",
-  "logos:processing",
-  "logos:arduino",
-  "logos:raspberry-pi"
+  "logos:ros"
 ]
 
 /**
@@ -331,7 +353,7 @@ export const menuList: TYPE.FunctionMenu[] = [
     }
   },
   {
-    title: "删除预设",
+    title: "DeleteShortcut",
     icon: Trash2,
     description: "删除预设",
     event: () => {

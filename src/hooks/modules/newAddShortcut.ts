@@ -30,6 +30,16 @@ export const useNewAddShortcut = (option: TYPE.InitConfig) => {
     }).then((data) => {
       setShortcutsSearchLocal(data || [])
     })
+
+    getLocal({
+      key: "activeCategory",
+      chrome
+    }).then((data) => {
+      setNewShortcut({
+        ...newShortcut,
+        category: data || "other"
+      })
+    })
   }, [chrome]) // 依赖项为 chrome 对象，确保在 chrome 可用时执行
 
   /**

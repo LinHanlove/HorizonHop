@@ -44,16 +44,26 @@ export default function IndexContent() {
       sender: chrome.runtime.MessageSender,
       sendResponse: (response?: any) => void
     ) => {
+      console.log("content.tsx onMessage", message)
+
       // 弹窗事件
       const isOpenModel = [
         MODEL_TYPE.addNewShortcut,
         MODEL_TYPE.setting,
         MODEL_TYPE.deleteShortcut
       ].includes(message.type)
-      // 打开弹窗
-      if (!!message.type && isOpenModel) {
-        setDialogName(message.type)
-        setIsDialogOpen(true)
+
+      if (message.origin === "popup") {
+        // 打开弹窗
+        if (!!message.type && isOpenModel) {
+          setDialogName(message.type)
+          setIsDialogOpen(true)
+        }
+        // 切换类目
+        if (message.type === "categoryChange") {
+          setDialogName(null)
+          setIsDialogOpen(false)
+        }
       }
     }
 

@@ -11,7 +11,7 @@ import React from "react"
 
 import { Input } from "~components/ui/input"
 import { presetIcons } from "~constants"
-import { useNewAddShortcut } from "~hooks"
+import { useNewAddShortcut, useSearch } from "~hooks"
 import { cn } from "~utils/shadcn"
 
 import { SHORTCUT_TYPE_MAP } from "./config"
@@ -21,6 +21,7 @@ export default function NewAddShortcut({ ...props }) {
 
   const { newShortcut, setNewShortcut, onSubmitNewShortcut } =
     useNewAddShortcut({ chrome })
+
   return (
     <>
       <Dialog open={open} onOpenChange={() => setOpen(false)}>
