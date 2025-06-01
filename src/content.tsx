@@ -2,10 +2,11 @@ import cssText from "data-text:~/style.css"
 import type { PlasmoCSConfig } from "plasmo"
 import { useEffect, useState } from "react"
 
+import DeleteShortcut from "~components/base/DeleteShortcut"
 import NewAddShortcut from "~components/base/NewAddShortcut"
 import Setting from "~components/base/Setting"
 import { SonnerProvider } from "~components/base/Sonner"
-import { POPUP_TYPE } from "~constants"
+import { MODEL_TYPE } from "~constants"
 import { onListenerMessage } from "~utils"
 
 export const config: PlasmoCSConfig = {
@@ -32,7 +33,7 @@ export const getStyle = (): HTMLStyleElement => {
 
 export default function IndexContent() {
   const [dialogName, setDialogName] = useState<string | null>(
-    POPUP_TYPE.setting
+    MODEL_TYPE.deleteShortcut
   )
 
   const [isDialogOpen, setIsDialogOpen] = useState(true)
@@ -68,7 +69,7 @@ export default function IndexContent() {
   return (
     <SonnerProvider>
       {/* S 新增快捷方式 */}
-      {dialogName === POPUP_TYPE.addNewShortcut && (
+      {dialogName === MODEL_TYPE.addNewShortcut && (
         <NewAddShortcut
           open={isDialogOpen}
           setOpen={(flag) => closeDialog(flag)}
@@ -77,10 +78,19 @@ export default function IndexContent() {
       {/* S 新增快捷方式 */}
 
       {/* S 设置 */}
-      {dialogName === POPUP_TYPE.setting && (
+      {dialogName === MODEL_TYPE.setting && (
         <Setting open={isDialogOpen} setOpen={(flag) => closeDialog(flag)} />
       )}
       {/* E 设置 */}
+
+      {/* S 删除 */}
+      {dialogName === MODEL_TYPE.deleteShortcut && (
+        <DeleteShortcut
+          open={isDialogOpen}
+          setOpen={(flag) => closeDialog(flag)}
+        />
+      )}
+      {/* S 删除 */}
     </SonnerProvider>
   )
 }

@@ -15,7 +15,7 @@ import {
   WandSparkles
 } from "lucide-react"
 
-import { createTab, openGitHubDev } from "~utils"
+import { createTab, getUUID, openGitHubDev } from "~utils"
 
 import packageJson from "../../../package.json"
 
@@ -24,7 +24,8 @@ import packageJson from "../../../package.json"
  */
 export const CONFIG = {
   name: "Horizon-Hop",
-  version: packageJson.version
+  version: packageJson.version,
+  author: "LinHanPro"
 }
 
 /**
@@ -32,6 +33,7 @@ export const CONFIG = {
  */
 export const defaultShortcuts: TYPE.Shortcuts[] = [
   {
+    id: getUUID(),
     alias: "baidu",
     icon: Search,
     iconColor: "#ff0000",
@@ -40,6 +42,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
     category: "search"
   },
   {
+    id: getUUID(),
     alias: "google",
     icon: Earth,
     iconColor: "#4285f4",
@@ -49,6 +52,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
     category: "search"
   },
   {
+    id: getUUID(),
     alias: "npm",
     icon: Package,
     iconColor: "#c12127",
@@ -57,6 +61,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
     category: "dev"
   },
   {
+    id: getUUID(),
     alias: "github",
     icon: Github,
     iconColor: "#181717",
@@ -65,6 +70,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
     category: "dev"
   },
   {
+    id: getUUID(),
     alias: "csdn",
     icon: LibraryBig,
     iconColor: "#ff6600",
@@ -73,6 +79,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
     category: "dev"
   },
   {
+    id: getUUID(),
     alias: "juejin",
     icon: LibraryBig,
     iconColor: "#f0ad4e",
@@ -81,6 +88,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
     category: "dev"
   },
   {
+    id: getUUID(),
     alias: "vant",
     icon: Smartphone,
     iconColor: "#00b4ff",
@@ -89,6 +97,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
     category: "dev"
   },
   {
+    id: getUUID(),
     alias: "element2",
     icon: Biohazard,
     iconColor: "#409eff",
@@ -97,6 +106,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
     category: "dev"
   },
   {
+    id: getUUID(),
     alias: "element3",
     icon: Biohazard,
     iconColor: "#409eff",
@@ -105,6 +115,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
     category: "dev"
   },
   {
+    id: getUUID(),
     alias: "antdV",
     icon: Component,
     iconColor: "#1677ff",
@@ -113,6 +124,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
     category: "dev"
   },
   {
+    id: getUUID(),
     alias: "antdR",
     icon: Component,
     iconColor: "#1677ff",
@@ -121,6 +133,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
     category: "dev"
   },
   {
+    id: getUUID(),
     alias: "iconify",
     icon: WandSparkles,
     iconColor: "#8e44ad", // Iconify紫

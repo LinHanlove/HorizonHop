@@ -11,74 +11,18 @@ import { ChevronRight } from "lucide-react"
 import React, { useState } from "react"
 
 import { CONFIG } from "~constants"
+import { useSetting } from "~hooks"
 
 export default function Setting({ ...props }) {
   console.log("设置弹窗", props)
 
   const { open, setOpen } = props
 
-  const [isLightModeEnabled, setIsLightModeEnabled] = useState(false)
-  const [isGlassEffectEnabled, setIsGlassEffectEnabled] = useState(true)
-  const [isAnimationEnabled, setIsAnimationEnabled] = useState(true)
-  const [isPanelExpanded, setIsPanelExpanded] = useState(false)
-  const [isShowDescriptionEnabled, setIsShowDescriptionEnabled] = useState(true)
-  const [isCustomFunctionEnabled, setIsCustomFunctionEnabled] = useState(false)
-  const [isOpenInNewTabEnabled, setIsOpenInNewTabEnabled] = useState(true)
-
-  /**
-   * @constants 开关类设置的配map
-   */
-  const switchConfigMap = [
-    {
-      title: "外观",
-      items: [
-        {
-          title: "明亮模式",
-          description: "当前主题模式",
-          checked: isLightModeEnabled,
-          onChange: setIsLightModeEnabled
-        },
-        {
-          title: "毛玻璃效果",
-          description: "启用背景模糊效果",
-          checked: isGlassEffectEnabled,
-          onChange: setIsGlassEffectEnabled
-        },
-        {
-          title: "动画效果",
-          description: "启用动画效果",
-          checked: isAnimationEnabled,
-          onChange: setIsAnimationEnabled
-        }
-      ]
-    },
-    {
-      title: "功能",
-      items: [
-        {
-          title: "显示描述",
-          description: "在卡片上显示描述",
-          checked: isShowDescriptionEnabled,
-          onChange: setIsShowDescriptionEnabled
-        }
-      ]
-    },
-    {
-      title: "行为",
-      items: [
-        {
-          title: "在新标签页中打开",
-          description: "在浏览器的新标签页中打开链接",
-          checked: isOpenInNewTabEnabled,
-          onChange: setIsOpenInNewTabEnabled
-        }
-      ]
-    }
-  ]
+  const { switchConfigMap, exportData } = useSetting()
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
-      <DialogContent className="lh-w-[420px] lh-flex lh-flex-col lh-max-h-[80vh]">
+      <DialogContent className="lh-w-[420px] lh-flex lh-flex-col lh-max-h-[60vh]">
         <DialogHeader>
           <DialogTitle>设置</DialogTitle>
         </DialogHeader>
@@ -121,18 +65,20 @@ export default function Setting({ ...props }) {
               数据
             </h3>
             <div className="lh-space-y-3">
-              <button className="lh-flex lh-items-center lh-justify-between lh-w-full lh-px-4 lh-py-3 lh-rounded-lg lh-bg-slate-50 hover:lh-bg-slate-100 lh-text-left lh-transition-colors">
+              <button
+                onClick={exportData}
+                className="lh-flex lh-items-center lh-justify-between lh-w-full lh-px-4 lh-py-3 lh-rounded-lg lh-bg-slate-50 hover:lh-bg-slate-100 lh-text-left lh-transition-colors">
                 <span className="lh-text-sm lh-font-medium lh-text-slate-700">
                   导出数据
                 </span>
                 <ChevronRight className="lh-h-4 lh-w-4 lh-text-slate-400" />
               </button>
-              <button className="lh-flex lh-items-center lh-justify-between lh-w-full lh-px-4 lh-py-3 lh-rounded-lg lh-bg-slate-50 hover:lh-bg-slate-100 lh-text-left lh-transition-colors">
+              {/* <button className="lh-flex lh-items-center lh-justify-between lh-w-full lh-px-4 lh-py-3 lh-rounded-lg lh-bg-slate-50 hover:lh-bg-slate-100 lh-text-left lh-transition-colors">
                 <span className="lh-text-sm lh-font-medium lh-text-slate-700">
                   导入数据
                 </span>
                 <ChevronRight className="lh-h-4 lh-w-4 lh-text-slate-400" />
-              </button>
+              </button> */}
             </div>
           </div>
 
@@ -148,12 +94,12 @@ export default function Setting({ ...props }) {
               </div>
               <div className="lh-text-center lh-space-y-2">
                 <p className="lh-font-medium lh-text-lg lh-text-slate-800">
-                  Atom Honeycomb
+                  {CONFIG.name}
                 </p>
-                <p className="lh-text-slate-600">版本 2.0</p>
+                <p className="lh-text-slate-600">版本 {CONFIG.version}</p>
                 <div className="lh-w-16 lh-h-0.5 lh-bg-slate-800 lh-mx-auto lh-my-4"></div>
                 <p className="lh-text-slate-500 lh-text-sm lh-flex lh-items-center lh-justify-center">
-                  © 2025 LinHanPro
+                  © 2025 {CONFIG.author}
                   <a
                     className="lh-text-slate-600 lh-font-medium lh-underline lh-pl-2"
                     href="https://github.com/LinHanPro/lin-han-pro"

@@ -3,7 +3,7 @@ import React, { useState } from "react"
 
 import { Button } from "~components/ui/button"
 import { Input } from "~components/ui/input"
-import { CONFIG, POPUP_TYPE } from "~constants"
+import { CONFIG, MODEL_TYPE } from "~constants"
 import { sendMessage } from "~utils"
 
 export default function Header() {
@@ -14,7 +14,7 @@ export default function Header() {
    */
   const openSetting = () => {
     sendMessage({
-      type: POPUP_TYPE.setting,
+      type: MODEL_TYPE.setting,
       origin: "popup",
       chrome
     })

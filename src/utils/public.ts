@@ -1,3 +1,5 @@
+import md5 from "md5"
+
 /**
  * @function 将类转换为单例类
  */
@@ -40,11 +42,11 @@ export const copyText = async (value: string) => {
       if (window.navigator.clipboard) {
         window.navigator.clipboard.writeText(value)
       } else {
-        const textarea = document.createElement('textarea')
+        const textarea = document.createElement("textarea")
         document.body.appendChild(textarea)
         textarea.value = value
         textarea.select()
-        document.execCommand('copy')
+        document.execCommand("copy")
         document.body.removeChild(textarea)
       }
       resolve(value)
@@ -52,4 +54,13 @@ export const copyText = async (value: string) => {
       reject(error)
     }
   })
+}
+
+/**
+ * @function  返回一个唯一的id
+ */
+export const getUUID = () => {
+  const time = new Date().getTime()
+  const random = Math.floor(Math.random() * 1000)
+  return md5(`${time}-${random}`)
 }

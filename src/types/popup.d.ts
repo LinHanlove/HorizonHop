@@ -3,6 +3,7 @@ declare namespace TYPE {
    * @type 默认搜索配置
    */
   interface Shortcuts {
+    id: string // id
     alias: string // 别名
     icon:
       | ForwardRefExoticComponent<

@@ -145,7 +145,7 @@ export default function NewAddShortcut({ ...props }) {
             </div>
           </div>
           <DialogFooter className="lh-flex lh-justify-end">
-            <Button onClick={() => onSubmitNewShortcut(newShortcut)}>
+            <Button onClick={() => onSubmitNewShortcut(newShortcut, setOpen)}>
               保存设置
             </Button>
           </DialogFooter>

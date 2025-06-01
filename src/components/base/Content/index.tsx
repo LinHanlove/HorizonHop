@@ -4,7 +4,7 @@ import { ChevronLeft, Menu, Plus } from "lucide-react"
 import React, { useState } from "react"
 
 import { Button } from "~components/ui/button"
-import { defaultShortcuts, menuList, POPUP_TYPE } from "~constants"
+import { defaultShortcuts, menuList, MODEL_TYPE } from "~constants"
 import { sendMessage } from "~utils"
 
 export default function Content() {
@@ -56,7 +56,7 @@ export default function Content() {
    */
   const onAddShortcut = () => {
     sendMessage({
-      type: POPUP_TYPE.addNewShortcut,
+      type: MODEL_TYPE.addNewShortcut,
       origin: "popup",
       chrome
     })
@@ -201,7 +201,7 @@ export default function Content() {
                       style={{ color: shortcut.iconColor }}
                     />
                   ) : (
-                    <span className="lh-h-4 lh-w-4">shortcut.icon</span>
+                    <span className="lh-h-4 lh-w-4">{shortcut.icon}</span>
                   )}
                 </div>
 

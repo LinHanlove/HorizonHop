@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react"
 
 import { toast } from "~components/base/Sonner"
-import { getLocal, setLocal } from "~utils"
+import { getLocal, getUUID, setLocal } from "~utils"
 
 export const useNewAddShortcut = (option: TYPE.InitConfig) => {
   const { chrome } = option
   // 新增的快捷方式
   const [newShortcut, setNewShortcut] = useState<TYPE.Shortcuts>({
+    id: getUUID(),
     alias: "",
     icon: "🔗",
     prefix: "",
@@ -34,8 +35,9 @@ export const useNewAddShortcut = (option: TYPE.InitConfig) => {
   /**
    * @function 设置新增的快捷方式
    */
-  const onSubmitNewShortcut = (shortcut) => {
+  const onSubmitNewShortcut = (shortcut, setOpen) => {
     const { alias, prefix } = shortcut
+    shortcut.id = getUUID()
     if (!alias) {
       return toast("请输入快捷方式名称", {
         title: "添加错误",
@@ -63,6 +65,12 @@ export const useNewAddShortcut = (option: TYPE.InitConfig) => {
       value: JSON.stringify([...shortcutsSearchLocal, shortcut]),
       chrome
     })
+    toast("添加成功", {
+      type: "success"
+    })
+    setTimeout(() => {
+      setOpen(false)
+    }, 800)
   }
 
   return {
