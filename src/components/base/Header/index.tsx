@@ -1,5 +1,5 @@
-import { Pointer, Search, Settings } from "lucide-react"
-import React, { useState } from "react"
+import { Layers2, Settings } from "lucide-react"
+import React from "react"
 
 import { useSearchContext } from "~components/base/Layout"
 import { Button } from "~components/ui/button"
@@ -46,7 +46,7 @@ export default function Header() {
                     chrome
                   })
                 }}>
-                <Pointer className="lh-w-4 lh-h-4" />
+                <Layers2 className="lh-w-4 lh-h-4" />
               </Button>
               <Button
                 variant="ghost"
