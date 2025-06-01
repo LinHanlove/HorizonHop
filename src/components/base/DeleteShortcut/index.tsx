@@ -5,21 +5,16 @@ import Dialog, {
   DialogTitle
 } from "@/components/base/Dialog"
 import { Button } from "@/components/ui/button"
+import { Icon } from "@iconify/react"
 import { Trash2 } from "lucide-react"
 import React, { useEffect } from "react"
 
 import { useSetting } from "~hooks"
 import { cn } from "~utils/shadcn"
 
-interface DeleteShortcutProps {
-  open: boolean
-  setOpen: (isOpen: boolean) => void
-}
-
-export default function DeleteShortcut({ open, setOpen }: DeleteShortcutProps) {
-  const { shortcutsToDelete, loadShortcutsToDelete, deleteShortcut } =
-    useSetting()
-
+export default function DeleteShortcut({ ...props }) {
+  const { shortcuts, loadShortcutsToDelete, deleteShortcut } = useSetting()
+  const { open, setOpen } = props
   useEffect(() => {
     if (open) {
       loadShortcutsToDelete()
@@ -34,31 +29,21 @@ export default function DeleteShortcut({ open, setOpen }: DeleteShortcutProps) {
         </DialogHeader>
         <DialogDescription>选择要删除的预设快捷方式。</DialogDescription>
         <div className="lh-space-y-3 lh-overflow-y-auto lh-py-2 lh-flex-1 lh-pr-2">
-          {shortcutsToDelete.length === 0 ? (
+          {!shortcuts.length ? (
             <p className="lh-text-center lh-text-slate-500">
               没有可删除的快捷方式。
             </p>
           ) : (
-            shortcutsToDelete.map((shortcut) => (
+            shortcuts.map((shortcut) => (
               <div
                 key={shortcut.id}
                 className="lh-flex lh-items-center lh-justify-between lh-p-2 lh-rounded-md lh-bg-card hover:lh-bg-accent lh-text-card-foreground lh-transition-colors lh-border lh-border-border">
                 <div className="lh-flex-shrink-0 lh-mr-4 lh-p-2 lh-bg-background lh-rounded-full lh-shadow-sm lh-flex lh-items-center lh-justify-center">
-                  {shortcut.icon &&
-                    (typeof shortcut.icon !== "string" ? (
-                      <shortcut.icon
-                        className={cn(
-                          "lh-h-5 lh-w-5",
-                          shortcut.iconColor
-                            ? `lh-text-[${shortcut.iconColor}]`
-                            : "lh-text-muted-foreground"
-                        )}
-                      />
-                    ) : (
-                      <span className="lh-h-5 lh-w-5 lh-flex lh-items-center lh-justify-center lh-text-xl">
-                        {shortcut.icon}
-                      </span>
-                    ))}
+                  <Icon
+                    icon={shortcut.icon}
+                    color={shortcut.iconColor}
+                    className={cn("lh-h-4 lh-w-4")}
+                  />
                 </div>
 
                 <div className="lh-flex-1 lh-mr-4 lh-space-y-0.5 lh-min-w-0">

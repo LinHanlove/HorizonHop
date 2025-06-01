@@ -1,6 +1,7 @@
 import { useState } from "react"
 
 import { toast } from "~components/base/Sonner"
+import { defaultShortcuts } from "~constants"
 import { copyText, getLocal, setLocal } from "~utils"
 
 export const useSetting = () => {
@@ -18,9 +19,7 @@ export const useSetting = () => {
   // 删除弹窗相关状态
   const [isDeleteShortcutDialogOpen, setIsDeleteShortcutDialogOpen] =
     useState(false)
-  const [shortcutsToDelete, setShortcutsToDelete] = useState<TYPE.Shortcuts[]>(
-    []
-  ) // 存储要删除的快捷方式列表
+  const [shortcuts, setShortcuts] = useState<TYPE.Shortcuts[]>([]) // 存储要删除的快捷方式列表
 
   /**
    * @constants 开关类设置的配map
@@ -98,17 +97,16 @@ export const useSetting = () => {
       chrome: chrome
     })
       .then((data) => {
-        // 确保数据是数组，如果 local storage 中没有或格式不对，设为空数组
         if (Array.isArray(data)) {
-          setShortcutsToDelete(data)
+          setShortcuts(data)
         } else {
-          setShortcutsToDelete([])
+          setShortcuts([])
         }
       })
       .catch((error) => {
         console.error("加载快捷方式失败:", error)
         toast("加载快捷方式失败，请稍后再试", { type: "error" })
-        setShortcutsToDelete([])
+        setShortcuts([])
       })
   }
 
@@ -118,25 +116,37 @@ export const useSetting = () => {
    */
   const deleteShortcut = (id: string) => {
     // 过滤掉要删除的快捷方式
-    const updatedShortcuts = shortcutsToDelete.filter(
-      (shortcut) => shortcut.id !== id
-    )
+    const updatedShortcuts = shortcuts.filter((shortcut) => shortcut.id !== id)
 
     // 更新本地存储
     setLocal({
       key: "shortcutsSearch",
-      value: JSON.stringify(updatedShortcuts), // setLocal 需要字符串
+      value: JSON.stringify(updatedShortcuts),
       chrome: chrome
     })
       .then(() => {
         // 更新组件状态
-        setShortcutsToDelete(updatedShortcuts)
+        setShortcuts(updatedShortcuts)
         toast("快捷方式删除成功", { type: "success" })
       })
       .catch((error) => {
         console.error("删除快捷方式失败:", error)
         toast("删除快捷方式失败，请稍后再试", { type: "error" })
       })
+  }
+
+  /**
+   * @function 一件导入预设
+   */
+  const importData = () => {
+    setLocal({
+      key: "shortcutsSearch",
+      value: JSON.stringify([...defaultShortcuts, ...shortcuts]),
+      chrome
+    })
+    toast("导入成功", {
+      type: "success"
+    })
   }
 
   // 返回状态和更新函数
@@ -156,8 +166,9 @@ export const useSetting = () => {
     // 导出删除弹窗相关状态和函数
     isDeleteShortcutDialogOpen,
     setIsDeleteShortcutDialogOpen,
-    shortcutsToDelete,
+    shortcuts,
     loadShortcutsToDelete,
-    deleteShortcut
+    deleteShortcut,
+    importData
   }
 }

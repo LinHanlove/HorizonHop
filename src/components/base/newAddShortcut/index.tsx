@@ -6,9 +6,11 @@ import Dialog, {
   DialogTitle
 } from "@/components/base/Dialog"
 import { Button } from "@/components/ui/button"
+import { Icon } from "@iconify/react"
 import React from "react"
 
 import { Input } from "~components/ui/input"
+import { presetIcons } from "~constants"
 import { useNewAddShortcut } from "~hooks"
 import { cn } from "~utils/shadcn"
 
@@ -87,37 +89,25 @@ export default function NewAddShortcut({ ...props }) {
               <label className="lh-block lh-text-sm lh-font-medium lh-text-slate-700 lh-mb-2">
                 图标
               </label>
-              <div className="lh-grid lh-grid-cols-8 lh-gap-2">
-                {[
-                  "🔗",
-                  "🌐",
-                  "📝",
-                  "📊",
-                  "🔍",
-                  "📦",
-                  "🐙",
-                  "💻",
-                  "🎨",
-                  "💎",
-                  "📱",
-                  "🔄",
-                  "🖼️",
-                  "{ }",
-                  "🗜️",
-                  "👨‍💻"
-                ].map((icon) => (
-                  <button
-                    key={icon}
-                    className={cn(
-                      "lh-flex lh-items-center lh-justify-center lh-h-10 lh-rounded-lg lh-transition-all",
-                      newShortcut.icon === icon
-                        ? "lh-bg-slate-800 lh-text-white lh-shadow-md"
-                        : "lh-bg-slate-100 lh-text-slate-700 hover:lh-bg-slate-200"
-                    )}
-                    onClick={() => setNewShortcut({ ...newShortcut, icon })}>
-                    {icon}
-                  </button>
-                ))}
+              <div className="lh-mb-4">
+                <label className="lh-block lh-text-sm lh-font-medium lh-text-gray-500 lh-mb-2">
+                  滚动选择预设图标
+                </label>
+                <div className="lh-flex lh-flex-wrap lh-gap-2 lh-max-h-[80px] lh-overflow-x-auto lh-pb-2 lh-pr-1">
+                  {presetIcons.map((icon) => (
+                    <button
+                      key={icon}
+                      className={cn(
+                        "lh-flex lh-items-center lh-justify-center lh-flex-shrink-0 lh-h-8 lh-w-8 lh-rounded-md lh-transition-all lh-p-1",
+                        newShortcut.icon === icon
+                          ? "lh-bg-slate-400 lh-text-white lh-shadow-md lh-border-teal-400"
+                          : "lh-bg-slate-100 lh-text-slate-700 hover:lh-bg-slate-200"
+                      )}
+                      onClick={() => setNewShortcut({ ...newShortcut, icon })}>
+                      <Icon icon={icon} className={cn("lh-h-4 lh-w-4")} />
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 

@@ -1,22 +1,18 @@
 import { cn } from "@/utils/shadcn"
+import { Icon } from "@iconify/react"
 import { AnimatePresence, motion } from "framer-motion"
 import { ChevronLeft, Menu, Plus } from "lucide-react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 import { Button } from "~components/ui/button"
-import { defaultShortcuts, menuList, MODEL_TYPE } from "~constants"
+import { menuList, MODEL_TYPE } from "~constants"
+import { useSetting } from "~hooks"
 import { sendMessage } from "~utils"
 
 export default function Content() {
+  const { shortcuts, importData, loadShortcutsToDelete } = useSetting()
   const [searchQuery, setSearchQuery] = useState("")
-  const [shortcuts, setShortcuts] = useState(defaultShortcuts)
-  const [newShortcut, setNewShortcut] = useState({
-    name: "",
-    url: "",
-    icon: "🔗",
-    category: "other"
-  })
-  const [showSettings, setShowSettings] = useState(false)
+
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   // 是否展开左侧面板
   const [leftPanelExpanded, setLeftPanelExpanded] = useState(false)
@@ -29,6 +25,12 @@ export default function Content() {
       shortcut.alias.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
+  useEffect(() => {
+    if (open) {
+      loadShortcutsToDelete()
+    }
+  }, [open, loadShortcutsToDelete])
+
   /**
    * @ array 按分类的快捷方式
    */
@@ -36,12 +38,10 @@ export default function Content() {
     new Set(filteredShortcuts.map((s) => s.category))
   ) as string[]
 
-  // Get shortcuts for active category or all if no category is selected
   const displayedShortcuts = activeCategory
     ? filteredShortcuts.filter((s) => s.category === activeCategory)
     : filteredShortcuts
 
-  // Handle function button click
   const handleFunctionClick = (event: () => void) => {
     event() // Execute the function directly
   }
@@ -187,49 +187,60 @@ export default function Content() {
         {/* E 分类栏 */}
         {/* S 快捷搜索 */}
         <div className="lh-flex-1 lh-p-4 lh-overflow-y-auto">
-          <div className="lh-grid lh-grid-cols-4 lh-gap-2">
-            {displayedShortcuts.map((shortcut, index) => (
-              <motion.button
-                key={shortcut.alias}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="lh-group lh-relative lh-flex lh-flex-col lh-items-center lh-justify-center lh-p-2 lh-rounded-[4px] lh-transition-all lh-duration-300 hover:lh-scale-105 hover:lh-shadow-lg hover:lh-shadow-slate-500/15 focus:lh-outline-none lh-bg-white/90 lh-backdrop-blur-sm lh-border lh-border-slate-200/50"
-                onClick={() => handleShortcutClick(shortcut.prefix)}>
-                <div className="lh-flex lh-items-center lh-justify-center lh-w-6 lh-h-6 lh-mb-2 lh-text-2xl lh-transition-transform lh-group-hover:scale-110 group-hover:lh-rotate-12">
-                  {typeof shortcut.icon !== "string" ? (
-                    <shortcut.icon
+          {!shortcuts.length ? (
+            // 当没有快捷方式时显示导入按钮
+            <div className="lh-flex lh-flex-col lh-items-center lh-justify-center lh-h-full">
+              <p className="lh-text-slate-500 lh-mb-4">还没有快捷方式，</p>
+              <button
+                onClick={() => importData()}
+                className="lh-px-6 lh-py-3 lh-rounded-md lh-bg-slate-800 hover:lh-bg-slate-900 lh-text-white lh-font-medium lh-transition-colors">
+                一键导入预设
+              </button>
+            </div>
+          ) : (
+            // 当有快捷方式时显示网格
+            <div className="lh-grid lh-grid-cols-4 lh-gap-2">
+              {displayedShortcuts.map((shortcut, index) => (
+                <motion.button
+                  key={shortcut.alias}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  className="lh-group lh-relative lh-flex lh-flex-col lh-items-center lh-justify-center lh-p-2 lh-rounded-[4px] lh-transition-all lh-duration-300 hover:lh-scale-105 hover:lh-shadow-lg hover:lh-shadow-slate-500/15 focus:lh-outline-none lh-bg-white/90 lh-backdrop-blur-sm lh-border lh-border-slate-200/50"
+                  onClick={() => handleShortcutClick(shortcut.prefix)}>
+                  <div className="lh-flex lh-items-center lh-justify-center lh-w-6 lh-h-6 lh-mb-2 lh-text-2xl lh-transition-transform lh-group-hover:scale-110 group-hover:lh-rotate-12">
+                    <Icon
+                      icon={shortcut.icon}
+                      color={shortcut.iconColor}
                       className={cn("lh-h-4 lh-w-4")}
-                      style={{ color: shortcut.iconColor }}
                     />
-                  ) : (
-                    <span className="lh-h-4 lh-w-4">{shortcut.icon}</span>
-                  )}
+                  </div>
+
+                  <span className="lh-text-[12px] lh-font-medium lh-text-slate-700 group-hover:lh-text-slate-900 lh-truncate lh-w-full lh-text-center lh-transition-colors">
+                    {shortcut.alias}
+                  </span>
+
+                  {/* 悬浮 */}
+                  <div className="lh-absolute lh-inset-0 lh-rounded-[4px] lh-bg-gradient-to-br lh-from-slate-500/5 lh-to-slate-600/5 lh-opacity-0 group-hover:lh-opacity-100 lh-transition-opacity lh-duration-300"></div>
+                </motion.button>
+              ))}
+
+              {/* S 添加 */}
+              <motion.button
+                transition={{
+                  duration: 0.3,
+                  delay: displayedShortcuts.length * 0.05
+                }}
+                className="lh-group lh-relative lh-flex lh-flex-col lh-items-center lh-justify-center lh-p-2 lh-rounded-[4px] lh-transition-all lh-duration-300 hover:lh-scale-105 hover:lh-shadow-lg hover:lh-shadow-slate-500/15 focus:lh-outline-none lh-bg-white/60 lh-backdrop-blur-sm lh-border lh-border-slate-200/50 lh-border-dashed"
+                onClick={onAddShortcut}>
+                <div className="lh-flex lh-items-center lh-justify-center lh-w-6 lh-h-6 lh-mb-2 lh-rounded-full lh-bg-slate-100 lh-text-slate-400 lh-transition-all group-hover:lh-text-slate-600 group-hover:lh-bg-slate-200 group-hover:lh-scale-110">
+                  <Plus className="lh-h-6 lh-w-6" />
                 </div>
-
-                <span className="lh-text-[12px] lh-font-medium lh-text-slate-700 group-hover:lh-text-slate-900 lh-truncate lh-w-full lh-text-center lh-transition-colors">
-                  {shortcut.alias}
+                <span className="lh-text-[10px] lh-text-nowrap lh-font-medium lh-text-slate-400 group-hover:lh-text-slate-600">
+                  添加
                 </span>
-
-                {/* 悬浮 */}
-                <div className="lh-absolute lh-inset-0 lh-rounded-[4px] lh-bg-gradient-to-br lh-from-slate-500/5 lh-to-slate-600/5 lh-opacity-0 group-hover:lh-opacity-100 lh-transition-opacity lh-duration-300"></div>
               </motion.button>
-            ))}
-
-            {/* 添加 */}
-            <motion.button
-              transition={{
-                duration: 0.3,
-                delay: displayedShortcuts.length * 0.05
-              }}
-              className="lh-group lh-relative lh-flex lh-flex-col lh-items-center lh-justify-center lh-p-2 lh-rounded-[4px] lh-transition-all lh-duration-300 hover:lh-scale-105 hover:lh-shadow-lg hover:lh-shadow-slate-500/15 focus:lh-outline-none lh-bg-white/60 lh-backdrop-blur-sm lh-border lh-border-slate-200/50 lh-border-dashed"
-              onClick={onAddShortcut}>
-              <div className="lh-flex lh-items-center lh-justify-center lh-w-6 lh-h-6 lh-mb-2 lh-rounded-full lh-bg-slate-100 lh-text-slate-400 lh-transition-all group-hover:lh-text-slate-600 group-hover:lh-bg-slate-200 group-hover:lh-scale-110">
-                <Plus className="lh-h-6 lh-w-6" />
-              </div>
-              <span className="lh-text-[10px] lh-text-nowrap lh-font-medium lh-text-slate-400 group-hover:lh-text-slate-600">
-                添加
-              </span>
-            </motion.button>
-          </div>
+              {/* E 添加 */}
+            </div>
+          )}
         </div>
         {/* E 快捷搜索 */}
       </div>
