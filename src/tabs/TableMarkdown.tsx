@@ -243,8 +243,7 @@ export default function TableMarkdown() {
       })
       handleCopy()
     } catch (error) {
-      console.log("error", error);
-      
+      console.log("error", error)
     }
   }, [data, action, indent, jsonContainer])
 

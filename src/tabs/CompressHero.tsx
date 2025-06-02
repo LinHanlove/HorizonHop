@@ -1,9 +1,13 @@
 import { Icon } from "@iconify/react"
 
-import "~/assets/style/tailwind.css"
+import { Button } from "~components/ui/button"
+import { Input } from "~components/ui/input"
+
+// import { Slider } from "~components/ui/slider"
+
+import "~style.css"
 
 import { useEffect, useRef, useState } from "react"
-
 
 import {
   Compressor_PNG,
@@ -273,219 +277,88 @@ export default function CompressHero() {
     return compressorDetails.find((i) => i.id === file.id)?.key === "convert"
   }
   return (
-    <>
-      <h2 className="title text-center text-2xl font-bold py-4">
-        CompressHero
-      </h2>
-      <div className="subTitle mx-4  text-[12px] font-semibold flex ">
-        <div className="mb-1 ">
-          支持PNG、JPEG、GIF、WEBP图片进行智能有损压缩、预览、格式转换；如只转换格式，则请勾选仅转换
-        </div>
-        <div className="mx-2">|</div>
-        <div className="mb-1 text-[orange]">
-          <a
-            title="使用文档"
-            href="https://linhan.atomnotion.com/posts/about-atomHoneycomb"
-            target="_blank"
-            rel="noopener noreferrer">
-            使用文档
-          </a>
-        </div>
+    <div className="lh-min-h-screen lh-bg-gradient-to-br lh-from-slate-50 lh-to-slate-100/50">
+      {/* 背景装饰 */}
+      <div className="lh-fixed lh-inset-0 lh-opacity-[0.02] lh-pointer-events-none">
+        <div
+          className="lh-absolute lh-inset-0"
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, rgb(71 85 105) 1px, transparent 0)`,
+            backgroundSize: "20px 20px"
+          }}></div>
       </div>
-      <div className="container mx-[auto] mt-4 h-[80vh] overflow-y-auto border-2 border-gray-200 rounded-lg p-4">
-        {/* S 调节区 */}
-        <div className="flex justify-start">
-          <div className="flex items-center mb-4 bg-[#f5f5f5] p-1 rounded-lg">
-            {adjustList.map((item, idx) => {
-              return (
-                <div
-                  style={{
-                    backgroundColor:
-                      item.value === quality ? "orange" : "#f5f5f5"
-                  }}
-                  onClick={() => setQuality(item.value)}
-                  className={`${idx === adjustList.length - 1 ? "" : "mr-2"} w-[60px] h-[26px] flex items-center justify-center rounded-lg  cursor-pointer hover:bg-[#e0e0e0] transition-all`}
-                  key={item.value}>
-                  <div className="flex items-center ">{item.label}</div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-        {/* E 调节区 */}
 
-        {/* S 上传区 */}
-        <div className="content flex items-start justify-center ">
-          <div className="flex justify-center">
-            <label
-              id="uploadFileDom"
-              ref={uploadFileRef}
-              htmlFor="file"
-              className={`w-[384px] h-[160px] group relative border-2 border-dashed  rounded-lg flex flex-col items-center justify-center cursor-pointer ${isDragging ? "border-[orange] bg-[#f5f5f5]" : "border-gray-300"}`}>
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                id="file"
-                className=" opacity-0 w-full h-full absolute top-0 left-0 "
-                onChange={handleFileChange}
-              />
-              <Icon
-                icon="si:add-fill"
-                className={`w-[20px] h-[20px] text-[orange] mb-2 group-hover:scale-150 transition-all duration-300 ${isDragging && "scale-150"}`}
-              />
-              <div
-                className={`text-[#666] text-[14px] font-semibold group-hover:scale-[1.2] transition-all duration-300 ${isDragging && "scale-[1.2]"}`}>
-                点击或拖拽图片文件到此处
+      <div className="lh-relative lh-container lh-mx-auto lh-px-4 lh-py-8">
+        {/* 标题区域 */}
+        <div className="lh-mb-8 lh-text-center">
+          <h1 className="lh-text-3xl lh-font-bold lh-text-slate-800 lh-tracking-tight lh-mb-2">
+            图片压缩
+          </h1>
+          <p className="lh-text-slate-500 lh-text-sm">
+            支持多种图片格式，快速压缩，保持画质
+          </p>
+        </div>
+
+        {/* 上传区域 */}
+        <div className="lh-max-w-2xl lh-mx-auto lh-mb-8">
+          <div className="lh-bg-white/80 lh-backdrop-blur-sm lh-rounded-xl lh-border lh-border-slate-200/60 lh-shadow-sm lh-p-6 lh-transition-all hover:lh-shadow-md">
+            <div className="lh-text-center">
+              <div className="lh-mb-4 lh-flex lh-justify-center">
+                <div className="lh-w-16 lh-h-16 lh-rounded-full lh-bg-slate-100 lh-flex lh-items-center lh-justify-center lh-text-slate-400">
+                  <Icon icon="mdi:image-plus" className="lh-w-8 lh-h-8" />
+                </div>
               </div>
-            </label>
+              <h3 className="lh-text-lg lh-font-medium lh-text-slate-700 lh-mb-2">
+                拖拽图片到这里
+              </h3>
+              <p className="lh-text-sm lh-text-slate-500 lh-mb-4">
+                或者点击选择图片
+              </p>
+              <Button
+                variant="outline"
+                className="lh-bg-white lh-border-slate-200 hover:lh-bg-slate-50 lh-text-slate-600">
+                选择图片
+              </Button>
+            </div>
           </div>
         </div>
-        {/* E 上传区 */}
 
-        {/* S 展示区 */}
-        <div className=" mt-4 flex justify-center items-center flex-col ">
-          {fileList.map((item) => (
-            <div
-              key={item.name}
-              className="flex items-end justify-between w-[calc(70vw-120px)] h-[46px]">
-              {/* <div className="mt-2 w-[66vw] ">
-                <div className="w-[60%] truncate">{item.name}</div>
-                {item.id ? (
-                  <Progress
-                    beforeText={formatFileSize(item.size)}
-                    afterText={
-                      compressorDetails.find((i) => i.id === item.id)?.key ===
-                      "compress"
-                        ? formatFileSize(
-                            compressorDetails.find((i) => i.id === item.id)
-                              ?.size
-                          )
-                        : ""
-                    }
-                    progress={
-                      compressorDetails.find((i) => i.id === item.id)?.key ===
-                      "compress"
-                        ? compressorDetails.find((i) => i.id === item.id)
-                            ?.compressibility
-                        : null
-                    }
-                  />
-                ) : (
-                  <Progress
-                    isContent={false}
-                    beforeText="File type is not supported"
-                    backgroundColor="#eb4545"
-                  />
-                )}
-              </div> */}
-              {item.id && (
-                <div className="h-full w-auto flex items-end justify-center gap-2 ml-2">
-                  {/* S 预览 */}
-                  {!isConvert(item) && (
-                    <div
-                      onClick={() => handlePreview(item)}
-                      className="h-full group flex items-end justify-center mr-2">
-                      <Icon
-                        icon="ri:eye-line"
-                        className="w-[20px] h-[20px] rounded-full  text-green-500 group-hover:bg-[#f5f5f5] group-hover:scale-150 transition-all duration-300"
-                      />
-                    </div>
-                  )}
-
-                  {/* E 预览 */}
-
-                  {/* S 删除 */}
-                  <div
-                    onClick={() => handleDelete(item)}
-                    className="h-full group flex items-end  justify-center mr-2">
-                    <Icon
-                      icon="mdi:delete-outline"
-                      className="w-[20px] h-[20px] rounded-full  text-red-500 group-hover:bg-[#f5f5f5] group-hover:scale-150 transition-all duration-300"
-                    />
-                  </div>
-                  {/* S 删除 */}
-
-                  {/* S 下载 */}
-                  <div
-                    onClick={() => handleDownload(item)}
-                    className="h-full group flex items-end  justify-center mr-2">
-                    <Icon
-                      icon="line-md:download-loop"
-                      className="w-[20px] h-[20px] rounded-full  text-[orange] group-hover:bg-[#f5f5f5] group-hover:scale-150 transition-all duration-300"
-                    />
-                  </div>
-                  {/* S 下载 */}
-
-                  {/* S 格式转换 */}
-                  {isConvert(item) && (
-                    <div
-                      onClick={() => {
-                        setFormatImage(item)
-                        setIsOpenFormat(true)
-                      }}
-                      className="h-full group flex items-end  justify-center mr-2">
-                      <Icon
-                        icon="icon-park-outline:file-conversion-one"
-                        className="w-[20px] h-[20px] rounded-full  text-[#2d9cf4] group-hover:bg-[#f5f5f5] group-hover:scale-150 transition-all duration-300"
-                      />
-                    </div>
-                  )}
-
-                  {/* E 格式转换 */}
+        {/* 设置区域 */}
+        <div className="lh-max-w-2xl lh-mx-auto">
+          <div className="lh-bg-white/80 lh-backdrop-blur-sm lh-rounded-xl lh-border lh-border-slate-200/60 lh-shadow-sm lh-p-6">
+            <h3 className="lh-text-lg lh-font-medium lh-text-slate-700 lh-mb-4">
+              压缩设置
+            </h3>
+            <div className="lh-space-y-4">
+              <div className="lh-flex lh-items-center lh-justify-between">
+                <label className="lh-text-sm lh-text-slate-600">压缩质量</label>
+                <div className="lh-w-48">
+                  {/* <Slider
+                    defaultValue={[80]}
+                    max={100}
+                    min={0}
+                    step={1}
+                    className="lh-w-full"
+                  /> */}
                 </div>
-              )}
+              </div>
+              <div className="lh-flex lh-items-center lh-justify-between">
+                <label className="lh-text-sm lh-text-slate-600">最大宽度</label>
+                <div className="lh-w-48">
+                  <Input
+                    type="number"
+                    className="lh-h-8 lh-text-sm"
+                    placeholder="原始宽度"
+                  />
+                </div>
+              </div>
             </div>
-          ))}
+          </div>
         </div>
-        {/* S 展示区 */}
       </div>
-
-      {/* S 预览弹窗 */}
-      {/* <Modal
-        isOpen={isOpen}
-        setIsOpen={(fisOpen) => setIsOpen(fisOpen)}
-        onConfirm={handlePreview}
-        onCancel={handleCancel}
-        title="对比预览">
-        <div className="flex justify-center items-center w-[70vw]">
-          <div className="w-1/2  border-r-2 border-[#2d9cf4] flex justify-center items-center flex-col">
-            <div className=" text-[#666] text-[14px] font-semibold mb-3">
-              压缩前{" "}
-              <span className="text-red-500">
-                ({formatFileSize(previewImage.original?.file.size)})
-              </span>
-            </div>
-            <img
-              className="w-full h-[60vh] "
-              src={previewImage.original?.url}
-              alt=""
-            />
-          </div>
-          <div className="w-1/2 flex justify-center items-center flex-col">
-            <div className=" text-[#666] text-[14px] font-semibold mb-3">
-              压缩后{" "}
-              <span className="text-green-500">
-                ({formatFileSize(previewImage.compressed?.file.size)})
-              </span>
-            </div>
-            <img
-              className="w-full h-[60vh] "
-              src={previewImage.compressed?.url}
-              alt=""
-            />
-          </div>
-        </div>
-      </Modal> */}
-      {/* E 预览弹窗 */}
-
-      {/* S format弹窗 */}
-     
-      {/* E format弹窗 */}
-    </>
+    </div>
   )
 }
-
 
 //  <Modal
 //         isOpen={isOpenFormat}
