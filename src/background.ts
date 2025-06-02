@@ -1,29 +1,36 @@
-import { menuList, MODEL_TYPE } from "~constants"
-import { createTab, onListenerMessage, openGitHubDev } from "~utils"
+import { menuList, MODEL_TYPE, SEND_FROM } from "~constants"
+import { onListenerMessage, sendMessage } from "~utils"
+
+let isPopupOpen = false
 
 /**
  * @function 监听快捷键命令
  */
 chrome.commands.onCommand.addListener((command) => {
-  // md表格格式转换
-  if (command === "tableMarkdown")
-    createTab({
-      chrome,
-      url: "TableMarkdown"
+  // 打开popup
+  if (command === "openPopup") {
+    // 获取当前popup状态
+    chrome.action.getPopup({}, (popupPath) => {
+      if (!isPopupOpen) {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          if (tabs[0]) {
+            // 聚焦当前窗口
+            chrome.windows.update(tabs[0].windowId, { focused: true })
+          }
+        })
+        isPopupOpen = true
+      } else {
+        chrome.action.openPopup()
+        isPopupOpen = false
+      }
     })
-  // jsonFormatter
-  if (command === "jsonFormatter")
-    createTab({
-      chrome,
-      url: "JsonFormatter"
-    })
-  // 打开githubDev
-  if (command === "openGitHubDev") openGitHubDev()
-  // 图片压缩
-  if (command === "compressHero")
-    createTab({
-      chrome,
-      url: "CompressHero"
+  }
+  // 打开功能面板
+  if (command === "openFunctionArea")
+    sendMessage({
+      type: MODEL_TYPE.functionArea,
+      origin: SEND_FROM.background,
+      chrome
     })
 })
 
@@ -62,5 +69,5 @@ menuList.forEach((item) => {
  */
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   const active = menuList.find((item) => item.id === info.menuItemId)
-  // if (active) active.onclick()
+  if (active) active.event()
 })

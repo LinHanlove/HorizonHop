@@ -7,7 +7,7 @@ import FunctionArea from "~components/base/FunctionArea"
 import NewAddShortcut from "~components/base/NewAddShortcut"
 import Setting from "~components/base/Setting"
 import { SonnerProvider } from "~components/base/Sonner"
-import { MODEL_TYPE } from "~constants"
+import { MODEL_TYPE, SEND_FROM } from "~constants"
 import { onListenerMessage } from "~utils"
 
 export const config: PlasmoCSConfig = {
@@ -55,7 +55,8 @@ export default function IndexContent() {
         MODEL_TYPE.functionArea
       ].includes(message.type)
 
-      if (message.origin === "popup") {
+      // 来自popup
+      if (message.origin === SEND_FROM.popup) {
         // 打开弹窗
         if (!!message.type && isOpenModel) {
           setDialogName(message.type)
@@ -64,6 +65,22 @@ export default function IndexContent() {
         // 切换类目
         if (message.type === "categoryChange") {
           closeDialog(false)
+        }
+      }
+
+      // 来自background
+      if (message.origin === SEND_FROM.background) {
+        // 打开弹窗
+        if (!!message.type && isOpenModel) {
+          setDialogName(message.type)
+          setIsDialogOpen(!isDialogOpen)
+        }
+        // 聚焦当前页面body
+        if (message.type === "focusBody") {
+          // 使用页面级别的操作
+          document.body.click()
+          window.focus()
+          document.body.focus()
         }
       }
     }

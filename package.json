@@ -60,37 +60,21 @@
       "notifications"
     ],
     "commands": {
-      "jsonFormatter": {
+      "openPopup": {
         "suggested_key": {
-          "default": "Alt+J",
-          "mac": "Alt+J",
-          "windows": "Alt+J"
+          "default": "Alt+O",
+          "mac": "Alt+O",
+          "windows": "Alt+O"
         },
-        "description": "Json Formatter"
+        "description": "打开popup"
       },
-      "openGitHubDev": {
+      "openFunctionArea": {
         "suggested_key": {
-          "default": "Alt+G",
-          "mac": "Alt+G",
-          "windows": "Alt+G"
+          "default": "Alt+F",
+          "mac": "Alt+F",
+          "windows": "Alt+F"
         },
-        "description": "激活githubDev"
-      },
-      "compressHero": {
-        "suggested_key": {
-          "default": "Alt+C",
-          "mac": "Alt+C",
-          "windows": "Alt+C"
-        },
-        "description": "图片压缩"
-      },
-      "tableMarkdown": {
-        "suggested_key": {
-          "default": "Alt+T",
-          "mac": "Alt+T",
-          "windows": "Alt+T"
-        },
-        "description": "md表格格式转换"
+        "description": "打开功能面板"
       }
     }
   }
