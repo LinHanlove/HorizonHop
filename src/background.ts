@@ -1,7 +1,7 @@
 import { menuList, MODEL_TYPE, SEND_FROM } from "~constants"
 import { onListenerMessage, sendMessage } from "~utils"
 
-let isPopupOpen = false
+let isPopupOpen = true
 
 /**
  * @function 监听快捷键命令

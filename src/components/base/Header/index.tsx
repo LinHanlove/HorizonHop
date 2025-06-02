@@ -65,8 +65,9 @@ export default function Header() {
               <Input
                 id="search-input"
                 placeholder="选择目标后输入内容，按下回车搜索..."
-                className="lh-w-full lh-h-8 lh-px-4 lh-text-sm lh-rounded-lg lh-border-0 lh-bg-white/80 lh-backdrop-blur-sm lh-shadow-sm lh-shadow-slate-500/5 lh-text-slate-700 placeholder:lh-text-slate-400 focus:lh-ring-2 focus-visible:lh-ring-1 focus:lh-border-2 focus:lh-ring-slate-400/30 focus:lh-bg-white/95 lh-transition-all"
+                className="lh-w-full lh-h-6 lh-px-2 lh-text-sm lh-rounded-lg lh-border-0 lh-bg-white/80 lh-backdrop-blur-sm lh-shadow-sm lh-shadow-slate-500/5 lh-text-slate-700 placeholder:lh-text-slate-400 focus:lh-ring-2 focus-visible:lh-ring-1 focus:lh-border-2 focus:lh-ring-slate-400/30 focus:lh-bg-white/95 lh-transition-all"
                 value={searchQuery}
+                autoFocus={true}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => onEnterSearch(e)}
               />
