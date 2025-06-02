@@ -30,11 +30,14 @@ export default function Header() {
         <div className="lh-relative lh-z-10 lh-px-2 lh-py-4">
           {/* S 名称 */}
           <div className="lh-flex lh-items-center lh-justify-between">
-            <h1 className="lh-flex-1 lh-text-2xl lh-text-center lh-font-bold lh-tracking-tight lh-text-transparent lh-bg-clip-text lh-bg-gradient-to-r lh-from-slate-700 lh-via-gray-700 lh-to-slate-800">
-              {CONFIG.name}
-            </h1>
+            <div>
+              <h1 className="lh-flex-1 lh-text-2xl lh-text-start lh-line- lh-font-bold lh-tracking-tight lh-text-transparent lh-bg-clip-text lh-bg-gradient-to-r lh-from-slate-700 lh-via-gray-700 lh-to-slate-800">
+                {CONFIG.name}
+              </h1>
+              <div className="lh-w-full lh-h-0.5 lh-bg-slate-800"></div>
+            </div>
             {/* S 设置 */}
-            <div className="lh-flex lh-space-x-1">
+            <div className="lh-flex">
               <Button
                 variant="ghost"
                 size="icon"
@@ -65,7 +68,7 @@ export default function Header() {
               <Input
                 id="search-input"
                 placeholder="选择目标后输入内容，按下回车搜索..."
-                className="lh-w-full lh-h-6 lh-px-2 lh-text-sm lh-rounded-lg lh-border-0 lh-bg-white/80 lh-backdrop-blur-sm lh-shadow-sm lh-shadow-slate-500/5 lh-text-slate-700 placeholder:lh-text-slate-400 focus:lh-ring-2 focus-visible:lh-ring-1 focus:lh-border-2 focus:lh-ring-slate-400/30 focus:lh-bg-white/95 lh-transition-all"
+                className="lh-w-full lh-px-3 lh-text-sm lh-rounded-lg lh-border lh-border-slate-200 lh-bg-white/90 lh-backdrop-blur-sm lh-shadow-sm lh-shadow-slate-500/5 lh-text-slate-700 placeholder:lh-text-slate-400 hover:lh-border-slate-300 focus:lh-ring-2 focus:lh-ring-slate-400/20 focus:lh-border-slate-400 focus:lh-bg-white lh-transition-all"
                 value={searchQuery}
                 autoFocus={true}
                 onChange={(e) => setSearchQuery(e.target.value)}

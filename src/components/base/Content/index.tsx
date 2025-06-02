@@ -42,7 +42,7 @@ export default function Content() {
   useEffect(() => {
     if (leftPanelExpanded) {
       setPageWidth({
-        sideBarWidth: 160,
+        sideBarWidth: 150,
         contentWidth: 200
       })
     } else {
@@ -74,8 +74,8 @@ export default function Content() {
       {/* S 侧边栏 - 功能菜单 */}
       <motion.div
         animate={{ width: pageWidth.sideBarWidth }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="lh-relative lh-bg-white/90 lh-backdrop-blur-sm lh-border-r lh-border-slate-200/60 lh-shadow-sm lh-z-10">
+        transition={{ duration: 0.4, ease: "easeInOut" }}
+        className="lh-relative lh-bg-white/90  lh-backdrop-blur-sm lh-border-r lh-border-slate-200/60 lh-shadow-sm lh-z-10">
         {/* S 背景 */}
         <div className="lh-absolute lh-inset-0 lh-opacity-[0.02]">
           <div
