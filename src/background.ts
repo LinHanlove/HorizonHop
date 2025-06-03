@@ -1,5 +1,5 @@
 import { menuList, MODEL_TYPE, SEND_FROM } from "~constants"
-import { onListenerMessage, sendMessage } from "~utils"
+import { lightIcon, onListenerMessage, sendMessage } from "~utils"
 
 let isPopupOpen = true
 
@@ -43,11 +43,18 @@ const onMessage = (
   sendResponse: (response?: any) => void
 ) => {
   console.log("background.tsx onMessage", message)
+  const { origin, type, data } = message
   // 从contentScript发送的消息
-  if (message.origin === "content") {
+  if (origin === SEND_FROM.content) {
     // 功能区事件
-    if (message.type === MODEL_TYPE.functionArea) {
-      menuList.find((item) => item.title === message.data.target)?.event()
+    if (type === MODEL_TYPE.functionArea) {
+      menuList.find((item) => item.title === data.target)?.event()
+    }
+    // 点亮徽标
+    if (type === "lightIcon") {
+      lightIcon({
+        chrome
+      })
     }
   }
 }

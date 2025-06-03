@@ -8,7 +8,7 @@ import NewAddShortcut from "~components/base/NewAddShortcut"
 import Setting from "~components/base/Setting"
 import { SonnerProvider } from "~components/base/Sonner"
 import { MODEL_TYPE, SEND_FROM } from "~constants"
-import { onListenerMessage } from "~utils"
+import { interceptLink, killCsdn, onListenerMessage } from "~utils"
 
 export const config: PlasmoCSConfig = {
   matches: ["<all_urls>"]
@@ -31,6 +31,16 @@ export const getStyle = (): HTMLStyleElement => {
 
   return styleElement
 }
+
+/**
+ * @function 取消外链的默认行为
+ */
+interceptLink(chrome)
+
+/**
+ * @function scdn默认打开内容，不需要点击关注
+ */
+killCsdn(chrome)
 
 export default function IndexContent() {
   // 弹窗名称

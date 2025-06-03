@@ -140,3 +140,19 @@ export const clearLocal = (option) => {
     })
   })
 }
+
+/**
+ * @function 点亮徽标
+ */
+export const lightIcon = (option) => {
+  const { chrome, color, text, textColor } = option
+  console.log(chrome.action, color, text, textColor)
+  chrome.action.setBadgeText({ text: text || "•" })
+  chrome.action.setBadgeTextColor({ color: textColor || "#fff" })
+  chrome.action.setBadgeBackgroundColor({ color: color || "#000000" })
+
+  // 5秒后关闭
+  sleep(5000).then(() => {
+    chrome.action.setBadgeText({ text: "" })
+  })
+}

@@ -1,4 +1,5 @@
-import { SEND_FROM } from "~constants"
+import { Message } from "~components/base/Message"
+import { CONFIG, safePages, SEND_FROM } from "~constants"
 import Compressor from "~utils/ability/Compressor"
 import UPNG from "~utils/ability/UPNG"
 
@@ -166,4 +167,78 @@ export const dataURLtoBlob = (dataurl) => {
     u8arr[n] = bstr.charCodeAt(n)
   }
   return new Blob([u8arr], { type: mime })
+}
+
+/**
+ * @function 消除网站安全页面跳转限制
+ */
+export const interceptLink = (chrome?: any) => {
+  // @match        *://link.juejin.cn/*
+  // @match        *://juejin.cn/*
+  // @match        *://www.jianshu.com/p/*
+  // @match        *://www.jianshu.com/go-wild?*
+  // @match        *://*.zhihu.com/*
+  // @match        *://tieba.baidu.com/*
+  // @match        *://*.oschina.net/*
+  // @match        *://gitee.com/*
+  // @match        *://leetcode.cn/link/*
+  // @match        *://blog.51cto.com/*
+  // @match        *://*.baidu.com/*
+
+  for (let safePage of safePages) {
+    if (!location.href.includes(safePage.url)) continue
+    sendMessageRuntime({
+      type: "lightIcon",
+      origin: SEND_FROM.content,
+      chrome
+    })
+    // 清除网站弹窗
+    while (document.body.firstChild) {
+      document.body.removeChild(document.body.firstChild)
+    }
+    for (let handler of safePage.handlers) {
+      // 处理跳转
+      document.body.append(
+        Message({
+          title: `${CONFIG.name}提醒您！正在跳转...`,
+          subTitle: decodeURIComponent(location.href.split(handler.start)[1])
+        })
+      )
+      location.replace(
+        decodeURIComponent(location.href.split(handler.start)[1])
+      )
+      return
+    }
+  }
+}
+
+/**
+ * @function 消除csdn一些垃圾限制
+ * @description 经过分析发现，点击关注展开其实只是样式层面上的隐藏，
+ * 所以找到对应类名修改样式就可以了
+ * 按钮class【hide-article-box hide-article-pos text-center】
+ * 内容id【article_content】
+ */
+export const killCsdn = (chrome?: any) => {
+  const scdnWhiteLink = "https://blog.csdn.net/"
+  console.log(location.href.includes(scdnWhiteLink))
+
+  if (!location.href.includes(scdnWhiteLink)) return
+  const hideArticleBox = document.querySelector(
+    ".hide-article-box"
+  ) as HTMLElement
+  const articleContent = document.querySelector(
+    "#article_content"
+  ) as HTMLElement
+  console.log(hideArticleBox, articleContent)
+
+  if (hideArticleBox) {
+    sendMessageRuntime({
+      type: "lightIcon",
+      origin: SEND_FROM.content,
+      chrome
+    })
+    hideArticleBox.style.display = "none"
+    articleContent.style.height = "auto"
+  }
 }

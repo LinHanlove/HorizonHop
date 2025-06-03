@@ -45,3 +45,69 @@ export const SHORTCUT_TYPE_MAP = [
     label: SHORTCUT_TYPE_NAME[SHORTCUT_TYPE.other]
   }
 ]
+
+/**
+ * 安全页面重定向列表
+ */
+export const safePages = [
+  {
+    name: "CSDN",
+    url: "link.csdn.net",
+    handlers: [
+      {
+        type: "forward",
+        start: "target="
+      }
+    ]
+  },
+  {
+    name: "掘金",
+    url: "link.juejin.cn",
+    handlers: [
+      {
+        type: "forward",
+        start: "target="
+      }
+    ]
+  },
+  {
+    name: "简书",
+    url: "jianshu.com/go-wild?ac=2",
+    handlers: [
+      {
+        type: "forward",
+        start: "url="
+      }
+    ]
+  },
+  {
+    name: "知乎",
+    url: "link.zhihu.com",
+    handlers: [
+      {
+        type: "forward",
+        start: "target="
+      }
+    ]
+  },
+  {
+    name: "开源中国",
+    url: "oschina.net/action/GoToLink",
+    handlers: [
+      {
+        type: "forward",
+        start: "url="
+      }
+    ]
+  },
+  {
+    name: "码云",
+    url: "gitee.com/link",
+    handlers: [
+      {
+        type: "forward",
+        start: "target="
+      }
+    ]
+  }
+]
