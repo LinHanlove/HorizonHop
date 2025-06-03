@@ -43,18 +43,17 @@ export const JsonFormatter = (
           : "&bsol;&quot;" // 转义的引号: \"
 
   const spanTag = (type: TYPE.JsonType, display?: string): string =>
-    // 创建带有样式的 span 标签
-    display
-      ? `<span class="lh-json-${type} lh-font-mono lh-text-sm">${display}</span>`
-      : ""
+    // 创建类似于 "<span class=json-boolean>true</span>" 的HTML。
+    display ? "<span class=json-" + type + ">" + display + "</span>" : ""
 
   /**
    * @function buildValueHtml
-   * @description 分析一个值并返回带有样式的HTML。
+   * @description 分析一个值并返回类似于 "<span class=json-number>3.1415</span>" 的HTML。
    * @param value JSON值
    * @returns
    */
   const buildValueHtml = (value: string): string => {
+    // 分析一个值并返回类似于 "<span class=json-number>3.1415</span>" 的HTML。
     const strType = /^"/.test(value) && "string"
     const boolType = ["true", "false"].includes(value) && "boolean"
     const nullType = value === "null" && "null"
@@ -62,7 +61,7 @@ export const JsonFormatter = (
     const urlPattern = /https?:\/\/[^\s"]+/g
     const target = linksNewTab ? " target=_blank" : ""
     const makeLink = (link: string) =>
-      `<a class="lh-json-link lh-text-blue-600 hover:lh-text-blue-700 lh-underline lh-decoration-dotted" href="${link}"${target}>${link}</a>`
+      `<a class=json-link href="${link}"${target}>${link}</a>`
     const display =
       strType && linkUrls ? value.replace(urlPattern, makeLink) : value
     return spanTag(type, display)
@@ -76,6 +75,7 @@ export const JsonFormatter = (
    * @returns
    */
   const replacer = (match: string, ...parts: string[]): string => {
+    // 将四个括号捕获组（缩进，键，值，结束）转换为HTML。
     const part = {
       indent: parts[0],
       key: parts[1],
@@ -105,32 +105,18 @@ export const JsonFormatter = (
   const html = json.replace(invalidHtml, toHtml).replace(jsonLine, replacer)
 
   // 将HTML包裹在 <pre> 标签中。
-  const makeLine = (line: string): string =>
-    `<li class="lh-json-li lh-py-0.5 lh-px-2 lh-border-l-2 lh-border-transparent hover:lh-border-slate-200 hover:lh-bg-slate-50/50 lh-transition-colors">${line}</li>`
+  const makeLine = (line: string): string => `   <li class=json-li>${line}</li>`
 
   // 用 <ol> 标签包裹 HTML。
-  const addLineNumbers = (html: string): string =>
+  const addLineNumbers = (
+    html: string
+  ): string => // 用 <ol> 标签包裹 HTML
     [
-      '<ol class="lh-json-lines lh-list-decimal lh-list-inside lh-text-slate-400 lh-text-xs lh-select-none" style="counter-reset: line">',
+      "<ol class=json-lines style='list-style:auto !important;'>",
       ...html.split("\n").map(makeLine),
       "</ol>"
     ].join("\n")
 
   // 返回HTML。
   return lineNumbers ? addLineNumbers(html) : html
-}
-
-// 添加样式类型定义
-declare global {
-  namespace TYPE {
-    type JsonType = "string" | "number" | "boolean" | "null" | "key" | "mark"
-    interface FormatOptions {
-      indent?: number
-      lineNumbers?: boolean
-      linkUrls?: boolean
-      linksNewTab?: boolean
-      quoteKeys?: boolean
-      trailingCommas?: boolean
-    }
-  }
 }
