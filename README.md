@@ -1,33 +1,213 @@
-This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with [`plasmo init`](https://www.npmjs.com/package/plasmo).
+# Horizon-Hop
 
-## Getting Started
+![Horizon-Hop Logo](./assets/icon.png)
 
-First, run the development server:
+## 项目简介
 
-```bash
-pnpm dev
-# or
-npm run dev
-```
+**Horizon-Hop** 是一款精心打造的浏览器扩展工具集，旨在为前端开发者、数据分析师以及所有需要处理结构化数据和图片的用户提供一站式的高效解决方案。我们集合了 JSON 格式化、Markdown 表格与 JSON 相互转换、本地图片压缩与格式处理等多种实用功能，助您跨越繁琐，直达效率的彼岸。
 
-Open your browser and load the appropriate development build. For example, if you are developing for the chrome browser, using manifest v3, use: `build/chrome-mv3-dev`.
+## 如何使用 Horizon-Hop
 
-You can start editing the popup by modifying `popup.tsx`. It should auto-update as you make changes. To add an options page, simply add a `options.tsx` file to the root of the project, with a react component default exported. Likewise to add a content page, add a `content.ts` file to the root of the project, importing some module and do some logic, then reload the extension on your browser.
+安装并启用 Horizon-Hop 扩展后，Horizon-Hop 的主要功能都集中在点击浏览器工具栏中的**扩展图标后弹出的主界面 (Popup)** 中。这个主界面是一个集成了多种工具的平台，您可以在其中便捷地访问和使用各项功能。理解主界面的布局和交互方式，将帮助您更高效地使用 Horizon-Hop。
 
-For further guidance, [visit our Documentation](https://docs.plasmo.com/)
+**主界面通常由以下几个主要区域组成：**
 
-## Making production build
+1.  **顶部导航/功能入口：** 位于主界面的侧边，这里列出了 Horizon-Hop 提供的所有核心功能模块（例如 JSON 格式化、Markdown 表格转换、图片压缩等）。点击不同的入口即可**在主界面下方的区域切换显示相应功能的专属操作界面**。
+2.  **快捷搜索框：** 在主界面的显著位置（顶部）提供一个**快捷搜索框**，让您通过输入关键词快速找到并启动特定功能或执行某些操作。
+3.  **主要内容区域：** 这是主界面的核心区域，会根据您选择的功能（通过导航或搜索）显示对应的操作界面。例如，当您选择 去**谷歌**搜索时，您可以选中**google**,然后在搜索框输入需要搜索的信息，最后回车，就可以跳转到对应的网址搜索。
+4.  **功能区内的交互元素：** 在每个功能的内容区域内，您会看到该工具特有的操作界面元素，如输入/输出区域、按钮、开关、下拉菜单等，以及可能出现的**弹窗**（用于完成特定任务或展示更多信息）。
 
-Run the following:
+**使用流程：**
 
-```bash
-pnpm build
-# or
-npm run build
-```
+*   点击扩展图标打开主界面。
+*   通过顶部导航或快捷搜索选择您需要使用的功能。
+*   在主要内容区域与选定功能的界面进行交互，完成您的任务。
 
-This should create a production bundle for your extension, ready to be zipped and published to the stores.
+此外，Horizon-Hop 的某些功能会在您浏览特定网页时**自动生效**，例如**链接安全跳转**，无需手动操作主界面。
 
-## Submit to the webstores
+## 核心功能详解与使用指南
 
-The easiest way to deploy your Plasmo extension is to use the built-in [bpp](https://bpp.browser.market) GitHub action. Prior to using this action however, make sure to build your extension and upload the first version to the store to establish the basic credentials. Then, simply follow [this setup instruction](https://docs.plasmo.com/framework/workflows/submit) and you should be on your way for automated submission!
+以下是 Horizon-Hop 的核心功能模块的详细介绍和使用方法：
+
+### 快捷键
+
+| 功能/亮点                                                      | 描述                                               |
+| -------------------------------------------------------------- | -------------------------------------------------- |
+| Alt + O                                                     | 快速打开插件主界面                            |
+| Alt + F        | 快速打开功能面板       |
+
+
+
+### 一. 快捷搜索方式 (Shortcut Search)
+
+这是 Horizon-Hop 主界面的一个便捷入口。当您打开扩展主界面后，可以通过快捷搜索功能快速找到您需要的工具或执行常用操作，无需手动点击导航。
+
+**功能特性：**
+
+*   **快速访问：** 通过输入功能名称（如"json"、"markdown"、"压缩"）或相关关键词，快速定位到目标功能。
+*   **命令执行：** 未来可能支持通过输入特定命令直接执行某些操作。
+*   **自定义快捷方式：** (可能在设置中实现) 允许用户为常用功能设置自定义的快捷输入。
+
+**使用方法：**
+
+1.  点击浏览器工具栏中的 Horizon-Hop 扩展图标，打开主界面。
+2.  在主界面的显著位置（例如顶部）找到快捷搜索框。
+3.  在搜索框中输入您要查找的功能名称或关键词。
+4.  搜索结果会实时显示，点击目标功能即可快速进入其操作界面。
+
+**快捷搜索界面示例**
+![快捷搜索界面示例](./assets/images/popup.png)
+
+**新增预设网址**
+![新增预设网址](./assets/images/addUrl.png)
+
+**删除预设网址**
+![删除预设网址](./assets/images/deleteUrl.png)
+
+**设置和版本信息**
+![设置和版本信息](./assets/images/setting.png)
+
+**功能区面板**
+![设置和版本信息](./assets/images/panel.png)
+
+### 二. JSON 格式化工具 (JsonFormatter)
+
+还在为混乱不堪的 JSON 数据而烦恼吗？JsonFormatter 提供了一个优雅直观的界面，帮助您轻松地格式化、查看和操作 JSON 数据。
+
+**功能特性：**
+
+*   **智能格式化与高亮：** 自动识别并格式化 JSON 结构，不同类型数据以不同颜色高亮显示，层级清晰。
+*   **行号与结构展示：** 提供行号，方便定位；通过展开/折叠功能，您可以轻松浏览复杂的 JSON 嵌套结构。
+*   **链接自动识别与跳转：** 自动识别 JSON 值中的 URL 字符串，并提供在新标签页中打开的便捷功能。
+*   **灵活的配置选项：** 支持自定义缩进空格数；可切换是否引用键名、是否保留尾随逗号、是否识别链接等，这些**设置**通过底部的**操作项（开关和输入框）** 进行控制，您可以实时调整并查看效果。
+*   **一键复制：** 双击格式化后的任意行内容即可快速复制到剪切板。此外，Output 区域右上角提供**复制按钮**，可一键复制整个格式化结果。
+*   **清空功能：** Input 区域右上角提供**清空按钮**，可快速清除输入区域的内容。
+*   **消息提示 (Toast):** 复制成功或执行其他操作时，通过精致的 **Toast 消息** 提供非侵入式反馈，这些消息会在屏幕顶部短暂显示后自动消失。
+
+**使用方法：**
+
+1.  通过扩展图标打开主界面，导航到 JsonFormatter 页面。
+2.  将待格式化的 JSON 文本粘贴到左侧的 **Input** 区域（**文本输入框**）。
+3.  右侧的 **Output** 区域将自动显示格式化后的 JSON 数据。
+4.  您可以通过底部的 **action** 区域调整格式化选项和缩进，这些**设置**会立即生效。
+5.  双击 Output 区域的任意行内容即可复制。
+6.  点击 Output 区域右上角的复制按钮复制整个结果。
+7.  点击 Input 区域右上角的清空按钮清除内容。
+
+**JsonFormatter 页面概览**
+![JsonFormatter 页面概览](./assets/images/jsonFormatter.png)
+
+**JsonFormatter - 配置选项示例**
+![JsonFormatter - 配置选项示例](./assets/images/jsonFormatterOption.png)
+
+### 三. Markdown 表格转换 (TableMarkdown)
+
+轻松将 Markdown 格式的表格转换为结构化的 JSON 对象数组，是处理文档数据、API 参数说明等场景的利器。此功能复用了 JsonFormatter 的部分逻辑和样式。
+
+
+**功能特性：**
+
+*   **快速转换：** 粘贴 Markdown 表格后即时生成对应的 JSON 结构。
+*   **智能解析：** 能够解析包含嵌套 List 和 Object 结构的复杂表格（核心转换逻辑）。
+*   **结果可视化：** 在右侧 Output 区域清晰展示转换后并格式化的高亮 JSON 数据。
+*   **一键复制 JSON：** Output 区域右上角提供**复制按钮**，方便将转换结果用于代码或数据处理。
+*   **格式化选项与缩进：** 复用 JsonFormatter 的操作项，通过底部的**控件**调整 JSON 输出格式。
+*   **消息提示 (Notify):** 复制成功时，通过浏览器**系统通知** 提供反馈，这些通知会在您操作系统的通知中心显示。
+*   **使用文档链接：** 提供快速访问详细使用文档的入口。
+
+**使用方法：**
+
+1.  通过扩展图标打开主界面，导航到 TableMarkdown 页面。
+2.  复制您要转换的 Markdown 表格内容。
+3.  将内容粘贴到左侧的 **Input** 区域（**富文本编辑器**）。
+4.  右侧的 **Output** 区域将显示解析并格式化后的 JSON 对象数组。
+5.  点击 Output 区域右上角的复制图标即可复制完整的 JSON 数据。
+6.  底部的操作栏可用于调整 JSON 格式化选项和缩进（复用 JsonFormatter 逻辑），**设置**会实时生效。
+
+**TableMarkdown 页面概览**
+![TableMarkdown 页面概览](./assets/images/tableMarkdown.png)
+
+### 四. 本地图片压缩与格式转换 (CompressHero)
+
+在本地完成图片的压缩和格式转换，保护您的隐私数据，处理速度快。这是功能最丰富的模块之一，包含了多种交互元素和流程。
+
+**功能特性：**
+
+*   **本地处理：** 所有图片处理均在您的本地浏览器中完成，数据安全（核心处理能力）。
+*   **文件添加：** 支持通过**拖拽**文件到指定区域或点击"选择图片"**按钮**添加图片。添加后文件会出现在下方的文件列表中。
+*   **压缩设置：** 在设置区域通过**按钮组**选择压缩质量（轻度、一般、重度），这是图片处理的**主要设置项**。
+*   **文件列表管理：** 清晰展示添加的文件列表，包括文件名、原始大小、处理状态、压缩率（处理完成后显示）等信息。列表项是处理图片的核心区域。
+    *   列表项提供**预览按钮**、**转换格式按钮**、**下载按钮**、**删除按钮**等操作。
+*   **处理进度：** 批量处理时显示总体**进度条**和百分比，让您了解处理进度。
+*   **批量操作：** 提供**批量下载按钮**和**清空列表按钮**，方便管理多个文件。
+
+**功能区弹窗详解：**
+
+在图片压缩功能区域内，有以下几种**弹窗**用于辅助操作：
+
+*   **图片预览弹窗：** 点击文件列表中的"预览"按钮打开。这是一个**模态窗口**，会覆盖在页面上方。弹窗内并排显示原始图片和压缩/转换后的图片，提供直观对比，同时显示各自的文件大小。
+*   **格式转换弹窗：** 点击文件列表中的"转换格式"按钮打开。这也是一个**模态窗口**，用于进行格式转换的**设置**。弹窗中显示当前格式，并通过**按钮组**让用户选择目标格式 (PNG, WEBP, JPEG)，确认后执行本地转换并下载。包含**错误提示**文本，例如选择相同格式时的提示。
+
+**使用方法：**
+
+1.  通过扩展图标打开主界面，导航到图片压缩页面。
+2.  通过拖拽图片文件到指定区域，或点击"选择图片"**按钮**添加图片文件。文件将显示在文件列表中。
+3.  在"压缩设置"区域选择您需要的"压缩质量"，这是影响处理结果的**主要设置**。文件会自动开始处理。
+4.  文件列表会显示处理进度和结果。处理完成后，会显示压缩率。
+5.  在文件列表中，您可以对单个文件进行操作：
+    *   点击"预览"按钮打开预览弹窗进行对比。
+    *   点击"转换格式"按钮打开格式转换弹窗，进行格式转换的**设置**，选择新格式并转换下载。
+    *   点击"删除"按钮从列表中移除文件。
+6.  使用页面顶部的"批量下载"按钮一次下载所有处理完成的文件，或使用"清空列表"按钮移除所有文件。
+
+**CompressHero 页面概览**
+![CompressHero - 主界面](./assets/images/compressHero.png)
+
+**CompressHero - 上传与压缩设置**
+![CompressHero - 上传与压缩设置](./assets/images/compressHeroUpload.png)
+
+**CompressHero - 文件列表与操作**
+![CompressHero - 文件列表与操作](./assets/images/compressHeroList.png)
+
+**CompressHero - 预览对比弹窗**
+![CompressHero - 预览对比弹窗](./assets/images/compressHeroPreview.png)
+
+**CompressHero - 格式转换弹窗**
+![CompressHero - 格式转换弹窗](./assets/images/compressHeroFormat.png)
+
+## 其他实用功能
+
+除了上述主要功能页面，Horizon-Hop 还提供以下实用辅助功能，它们通常在后台运行或以非主界面的方式提供服务：
+
+*   **链接安全跳转：** 此功能**自动生效**于部分特定网站 (例如知乎、简书、掘金、CSDN 等)。当您点击这些网站上的外部链接时，Horizon-Hop 会自动拦截并处理跳转逻辑，跳过中间提示页或解除内容限制，直接导航到目标网址，提升浏览效率。在执行跳转前，会通过一个临时的**消息提示**告知您正在进行跳转处理。
+    *   **(关于网址管理)**：目前扩展支持的网址列表是预设的，用户暂不能直接在界面上添加或删除特定网址。如果您有对特定网站的跳转优化需求，欢迎通过 GitHub 反馈。
+*   **浏览器徽标通知：** 在扩展图标上显示简洁的**状态提示**（如小圆点或特定文本），告知您扩展正在进行某些后台操作，例如处理链接跳转时的短暂提示。这是一个临时性的视觉反馈。
+*   **复制到剪贴板：** 在多个功能中提供便捷的**复制**能力，例如 JsonFormatter 和 TableMarkdown 的结果复制，CompressHero 处理完成文件的下载（触发下载链接）。复制成功通常伴随 **Toast 消息**或**系统通知**，提供操作成功的反馈。
+*   **系统通知 (Notify):** 在某些操作（如 TableMarkdown 复制成功）完成后，通过操作系统的通知中心提供反馈。这是一个标准的浏览器通知功能。
+*   **(关于全局设置)**：扩展可能包含一个**设置页面**，用于调整一些全局的行为或偏好设置。您可以在主界面中找到进入设置页面的入口
+
+## 安装与快速入门
+
+(这里将提供详细的安装步骤，根据您的发布方式填写)
+
+1.  **从 Chrome Web Store 安装 (推荐):** (填写商店链接和安装步骤)
+2.  **手动加载扩展:**
+    *   下载项目的最新代码。
+    *   打开 Chrome 浏览器，访问 `chrome://extensions/`。
+    *   开启右上角的"开发者模式"。
+    *   点击"加载已解压的扩展程序"，选择项目的根文件夹。
+3.  **快速入门:** 安装成功后，点击浏览器工具栏中的 Horizon-Hop 扩展图标即可打开主界面。您可以通过功能入口切换不同的工具页面，或使用快捷搜索快速启动功能。链接安全跳转等辅助功能会自动在支持的网站上生效。
+
+## 开发与贡献
+
+我们欢迎所有形式的贡献！如果您发现了 bug、有新的功能建议，或者想为项目贡献代码，请随时在 GitHub 上提交 Issue 或 Pull Request。
+
+(可以添加更详细的开发环境设置、运行项目、提交 Pull Request 的指南)
+
+## 许可证
+
+本项目采用 [LICENSE NAME] 许可证开源。
+
+---
+
+**[您的名字或组织名称] © [年份]**

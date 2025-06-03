@@ -18,9 +18,9 @@ import {
   Compressor_PNG,
   convertImageFormat,
   formatFileSize,
-  getUUID,
   UPNG_PNG
-} from "~utils"
+} from "~utils/func"
+import { getUUID } from "~utils/public"
 
 export default function CompressHero() {
   /**

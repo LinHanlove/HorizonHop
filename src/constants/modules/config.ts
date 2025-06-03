@@ -1,6 +1,7 @@
 import { Code, DiamondMinus, FileText, Github, Trash2 } from "lucide-react"
 
-import { createTab, getUUID, openGitHubDev, sendMessage } from "~utils"
+import { createTab, openGitHubDev, sendMessage } from "~utils"
+import { getUUID } from "~utils/public"
 
 import packageJson from "../../../package.json"
 import { SHORTCUT_TYPE } from "./common"

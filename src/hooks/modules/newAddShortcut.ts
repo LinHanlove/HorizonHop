@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
 
 import { toast } from "~components/base/Sonner"
-import { getLocal, getUUID, setLocal } from "~utils"
+import { getLocal, setLocal } from "~utils"
+import { getUUID } from "~utils/public"
 
 export const useNewAddShortcut = (option: TYPE.InitConfig) => {
   const { chrome } = option

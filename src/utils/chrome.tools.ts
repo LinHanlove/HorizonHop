@@ -1,3 +1,5 @@
+import { CONFIG } from "~constants"
+
 import { sleep } from "./public"
 
 export const icon = require("assets/icon.png")
@@ -76,8 +78,8 @@ export const notify = (option: TYPE.ChromeMessage) => {
       chrome.notifications.create(
         {
           type: type || "basic",
-          title: "Atom Honeycomb",
-          message: message || "Atom Honeycomb",
+          title: CONFIG.name,
+          message: message || CONFIG.name,
           iconUrl: iconUrl || icon
         },
         (notificationId) => {
