@@ -14,7 +14,7 @@ export const CONFIG = {
   name: "Horizon-Hop", // 插件名称
   version: packageJson.version, // 插件版本
   author: "LinHanPro", // 插件作者
-  usingTutorialsUrl: "" // 使用教程地址
+  usingTutorialsUrl: "https://linhan.atomnotion.com/posts/about-Horizon-Hop" // 使用教程地址
 }
 
 /**
