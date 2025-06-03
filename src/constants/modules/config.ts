@@ -10,9 +10,10 @@ import { MODEL_TYPE, SEND_FROM } from "./enum"
  * @constant 插件的配置常量
  */
 export const CONFIG = {
-  name: "Horizon-Hop",
-  version: packageJson.version,
-  author: "LinHanPro"
+  name: "Horizon-Hop", // 插件名称
+  version: packageJson.version, // 插件版本
+  author: "LinHanPro", // 插件作者
+  usingTutorialsUrl: "" // 使用教程地址
 }
 
 /**

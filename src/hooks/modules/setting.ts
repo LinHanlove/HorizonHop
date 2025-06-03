@@ -6,7 +6,7 @@ import { copyText, getLocal, setLocal } from "~utils"
 
 export const useSetting = () => {
   // 是否启用明亮模式
-  const [isLightModeEnabled, setIsLightModeEnabled] = useState(false)
+  const [isLightModeEnabled, setIsLightModeEnabled] = useState(true)
   // 是否启用毛玻璃效果
   const [isGlassEffectEnabled, setIsGlassEffectEnabled] = useState(true)
   // 是否启用界面动画
@@ -31,18 +31,21 @@ export const useSetting = () => {
         {
           title: "明亮模式",
           description: "当前主题模式",
+          disabled: true,
           checked: isLightModeEnabled,
           onChange: setIsLightModeEnabled
         },
         {
           title: "毛玻璃效果",
           description: "启用背景模糊效果",
+          disabled: true,
           checked: isGlassEffectEnabled,
           onChange: setIsGlassEffectEnabled
         },
         {
           title: "动画效果",
           description: "启用动画效果",
+          disabled: true,
           checked: isAnimationEnabled,
           onChange: setIsAnimationEnabled
         }
@@ -54,6 +57,7 @@ export const useSetting = () => {
         {
           title: "显示描述",
           description: "在卡片上显示描述",
+          disabled: true,
           checked: isShowDescriptionEnabled,
           onChange: setIsShowDescriptionEnabled
         }
@@ -65,6 +69,7 @@ export const useSetting = () => {
         {
           title: "在新标签页中打开",
           description: "在浏览器的新标签页中打开链接",
+          disabled: true,
           checked: isOpenInNewTabEnabled,
           onChange: setIsOpenInNewTabEnabled
         }

@@ -8,7 +8,7 @@ import Dialog, {
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { ChevronRight } from "lucide-react"
-import React, { useState } from "react"
+import React from "react"
 
 import { CONFIG } from "~constants"
 import { useSetting } from "~hooks"
@@ -50,6 +50,7 @@ export default function Setting({ ...props }) {
                         </div>
                         <Switch
                           checked={item.checked}
+                          disabled={item.disabled}
                           onCheckedChange={item.onChange}
                         />
                       </div>
@@ -102,7 +103,7 @@ export default function Setting({ ...props }) {
                   © 2025 {CONFIG.author}
                   <a
                     className="lh-text-slate-600 lh-font-medium lh-underline lh-pl-2"
-                    href="https://github.com/LinHanPro/lin-han-pro"
+                    href={CONFIG.usingTutorialsUrl}
                     target="_blank">
                     使用教程
                   </a>

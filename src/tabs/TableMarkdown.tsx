@@ -11,6 +11,7 @@ import "~/assets/style/jsonFormatter.css"
 
 import { SonnerProvider, toast } from "~components/base/Sonner"
 import { Button } from "~components/ui/button"
+import { CONFIG } from "~constants"
 import { copyText, notify } from "~utils"
 
 import { JsonFormatter as formatter } from "../utils/ability/jsonFormatter"
@@ -278,7 +279,7 @@ export default function TableMarkdown() {
               <div className="lh-flex lh-items-center lh-space-x-4">
                 <a
                   title="使用文档"
-                  href="https://linhan.atomnotion.com/posts/about-atomHoneycomb"
+                  href={CONFIG.usingTutorialsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="lh-flex lh-items-center lh-px-4 lh-py-2 lh-text-sm lh-text-gray-600 lh-bg-white lh-rounded-lg lh-border lh-border-gray-200 lh-shadow-sm lh-hover:border-purple-500 lh-hover:text-purple-600 lh-transition-all lh-duration-200">
