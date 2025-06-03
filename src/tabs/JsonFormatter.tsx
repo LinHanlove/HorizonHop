@@ -184,7 +184,7 @@ export default function JsonFormatter() {
                       清空
                     </Button>
                   </div>
-                  <div className="input-area lh-flex-1 lh-overflow-hidden">
+                  <div className="input-area lh-flex-1 lh-overflow-y-auto lh-max-h-[calc(100vh-280px)]">
                     <Textarea
                       id="json-input-area"
                       title="json-input-area"
@@ -225,7 +225,7 @@ export default function JsonFormatter() {
                       />
                     </Button>
                   </div>
-                  <div className="output-area lh-flex-1 lh-overflow-hidden">
+                  <div className="output-area lh-flex-1 lh-overflow-y-auto lh-max-h-[calc(100vh-280px)]">
                     <div className="lh-w-full lh-h-full lh-p-4 lh-bg-gray-50 lh-border lh-border-gray-200 lh-rounded-xl lh-shadow-sm lh-overflow-auto">
                       <pre className="json-container lh-rounded-lg" />
                     </div>

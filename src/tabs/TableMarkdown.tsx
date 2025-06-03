@@ -9,6 +9,8 @@ import { Editor } from "@wangeditor/editor-for-react"
 import "~/assets/style/tailwind.css"
 import "~/assets/style/jsonFormatter.css"
 
+import { SonnerProvider, toast } from "~components/base/Sonner"
+import { Button } from "~components/ui/button"
 import { copyText, notify } from "~utils"
 
 import { JsonFormatter as formatter } from "../utils/ability/jsonFormatter"
@@ -242,9 +244,7 @@ export default function TableMarkdown() {
         indent: indent
       })
       handleCopy()
-    } catch (error) {
-      console.log("error", error)
-    }
+    } catch (error) {}
   }, [data, action, indent, jsonContainer])
 
   useEffect(() => {
@@ -254,109 +254,163 @@ export default function TableMarkdown() {
   }, [])
 
   return (
-    <>
-      <h2 className="title text-center text-2xl font-bold py-4">
-        TableMarkdown
-      </h2>
-      <div className="subTitle mx-4  text-[12px] font-semibold flex ">
-        <div className="waring">注意：</div>
-        <div className="mb-1 ">
-          复制markdown格式下的表格，解析为对应的对象数组格式
-        </div>
-
-        <div className="mx-2">|</div>
-        <div className="mb-1 text-[orange]">
-          <a
-            title="使用文档"
-            href="https://linhan.atomnotion.com/posts/about-atomHoneycomb"
-            target="_blank"
-            rel="noopener noreferrer">
-            使用文档
-          </a>
-        </div>
-      </div>
-      <div className="container  mx-[auto] mt-4  border-2 border-gray-200 rounded-lg p-4 ">
-        <div className="content  grid grid-cols-2 ">
-          <div className="col-span-1  pr-4">
-            <h3 className="text-xl font-bold py-2">Input:</h3>
-            <div className="input-area w-full h-[70vh] overflow-y-auto p-2 border-2 border-gray-200 rounded-lg resize-none">
-              <Editor
-                className="h-full"
-                defaultConfig={editorConfig}
-                value={html}
-                onCreated={setEditor}
-                onChange={(editor) => handleEditorChange(editor)}
-                mode="default"
-                style={{ height: "500px", overflowY: "hidden" }}
-              />
-            </div>
-          </div>
-          <div className="col-span-1 pl-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-bold py-2">Output:</h3>
-
-              <Icon
-                icon="solar:copy-bold"
-                color="#008080"
-                className="w-[20px] h-[20px]"
-                onClick={() => {
-                  if (!jsonContainer.innerText) return
-                  copyText(jsonContainer.innerText).then(() => {
-                    notify({
-                      message: "复制成功",
-                      chrome
-                    })
-                  })
-                }}
-              />
-            </div>
-            <div className="output-area  w-full h-[70vh] overflow-y-auto p-2 border-2 border-gray-200 rounded-lg resize-none">
-              <pre className="json-container rounded-lg" />
-            </div>
-          </div>
-        </div>
-        <div className="action flex items-center justify-end">
-          <div className="text-xl font-bold ">
-            <div>action：</div>
-          </div>
-          {/* S 多选框组 */}
-          {action.map((item, index) => {
-            return (
-              <div className="flex items-center mr-3 " key={index}>
-                <input
-                  title={item.name}
-                  checked={item.value}
-                  onChange={() => handleChange(item)}
-                  type="checkbox"
-                  id={item.name}
-                />
-                <label className="ml-1" htmlFor={item.name}>
-                  {item.name}
-                </label>
+    <SonnerProvider>
+      <div className="lh-h-screen lh-bg-[#fafafa] lh-p-4 lh-overflow-hidden">
+        <div className="lh-h-full lh-max-w-[1400px] lh-mx-auto lh-flex lh-flex-col">
+          <div className="lh-flex lh-flex-col lh-mb-6">
+            <div className="lh-flex lh-items-center lh-justify-between">
+              <div className="lh-flex lh-items-center lh-space-x-3">
+                <div className="lh-w-10 lh-h-10 lh-rounded-xl lh-bg-gradient-to-br lh-from-purple-500 lh-to-purple-600 lh-flex lh-items-center lh-justify-center lh-shadow-lg lh-shadow-purple-500/20">
+                  <Icon
+                    icon="material-symbols:table"
+                    className="lh-w-6 lh-h-6 lh-text-white"
+                  />
+                </div>
+                <div>
+                  <h2 className="lh-text-2xl lh-font-bold lh-text-gray-900 lh-flex lh-items-center">
+                    TableMarkdown
+                  </h2>
+                  <p className="lh-text-sm lh-text-gray-500 lh-mt-0.5">
+                    表格 Markdown 转换工具
+                  </p>
+                </div>
               </div>
-            )
-          })}
-          {/* E 多选框组 */}
-          {/* S 缩进 */}
-          <div className="flex items-center mr-3">
-            <label className="ml-1" htmlFor="indent">
-              indent:
-            </label>
-            <input
-              className="ml-1 w-[50px] border-2 border-gray-200 rounded-[4px]"
-              title="indent"
-              type="number"
-              id="indent"
-              min={2}
-              step={2}
-              max={6}
-              value={indent}
-              onChange={(e) => setIndent(Number(e.target.value))}
-            />
+              <div className="lh-flex lh-items-center lh-space-x-4">
+                <a
+                  title="使用文档"
+                  href="https://linhan.atomnotion.com/posts/about-atomHoneycomb"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="lh-flex lh-items-center lh-px-4 lh-py-2 lh-text-sm lh-text-gray-600 lh-bg-white lh-rounded-lg lh-border lh-border-gray-200 lh-shadow-sm lh-hover:border-purple-500 lh-hover:text-purple-600 lh-transition-all lh-duration-200">
+                  <Icon
+                    icon="solar:document-bold"
+                    className="lh-w-4 lh-h-4 lh-mr-2"
+                  />
+                  使用文档
+                </a>
+              </div>
+            </div>
           </div>
-          {/* E 缩进 */}
+
+          <div className="lh-bg-white lh-rounded-2xl lh-shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] lh-border lh-border-gray-100 lh-overflow-hidden lh-flex-1 lh-flex lh-flex-col">
+            <div className="lh-p-4 lh-border-b lh-border-gray-100 lh-bg-gradient-to-r lh-from-gray-50 lh-to-white">
+              <div className="lh-flex lh-items-center lh-text-sm lh-text-gray-500">
+                <Icon
+                  icon="solar:info-circle-bold"
+                  className="lh-w-4 lh-h-4 lh-mr-2 lh-text-orange-500"
+                />
+                <span className="lh-font-medium">
+                  复制markdown格式下的表格到Input，解析为对应的对象数组格式。
+                </span>
+                <span className="lh-mx-2 lh-text-gray-300">|</span>
+                <span>格式化后的行双击可复制到剪切板。</span>
+                <span className="lh-mx-2 lh-text-gray-300">|</span>
+                <span>缩进和操作项可调整。</span>
+              </div>
+            </div>
+
+            <div className="container lh-p-4 lh-flex-1 lh-overflow-hidden">
+              <div className="content lh-grid lh-grid-cols-2 lh-gap-4 lh-h-full">
+                <div className="lh-col-span-1 lh-flex lh-flex-col lh-h-full">
+                  <div className="lh-h-8 lh-flex lh-items-center lh-justify-between lh-mb-2">
+                    <h3 className="lh-text-base lh-font-semibold lh-text-gray-900 lh-flex lh-items-center">
+                      <Icon
+                        icon="solar:arrow-left-bold"
+                        className="lh-w-4 lh-h-4 lh-mr-2 lh-text-gray-400"
+                      />
+                      Input
+                    </h3>
+                  </div>
+                  <div className="input-area lh-flex-1 lh-overflow-y-auto lh-max-h-[calc(100vh-280px)]">
+                    <Editor
+                      className="lh-w-full lh-h-full lh-p-4 lh-bg-gray-50 lh-border-gray-200 lh-rounded-xl lh-resize-none lh-shadow-sm lh-focus:ring-2 lh-focus:ring-purple-500/20 lh-focus:border-purple-500 lh-transition-all lh-duration-200 lh-text-gray-700 lh-text-sm lh-font-mono"
+                      defaultConfig={editorConfig}
+                      value={html}
+                      onCreated={setEditor}
+                      onChange={(editor) => handleEditorChange(editor)}
+                      mode="default"
+                      style={{ height: "100%" }}
+                    />
+                  </div>
+                </div>
+                <div className="lh-col-span-1 lh-flex lh-flex-col lh-h-full">
+                  <div className="lh-h-8 lh-flex lh-items-center lh-justify-between lh-mb-2">
+                    <h3 className="lh-text-base lh-font-semibold lh-text-gray-900 lh-flex lh-items-center">
+                      <Icon
+                        icon="solar:arrow-right-bold"
+                        className="lh-w-4 lh-h-4 lh-mr-2 lh-text-gray-400"
+                      />
+                      Output
+                    </h3>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        if (!jsonContainer.innerText) return
+                        copyText(jsonContainer.innerText).then(() => {
+                          toast("复制成功", { type: "success" })
+                        })
+                      }}
+                      className="lh-h-8 lh-w-8">
+                      <Icon
+                        icon="solar:copy-bold"
+                        className="lh-w-4 lh-h-4 lh-text-gray-400"
+                      />
+                    </Button>
+                  </div>
+                  <div className="output-area lh-flex-1 lh-overflow-y-auto lh-max-h-[calc(100vh-280px)]">
+                    <div className="lh-w-full lh-h-full lh-p-4 lh-bg-gray-50 lh-border lh-border-gray-200 lh-rounded-xl lh-shadow-sm lh-overflow-auto">
+                      <pre className="json-container lh-rounded-lg" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="action lh-flex lh-items-center lh-justify-between lh-p-4 lh-bg-gray-50 lh-border-t lh-border-gray-100">
+              <div className="lh-flex lh-items-center lh-space-x-6">
+                {action.map((item, index) => {
+                  return (
+                    <div className="lh-flex lh-items-center" key={index}>
+                      {/* Using native input for now, can replace with UI component if available */}
+                      <input
+                        title={item.name}
+                        checked={item.value}
+                        onChange={() => handleChange(item)}
+                        type="checkbox"
+                        id={item.name}
+                        className="lh-form-checkbox lh-h-4 lh-w-4 lh-text-purple-600 lh-transition duration-150 ease-in-out lh-rounded lh-border-gray-300 focus:lh-ring-purple-500"
+                      />
+                      <label
+                        className="lh-ml-2 lh-text-xs lh-text-gray-600"
+                        htmlFor={item.name}>
+                        {item.name}
+                      </label>
+                    </div>
+                  )
+                })}
+              </div>
+              <div className="lh-flex lh-items-center">
+                <label className="lh-text-xs lh-text-gray-600" htmlFor="indent">
+                  indent:
+                </label>
+                {/* Using native input for now, can replace with UI component if available */}
+                <input
+                  className="lh-ml-2 lh-w-14 lh-h-8 lh-text-xs lh-border-gray-300 lh-rounded-md lh-shadow-sm focus:lh-border-purple-500 focus:lh-ring-purple-500"
+                  title="indent"
+                  type="number"
+                  id="indent"
+                  min={2}
+                  step={2}
+                  max={6}
+                  value={indent}
+                  onChange={(e) => setIndent(Number(e.target.value))}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </>
+    </SonnerProvider>
   )
 }
