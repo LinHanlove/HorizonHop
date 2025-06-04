@@ -1,5 +1,7 @@
 import md5 from "md5"
 
+let uuidCounter = 0
+
 /**
  * @function 将类转换为单例类
  */
@@ -61,6 +63,7 @@ export const copyText = async (value: string) => {
  */
 export const getUUID = () => {
   const time = new Date().getTime()
-  const random = Math.floor(Math.random() * 1000)
-  return md5(`${time}-${random}`)
+  const random = Math.random() // 使用 Math.random() 获取更大范围的随机数
+  uuidCounter++ // 每次调用递增计数器
+  return md5(`${time}-${random}-${uuidCounter}`) // 将计数器加入到哈希字符串中
 }
