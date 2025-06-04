@@ -61,6 +61,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
     id: getUUID(),
     alias: "csdn",
     icon: "simple-icons:csdn",
+    iconColor: "#ff6600",
     prefix: "https://so.csdn.net/so/search?spm=1000.2115.3001.4498&q=",
     suffix: "&t=&u=",
     category: "dev"
@@ -69,6 +70,7 @@ export const defaultShortcuts: TYPE.Shortcuts[] = [
     id: getUUID(),
     alias: "juejin",
     icon: "simple-icons:juejin",
+    iconColor: "#1e80ff",
     prefix: "https://juejin.cn/search?query=",
     suffix: "&fromSeo=0&fromHistory=0&fromSuggest=0",
     category: "dev"

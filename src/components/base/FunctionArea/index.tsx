@@ -54,6 +54,8 @@ export default function FunctionArea({ ...props }) {
       },
       chrome
     })
+    // 关闭弹窗
+    setOpen(false)
   }
 
   useEffect(() => {
