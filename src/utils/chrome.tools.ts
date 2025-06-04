@@ -158,3 +158,16 @@ export const lightIcon = (option) => {
     chrome.action.setBadgeText({ text: "" })
   })
 }
+
+/**
+ * @function 关闭popup
+ */
+export const closePopup = (option) => {
+  const { chrome } = option
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs[0]) {
+      // 聚焦当前窗口
+      chrome.windows.update(tabs[0].windowId, { focused: true })
+    }
+  })
+}

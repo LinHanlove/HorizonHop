@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import { toast } from "~components/base/Sonner"
 import { defaultShortcuts } from "~constants"
-import { copyText, getLocal, setLocal } from "~utils"
+import { closePopup, copyText, getLocal, notify, setLocal } from "~utils"
 
 export const useSetting = () => {
   // 是否启用明亮模式
@@ -148,9 +148,16 @@ export const useSetting = () => {
       key: "shortcutsSearch",
       value: JSON.stringify([...defaultShortcuts, ...shortcuts]),
       chrome
-    })
-    toast("导入成功", {
-      type: "success"
+    }).then(() => {
+      notify({
+        message: "导入成功",
+        chrome
+      })
+      setTimeout(() => {
+        closePopup({
+          chrome
+        })
+      }, 500)
     })
   }
 

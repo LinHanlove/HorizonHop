@@ -4,6 +4,13 @@ import { AnimatePresence, motion } from "framer-motion"
 import { ChevronLeft, Menu, Plus } from "lucide-react"
 import React, { useEffect, useState } from "react"
 
+// Import the tooltip components
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from "~/components/ui/tooltip"
 import { useSearchContext } from "~components/base/Layout"
 import { Button } from "~components/ui/button"
 import { menuList, MODEL_TYPE, SEND_FROM, SHORTCUT_TYPE_MAP } from "~constants"
@@ -52,6 +59,13 @@ export default function Content() {
       })
     }
   }, [leftPanelExpanded])
+
+  // Reset hoveredFunction when leftPanelExpanded becomes false
+  useEffect(() => {
+    if (!leftPanelExpanded) {
+      setHoveredFunction(null)
+    }
+  }, [leftPanelExpanded, setHoveredFunction])
 
   // 当前分类的快捷方式
   const displayedShortcuts = activeCategory
@@ -106,51 +120,49 @@ export default function Content() {
 
           {/* S 功能按钮 */}
           <div className="lh-flex-1 lh-px-2 lh-pb-3">
-            <div className="lh-space-y-1">
-              {menuList.map((func, index) => (
-                <motion.button
-                  key={func.title}
-                  transition={{ duration: 0.2, delay: index * 0.05 }}
-                  className="lh-group lh-relative lh-w-full lh-flex lh-items-center lh-p-2 lh-rounded-lg lh-transition-all lh-duration-200 hover:lh-bg-slate-100/80 focus:lh-outline-none"
-                  onClick={func.event}
-                  onMouseEnter={() => setHoveredFunction(index)}
-                  onMouseLeave={() => setHoveredFunction(null)}>
-                  {!leftPanelExpanded && (
-                    <div className="lh-flex lh-items-center lh-justify-center lh-w-7 lh-h-7 lh-rounded-lg lh-bg-slate-100/80 lh-text-slate-500 group-hover:lh-text-slate-700 group-hover:lh-bg-slate-200/80 lh-transition-all lh-shadow-sm">
-                      <func.icon className="lh-h-4 lh-w-4" />
-                    </div>
-                  )}
+            <TooltipProvider>
+              <div className="lh-space-y-1">
+                {menuList.map((func, index) => (
+                  <Tooltip
+                    key={func.title}
+                    delayDuration={0}
+                    open={!leftPanelExpanded && hoveredFunction === index}>
+                    <TooltipTrigger asChild>
+                      <motion.button
+                        transition={{ duration: 0.2, delay: index * 0.05 }}
+                        className="lh-group lh-relative lh-w-full lh-flex lh-items-center lh-p-2 lh-rounded-lg lh-transition-all lh-duration-200 hover:lh-bg-slate-100/80 focus:lh-outline-none"
+                        onClick={func.event}
+                        onMouseEnter={() => setHoveredFunction(index)}
+                        onMouseLeave={() => setHoveredFunction(null)}>
+                        {!leftPanelExpanded && (
+                          <div className="lh-flex lh-items-center lh-justify-center lh-w-7 lh-h-7 lh-rounded-lg lh-bg-slate-100/80 lh-text-slate-500 group-hover:lh-text-slate-700 group-hover:lh-bg-slate-200/80 lh-transition-all lh-shadow-sm">
+                            <func.icon className="lh-h-4 lh-w-4" />
+                          </div>
+                        )}
 
-                  <AnimatePresence>
-                    {leftPanelExpanded && (
-                      <motion.div
-                        transition={{ duration: 0.15 }}
-                        className="lh-flex-1 lh-text-left">
-                        <div className="lh-text-sm lh-font-medium lh-text-slate-700 group-hover:lh-text-slate-900">
-                          {func.title}
-                        </div>
-                        <div className="lh-text-xs lh-text-slate-500 group-hover:lh-text-slate-600 lh-leading-tight">
-                          {func.description}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  {/* S 鼠标悬浮提示 */}
-                  {!leftPanelExpanded && hoveredFunction === index && (
-                    <AnimatePresence>
-                      <motion.div
-                        exit={{ opacity: 0, x: -5 }}
-                        className="lh-absolute lh-left-full lh-ml-2 lh-px-3 lh-py-2 lh-bg-slate-800 lh-text-white lh-text-sm lh-rounded-lg lh-shadow-lg lh-z-50 lh-whitespace-nowrap lh-border lh-border-slate-700 lh-pointer-events-none">
-                        {func.description}
-                        <div className="lh-absolute lh-left-0 lh-top-1/2 lh-transform lh--translate-y-1/2 lh--translate-x-1 lh-w-2 lh-h-2 lh-bg-slate-800 lh-rotate-45 lh-border-l lh-border-b lh-border-slate-700"></div>
-                      </motion.div>
-                    </AnimatePresence>
-                  )}
-                  {/* E 鼠标悬浮提示 */}
-                </motion.button>
-              ))}
-            </div>
+                        <AnimatePresence>
+                          {leftPanelExpanded && (
+                            <motion.div
+                              transition={{ duration: 0.15 }}
+                              className="lh-flex-1 lh-text-left">
+                              <div className="lh-text-sm lh-font-medium lh-text-slate-700 group-hover:lh-text-slate-900">
+                                {func.title}
+                              </div>
+                              <div className="lh-text-xs lh-text-slate-500 group-hover:lh-text-slate-600 lh-leading-tight">
+                                {func.description}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      <p>{func.description}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                ))}
+              </div>
+            </TooltipProvider>
           </div>
           {/* E 功能按钮 */}
         </div>

@@ -1,5 +1,5 @@
 import { menuList, MODEL_TYPE, SEND_FROM } from "~constants"
-import { lightIcon, onListenerMessage, sendMessage } from "~utils"
+import { closePopup, lightIcon, onListenerMessage, sendMessage } from "~utils"
 
 let isPopupOpen = true
 
@@ -12,11 +12,8 @@ chrome.commands.onCommand.addListener((command) => {
     // 获取当前popup状态
     chrome.action.getPopup({}, (popupPath) => {
       if (!isPopupOpen) {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          if (tabs[0]) {
-            // 聚焦当前窗口
-            chrome.windows.update(tabs[0].windowId, { focused: true })
-          }
+        closePopup({
+          chrome
         })
         isPopupOpen = true
       } else {

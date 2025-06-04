@@ -1,5 +1,11 @@
 import { CircleX } from "lucide-react"
-import React, { createContext, useCallback, useContext, useState } from "react"
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState
+} from "react"
 
 import { Button } from "~components/ui/button"
 import { cn } from "~utils/shadcn"
@@ -31,6 +37,34 @@ interface DialogProps {
 export default function Dialog({ open, onOpenChange, children }: DialogProps) {
   const setOpen = useCallback(onOpenChange, [onOpenChange])
 
+  useEffect(() => {
+    const bodyStyle = document.body.style
+    const dialogPanel = document.querySelector(".dialog-panel")
+
+    if (open) {
+      bodyStyle.overflow = "hidden"
+      bodyStyle.pointerEvents = "none"
+      if (dialogPanel) {
+        ;(dialogPanel as HTMLElement).style.pointerEvents = "auto"
+      }
+    } else {
+      bodyStyle.overflow = ""
+      bodyStyle.pointerEvents = ""
+      if (dialogPanel) {
+        ;(dialogPanel as HTMLElement).style.pointerEvents = ""
+      }
+    }
+
+    return () => {
+      // Clean up the styles when the component unmounts
+      bodyStyle.overflow = ""
+      bodyStyle.pointerEvents = ""
+      if (dialogPanel) {
+        ;(dialogPanel as HTMLElement).style.pointerEvents = ""
+      }
+    }
+  }, [open])
+
   return (
     <DialogContext.Provider value={{ open, setOpen }}>
       {open && (
@@ -60,7 +94,8 @@ export function DialogContent({ children, className }: DialogContentProps) {
     <div
       className={cn(
         "lh-bg-white lh-rounded-lg lh-shadow-lg lh-p-4 lh-m-4 lh-flex lh-flex-col lh-gap-4",
-        className
+        className,
+        "dialog-panel"
       )}
       onClick={(e) => e.stopPropagation()} // 阻止点击内容区域关闭
     >
