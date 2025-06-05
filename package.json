@@ -72,9 +72,9 @@
       },
       "openFunctionArea": {
         "suggested_key": {
-          "default": "Alt+F",
-          "mac": "Alt+F",
-          "windows": "Alt+F"
+          "default": "Alt+P",
+          "mac": "Alt+P",
+          "windows": "Alt+P"
         },
         "description": "打开功能面板"
       }
