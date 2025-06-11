@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 
 import { SEND_FROM } from "~constants"
-import { useSetting } from "~hooks"
 import { getLocal, sendMessage, setLocal } from "~utils"
 
 interface Option {
@@ -21,13 +20,17 @@ export const useSearch = (option?: Option) => {
   // 是否展开左侧面板
   const [leftPanelExpanded, setLeftPanelExpanded] = useState(false)
 
-  // 功能区当前鼠标悬停的快捷方式索引
-  const [hoveredFunction, setHoveredFunction] = useState<number | null>(null)
+  // 当前鼠标hover的快捷方式
+  const [hoveredFunction, setHoveredFunction] = useState(null)
+
+  // 当前tab选的快捷方式
+  const [tabActiveShortcut, setTabActiveShortcut] =
+    useState<TYPE.Shortcuts | null>(null)
 
   // 当前分类的快捷方式
   const displayedShortcuts = activeCategory
-    ? shortcuts.filter((s) => s.category === activeCategory)
-    : shortcuts
+    ? shortcuts?.filter((s) => s.category === activeCategory) || []
+    : shortcuts || []
 
   // 初始化时从本地存储加载数据
   useEffect(() => {
@@ -35,7 +38,7 @@ export const useSearch = (option?: Option) => {
       key: "searchTarget",
       chrome
     }).then((data) => {
-      setSearchTarget(data || {})
+      setSearchTarget(data || null)
       console.log("读取数据searchTarget", data, searchTarget)
     })
 
@@ -46,6 +49,20 @@ export const useSearch = (option?: Option) => {
       setActiveCategory(data || null)
     })
   }, [chrome])
+
+  // 根据searchTarget或displayedShortcuts初始化tabActiveShortcut
+  useEffect(() => {
+    if (
+      searchTarget &&
+      displayedShortcuts.some((s) => s.id === searchTarget.id)
+    ) {
+      setTabActiveShortcut(searchTarget)
+    } else if (displayedShortcuts.length > 0) {
+      setTabActiveShortcut(displayedShortcuts[0])
+    } else {
+      setTabActiveShortcut(null)
+    }
+  }, [displayedShortcuts, searchTarget])
 
   // 监听搜索值变化
   useEffect(() => {
@@ -95,6 +112,32 @@ export const useSearch = (option?: Option) => {
       "_blank"
     )
   }
+
+  // 处理键盘事件，切换选中快捷方式
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (displayedShortcuts.length === 0) return
+      if (e.key === "Tab") {
+        e.preventDefault()
+        const currentIndex = tabActiveShortcut
+          ? displayedShortcuts.findIndex((s) => s.id === tabActiveShortcut.id)
+          : -1
+        const nextIndex = (currentIndex + 1) % displayedShortcuts.length
+        const nextShortcut = displayedShortcuts[nextIndex]
+        setTabActiveShortcut(nextShortcut)
+        setSearchTarget(nextShortcut)
+      } else if (e.key === "Enter") {
+        e.preventDefault()
+        if (tabActiveShortcut && searchQuery) {
+          onSearch(tabActiveShortcut)
+        }
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [displayedShortcuts, tabActiveShortcut, searchQuery, onSearch])
+
   return {
     searchQuery,
     setSearchQuery,
@@ -104,10 +147,12 @@ export const useSearch = (option?: Option) => {
     setActiveCategory,
     leftPanelExpanded,
     setLeftPanelExpanded,
-    hoveredFunction,
-    setHoveredFunction,
+    tabActiveShortcut,
+    setTabActiveShortcut,
     onSelectShortcut,
     onEnterSearch,
-    displayedShortcuts
+    displayedShortcuts,
+    hoveredFunction,
+    setHoveredFunction
   }
 }
