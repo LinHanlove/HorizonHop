@@ -1,9 +1,14 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 import { SEND_FROM } from "~constants"
+import { useSetting } from "~hooks"
 import { getLocal, sendMessage, setLocal } from "~utils"
 
-export const useSearch = () => {
+interface Option {
+  shortcuts?: TYPE.Shortcuts[]
+}
+export const useSearch = (option?: Option) => {
+  const { shortcuts } = option
   // 搜索值
   const [searchQuery, setSearchQuery] = useState("")
 
@@ -18,6 +23,11 @@ export const useSearch = () => {
 
   // 功能区当前鼠标悬停的快捷方式索引
   const [hoveredFunction, setHoveredFunction] = useState<number | null>(null)
+
+  // 当前分类的快捷方式
+  const displayedShortcuts = activeCategory
+    ? shortcuts.filter((s) => s.category === activeCategory)
+    : shortcuts
 
   // 初始化时从本地存储加载数据
   useEffect(() => {
@@ -62,6 +72,10 @@ export const useSearch = () => {
   const onSelectShortcut = (shortcut: TYPE.Shortcuts) => {
     if (!shortcut.id) return
     setSearchTarget(shortcut)
+    // 如果搜索框有值则直接跳转
+    if (searchQuery) {
+      onSearch(shortcut)
+    }
   }
 
   /**
@@ -69,8 +83,15 @@ export const useSearch = () => {
    */
   const onEnterSearch = (e) => {
     if (!searchTarget || !searchQuery || e.key !== "Enter") return
+    onSearch(searchTarget)
+  }
+
+  /**
+   * @function 跳转搜索
+   */
+  const onSearch = (option) => {
     window.open(
-      `${searchTarget.prefix}${encodeURIComponent(searchQuery)}${searchTarget.suffix}`,
+      `${option.prefix}${encodeURIComponent(searchQuery)}${option.suffix}`,
       "_blank"
     )
   }
@@ -86,6 +107,7 @@ export const useSearch = () => {
     hoveredFunction,
     setHoveredFunction,
     onSelectShortcut,
-    onEnterSearch
+    onEnterSearch,
+    displayedShortcuts
   }
 }

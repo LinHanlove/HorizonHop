@@ -14,12 +14,9 @@ import {
 import { useSearchContext } from "~components/base/Layout"
 import { Button } from "~components/ui/button"
 import { menuList, MODEL_TYPE, SEND_FROM, SHORTCUT_TYPE_MAP } from "~constants"
-import { useSetting } from "~hooks"
 import { sendMessage } from "~utils"
 
 export default function Content() {
-  const { shortcuts, importData, loadShortcutsToDelete } = useSetting()
-
   const {
     searchTarget,
     activeCategory,
@@ -28,7 +25,11 @@ export default function Content() {
     setLeftPanelExpanded,
     hoveredFunction,
     setHoveredFunction,
-    onSelectShortcut
+    onSelectShortcut,
+    displayedShortcuts,
+    shortcuts,
+    importData,
+    loadShortcutsToDelete
   } = useSearchContext()
 
   // 页面宽度
@@ -66,11 +67,6 @@ export default function Content() {
       setHoveredFunction(null)
     }
   }, [leftPanelExpanded, setHoveredFunction])
-
-  // 当前分类的快捷方式
-  const displayedShortcuts = activeCategory
-    ? shortcuts.filter((s) => s.category === activeCategory)
-    : shortcuts
 
   /**
    * @function 添加快捷方式

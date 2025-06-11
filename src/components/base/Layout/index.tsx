@@ -1,22 +1,23 @@
 import React, { createContext, useContext, useSyncExternalStore } from "react"
 
-import { useSearch } from "~hooks"
+import { useSearch, useSetting } from "~hooks"
 
 import Content from "../Content"
 import Header from "../Header"
 
 // 创建 Context
-export const SearchContext = createContext<ReturnType<typeof useSearch> | null>(
-  null
-)
+export const SearchContext = createContext<
+  (ReturnType<typeof useSearch> & ReturnType<typeof useSetting>) | null
+>(null)
 
 // 创建 Provider 组件
 export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
-  const searchProps = useSearch()
+  const settingProps = useSetting()
+  const searchProps = useSearch({ shortcuts: settingProps.shortcuts })
   return (
-    <SearchContext.Provider value={searchProps}>
+    <SearchContext.Provider value={{ ...searchProps, ...settingProps }}>
       {children}
     </SearchContext.Provider>
   )
