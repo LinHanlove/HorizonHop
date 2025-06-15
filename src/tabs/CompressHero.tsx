@@ -8,6 +8,7 @@ import Dialog, {
   DialogTitle
 } from "~components/base/Dialog"
 import { Button } from "~components/ui/button"
+import { Checkbox } from "~components/ui/checkbox"
 import { Progress } from "~components/ui/progress"
 
 import "~style.css"
@@ -17,6 +18,7 @@ import { useEffect, useRef, useState } from "react"
 import {
   Compressor_PNG,
   convertImageFormat,
+  downloadFilesAsZip,
   formatFileSize,
   UPNG_PNG
 } from "~utils/func"
@@ -119,6 +121,12 @@ export default function CompressHero() {
   const [progress, setProgress] = useState<number>(0)
 
   /**
+   * @useState selectedFiles
+   * @description 选中的文件列表
+   */
+  const [selectedFiles, setSelectedFiles] = useState<string[]>([])
+
+  /**
    * @description 监听文件列表
    */
   useEffect(() => {
@@ -135,40 +143,56 @@ export default function CompressHero() {
   const processFiles = async () => {
     const afterData = []
     console.log("监听文件列表", fileList, quality)
-
     for (let index = 0; index < fileList.length; index++) {
       let fileData
       const file = fileList[index]
 
       if (file.status !== "success" && file.type.startsWith("image/")) {
-        // 更新进度
-        setProgress(((index + 1) / fileList.length) * 100)
+        try {
+          // 更新进度
+          setProgress(((index + 1) / fileList.length) * 100)
 
-        if (quality) {
-          console.log("文件类型--->", file.type, file.type === "image/png")
+          if (quality) {
+            console.log("文件类型--->", file.type, file.type === "image/png")
 
-          if (file.type === "image/png") {
-            fileData = await UPNG_PNG(file, quality)
-          } else {
-            fileData = await Compressor_PNG(file, quality, window)
+            if (file.type === "image/png") {
+              fileData = await UPNG_PNG(file, quality)
+            } else {
+              fileData = await Compressor_PNG(file, quality, window)
+            }
           }
-        }
-        console.log("压缩前--->", file)
+          console.log("压缩前--->", file)
 
-        console.log("压缩后-->", fileData)
-        file["status"] = "success"
-        const compressibility = quality
-          ? ((file.size - fileData.size) / file.size) * 100
-          : 0
-        afterData.push({
-          id: file.id,
-          file: quality ? fileData : file,
-          name: file.name,
-          size: quality ? fileData.size : file.size,
-          type: file.type,
-          key: quality ? "compress" : "convert", // 标记是否是压缩文件还是转换文件
-          compressibility
-        })
+          console.log("压缩后-->", fileData)
+          file["status"] = "success"
+          const compressibility = quality
+            ? ((file.size - fileData.size) / file.size) * 100
+            : 0
+          afterData.push({
+            id: file.id,
+            file: quality ? fileData : file,
+            name: file.name,
+            size: quality ? fileData.size : file.size,
+            type: file.type,
+            key: quality ? "compress" : "convert", // 标记是否是压缩文件还是转换文件
+            compressibility,
+            status: "success" // 添加状态
+          })
+        } catch (error) {
+          console.error("处理异常--->", error)
+          file["status"] = "failed" // 设置文件状态为失败
+          afterData.push({
+            id: file.id,
+            file: file, // 失败时保留原始文件
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            key: quality ? "compress" : "convert",
+            compressibility: 0, // 失败时压缩率为0
+            status: "failed", // 标记为失败
+            error: error.message // 可以记录错误信息
+          })
+        }
       }
     }
 
@@ -302,6 +326,22 @@ export default function CompressHero() {
     setIsOpenFormat(false)
   }
 
+  /**
+   * @function handleBatchDownload
+   * @description 批量下载文件
+   */
+  const handleBatchDownload = async () => {
+    const filesToDownload = compressorDetails.filter((file) =>
+      selectedFiles.includes(file.id)
+    )
+    // 生成一个带有当前日期的ZIP文件名
+    const date = new Date()
+    const zipFileName = `compressed_images_${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}.zip`
+
+    await downloadFilesAsZip(filesToDownload, zipFileName)
+    setSelectedFiles([]) // 下载完成后清空选中状态
+  }
+
   useEffect(() => {
     const uploadFileDom = uploadFileRef.current
     if (uploadFileDom) {
@@ -375,7 +415,7 @@ export default function CompressHero() {
                 {isDragging ? "释放以上传图片" : "拖拽图片到这里"}
               </h3>
               <p className="lh-text-sm lh-text-slate-500 lh-mb-4">
-                或者点击选择图片
+                或者点击选择图片 (按住 Ctrl / Command 键可选择多个文件)
               </p>
               <div className="lh-flex lh-justify-center lh-space-x-4">
                 <Button
@@ -390,13 +430,9 @@ export default function CompressHero() {
                     variant="default"
                     className="lh-bg-teal-600 hover:lh-bg-teal-700"
                     onClick={() => {
-                      compressorDetails.forEach((file) => {
-                        const a = document.createElement("a")
-                        a.href = URL.createObjectURL(file.file)
-                        a.download = file.file.name
-                        a.click()
-                      })
-                    }}>
+                      handleBatchDownload()
+                    }}
+                    disabled={selectedFiles.length === 0}>
                     <Icon
                       icon="mdi:download"
                       className="lh-w-4 lh-h-4 lh-mr-2"
@@ -452,6 +488,7 @@ export default function CompressHero() {
                     onClick={() => {
                       setFileList([])
                       setCompressorDetails([])
+                      setSelectedFiles([])
                     }}
                     className="lh-text-red-500">
                     <Icon icon="mdi:delete" className="lh-w-4 lh-h-4 lh-mr-1" />
@@ -488,11 +525,25 @@ export default function CompressHero() {
                   )
                   const isProcessing =
                     !compressedFile && file.status !== "success"
+                  const isFailed = compressedFile?.status === "failed"
                   return (
                     <div
                       key={file.id}
                       className="lh-flex lh-items-center lh-justify-between lh-p-4 lh-bg-slate-50 lh-rounded-lg lh-border lh-border-slate-200">
                       <div className="lh-flex lh-items-center lh-space-x-4 lh-min-w-0">
+                        {!isFailed && (
+                          <Checkbox
+                            id={file.id}
+                            checked={selectedFiles.includes(file.id)}
+                            onCheckedChange={(checked) => {
+                              setSelectedFiles((prev) =>
+                                checked
+                                  ? [...prev, file.id]
+                                  : prev.filter((id) => id !== file.id)
+                              )
+                            }}
+                          />
+                        )}
                         <div className="lh-w-12 lh-h-12 lh-rounded-lg lh-bg-slate-100 lh-flex lh-items-center lh-justify-center lh-flex-shrink-0">
                           <Icon
                             icon="mdi:image"
@@ -516,6 +567,14 @@ export default function CompressHero() {
                               className="lh-w-4 lh-h-4 lh-mr-2 lh-animate-spin"
                             />
                             处理中...
+                          </div>
+                        ) : isFailed ? (
+                          <div className="lh-flex lh-items-center lh-text-red-500">
+                            <Icon
+                              icon="mdi:alert-circle-outline"
+                              className="lh-w-4 lh-h-4 lh-mr-2"
+                            />
+                            处理失败
                           </div>
                         ) : (
                           <>
@@ -575,6 +634,19 @@ export default function CompressHero() {
                               删除
                             </Button>
                           </>
+                        )}
+                        {isFailed && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDelete(file)}
+                            className="lh-text-red-500">
+                            <Icon
+                              icon="mdi:delete"
+                              className="lh-w-4 lh-h-4 lh-mr-1"
+                            />
+                            删除
+                          </Button>
                         )}
                       </div>
                     </div>

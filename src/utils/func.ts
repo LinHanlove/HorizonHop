@@ -1,3 +1,5 @@
+import JSZip from "jszip"
+
 import { Message } from "~components/base/Message"
 import { CONFIG, safePages, SEND_FROM } from "~constants"
 import Compressor from "~utils/ability/Compressor"
@@ -241,4 +243,24 @@ export const killCsdn = (chrome?: any) => {
     hideArticleBox.style.display = "none"
     articleContent.style.height = "auto"
   }
+}
+
+/**
+ * @function downloadFilesAsZip
+ * @description 将多个文件打包成ZIP并下载
+ * @param files 要下载的文件数组
+ * @param zipFileName ZIP文件的名称
+ */
+export const downloadFilesAsZip = async (files: any[], zipFileName: string) => {
+  const zip = new JSZip()
+  files.forEach((file) => {
+    zip.file(file.name, file.file)
+  })
+
+  const content = await zip.generateAsync({ type: "blob" })
+  const a = document.createElement("a")
+  a.href = URL.createObjectURL(content)
+  a.download = zipFileName
+  a.click()
+  URL.revokeObjectURL(a.href)
 }
