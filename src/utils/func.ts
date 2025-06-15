@@ -11,10 +11,6 @@ import { notify, sendMessageRuntime } from "./chrome.tools"
  * @function 打开githubDev 线上查看github项目
  */
 export const openGitHubDev = () => {
-  notify({
-    message: "启动中请稍后...",
-    chrome
-  })
   sendMessageRuntime({
     type: "lightIcon",
     origin: SEND_FROM.content,
