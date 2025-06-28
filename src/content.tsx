@@ -47,7 +47,7 @@ export default function IndexContent() {
   const [dialogName, setDialogName] = useState<string | null>(null)
 
   // 弹窗是否打开
-  const [isDialogOpen, setIsDialogOpen] = useState(true)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   useEffect(() => {
     const onMessage = (
