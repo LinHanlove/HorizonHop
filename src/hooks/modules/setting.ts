@@ -121,7 +121,8 @@ export const useSetting = () => {
    */
   const deleteShortcut = (id: string) => {
     // 过滤掉要删除的快捷方式
-    const updatedShortcuts = shortcuts.filter((shortcut) => shortcut.id !== id)
+    const updatedShortcuts =
+      shortcuts.filter((shortcut) => shortcut.id !== id) || []
 
     // 更新本地存储
     setLocal({

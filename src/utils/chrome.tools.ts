@@ -125,7 +125,7 @@ export const getLocal = (option) => {
       if (chrome.runtime.lastError) {
         reject(chrome.runtime.lastError)
       } else {
-        resolve(JSON.parse(result[key]))
+        resolve(JSON.parse(result[key] || "{}"))
       }
     })
   })
