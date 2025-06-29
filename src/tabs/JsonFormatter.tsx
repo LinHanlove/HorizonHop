@@ -8,13 +8,10 @@ import { Switch } from "~components/ui/switch"
 import { Textarea } from "~components/ui/textarea"
 
 import "~/assets/style/tailwind.css"
-import "~/assets/style/jsonFormatter.css"
 
 import { SonnerProvider, toast } from "~components/base/Sonner"
 import { CONFIG } from "~constants"
-import { copyText } from "~utils"
-
-import { JsonFormatter as formatter } from "../utils/ability/jsonFormatter"
+import { useJsonViewConfig } from "~hooks"
 
 /**
  * JsonFormatter 页面组件
@@ -25,111 +22,10 @@ export default function JsonFormatter() {
   // 输入区内容（字符串形式的 JSON）
   const [data, setData] = useState<string>()
 
-  // 原生格式化区容器（暂未用到）
-  const [jsonContainer, setJsonContainer] = useState<HTMLElement>()
-
-  // 备用操作栏配置（暂未用到）
-  const [action, setAction] = useState([
-    { name: "quoteKeys", value: false },
-    { name: "lineNumbers", value: true },
-    { name: "linkUrls", value: true },
-    { name: "linksNewTab", value: true },
-    { name: "trailingCommas", value: false }
-  ])
-  // 输入区缩进宽度
-  const [indent, setIndent] = useState(2)
-
-  // 右侧配置栏可选项
-  const themeOptions = [
-    "rjv-default",
-    "monokai",
-    "solarized",
-    "summerfruit",
-    "eighties",
-    "apathy",
-    "paraiso",
-    "twilight",
-    "grayscale",
-    "harmonic",
-    "hopscotch",
-    "marrakesh",
-    "ocean",
-    "tomorrow"
-  ]
-  const iconStyleOptions = ["triangle", "circle", "square"]
-  // 右侧配置栏各项状态
-  const [theme, setTheme] = useState("rjv-default" as any) // 主题
-  const [iconStyle, setIconStyle] = useState<"triangle" | "circle" | "square">(
-    "triangle"
-  ) // icon风格
-  const [indentWidth, setIndentWidth] = useState(2) // 缩进宽度
-  // 折叠层级，false为全部展开，数字为折叠层数
-  const [collapsed, setCollapsed] = useState<false | number>(false)
-  const [collapseStringsAfterLength, setCollapseStringsAfterLength] =
-    useState(0) // 折叠字符串长度
-  const [displayDataTypes, setDisplayDataTypes] = useState(true) // 显示类型
-  const [displayObjectSize, setDisplayObjectSize] = useState(false) // 显示对象长度
-  const [enableEdit, setEnableEdit] = useState(false) // 可编辑
-  const [enableClipboard, setEnableClipboard] = useState(true) // 可复制
-  const [sortKeys, setSortKeys] = useState(false) // 排序key
-  const [quotesOnKeys, setQuotesOnKeys] = useState(false) // key加引号
-
   // 文件导入input引用
   const fileInputRef = useRef<HTMLInputElement>(null)
   // 输入区错误提示
   const [inputError, setInputError] = useState<string>("")
-
-  // 处理复选框变化的函数（暂未用到）
-  const handleChange = (item) => {
-    const updatedAction = action.map((i) => {
-      if (i.name === item.name) {
-        return { ...i, value: !i.value }
-      }
-      return i
-    })
-    setAction(updatedAction)
-  }
-
-  /**
-   * 获取备用操作栏配置项的值（暂未用到）
-   */
-  const getOption = () => {
-    let option = {}
-    action.forEach((item) => {
-      option[item.name] = item.value
-    })
-    return option
-  }
-
-  /**
-   * 原生格式化区双击复制（暂未用到）
-   */
-  const handleCopy = () => {
-    const lis = document.querySelectorAll(".json-li")
-    lis.forEach((li) => {
-      li.addEventListener("dblclick", (e) => {
-        const text = (e.target as HTMLElement).innerText
-        copyText(text).then(() => {
-          toast("复制成功", { type: "success" })
-        })
-      })
-    })
-  }
-
-  /**
-   * 原生格式化区渲染与复制（暂未用到）
-   */
-  useEffect(() => {
-    try {
-      setJsonContainer(document.querySelector(".json-container") as HTMLElement)
-      if (!jsonContainer) return
-      jsonContainer.innerHTML = formatter(JSON.parse(data || "{}"), {
-        ...getOption(),
-        indent: indent
-      })
-      handleCopy()
-    } catch (error) {}
-  }, [data, action, indent, jsonContainer])
 
   /**
    * 输入区自动聚焦
@@ -150,57 +46,6 @@ export default function JsonFormatter() {
       setInputError(e.message)
     }
   }, [data])
-
-  /**
-   * 一键格式化输入区内容
-   */
-  const handleFormat = () => {
-    try {
-      setData(JSON.stringify(JSON.parse(data), null, 2))
-    } catch {}
-  }
-  /**
-   * 一键压缩输入区内容
-   */
-  const handleCompress = () => {
-    try {
-      setData(JSON.stringify(JSON.parse(data)))
-    } catch {}
-  }
-  /**
-   * 复制全部（格式化/压缩）
-   * @param minify 是否压缩
-   */
-  const handleCopyAll = (minify = false) => {
-    try {
-      const text = minify
-        ? JSON.stringify(JSON.parse(data))
-        : JSON.stringify(JSON.parse(data), null, 2)
-      copyText(text).then(() => {
-        toast("复制成功", { type: "success" })
-      })
-    } catch {
-      toast("复制失败，JSON格式有误", { type: "error" })
-    }
-  }
-  /**
-   * 导出当前内容为.json文件
-   */
-  const handleExport = () => {
-    try {
-      const blob = new Blob([JSON.stringify(JSON.parse(data), null, 2)], {
-        type: "application/json"
-      })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = "data.json"
-      a.click()
-      URL.revokeObjectURL(url)
-    } catch {
-      toast("导出失败，JSON格式有误", { type: "error" })
-    }
-  }
   /**
    * 导入.json文件自动填充输入区
    */
@@ -221,149 +66,26 @@ export default function JsonFormatter() {
     reader.readAsText(file)
   }
 
-  /**
-   * 右侧配置栏表单项配置数组
-   * 每项包含类型、label、value、onChange、可选项、分组等
-   * 通过map循环渲染，维护方便
-   */
-  type ConfigItem =
-    | {
-        type: "input"
-        label: React.ReactNode
-        value: string | number
-        onChange: (v: string) => void
-        inputProps?: React.InputHTMLAttributes<HTMLInputElement>
-        group: "block"
-      }
-    | {
-        type: "select"
-        label: React.ReactNode
-        value: string | number
-        onChange: (v: string) => void
-        options: string[]
-        group: "block"
-      }
-    | {
-        type: "switch"
-        label: React.ReactNode
-        value: boolean
-        onChange: (checked: boolean) => void
-        group: "inline"
-      }
-
-  const configList: ConfigItem[] = [
-    {
-      type: "input",
-      label: "折叠层级",
-      value: typeof collapsed === "number" ? collapsed : "",
-      onChange: (v: string) => {
-        if (v === "" || v === undefined || v === null) {
-          setCollapsed(false)
-        } else {
-          setCollapsed(Number(v))
-        }
-      },
-      inputProps: { type: "number", min: 0, max: 6, placeholder: "全部展开" },
-      group: "block"
-    },
-    {
-      type: "select",
-      label: "主题",
-      value: theme,
-      onChange: (v: string) => setTheme(v),
-      options: themeOptions,
-      group: "block"
-    },
-    {
-      type: "select",
-      label: "Icon风格",
-      value: iconStyle,
-      onChange: (v: string) =>
-        setIconStyle(v as "triangle" | "circle" | "square"),
-      options: iconStyleOptions,
-      group: "block"
-    },
-    {
-      type: "input",
-      label: "缩进宽度",
-      value: indentWidth,
-      onChange: (v: string) => setIndentWidth(Number(v)),
-      inputProps: { type: "number", min: 2, max: 8 },
-      group: "block"
-    },
-    {
-      type: "input",
-      label: "折叠字符串长度",
-      value: collapseStringsAfterLength,
-      onChange: (v: string) => setCollapseStringsAfterLength(Number(v)),
-      inputProps: { type: "number", min: 0, max: 100 },
-      group: "block"
-    },
-    {
-      type: "switch",
-      label: "显示类型",
-      value: displayDataTypes,
-      onChange: (checked: boolean) => setDisplayDataTypes(checked),
-      group: "inline"
-    },
-    {
-      type: "switch",
-      label: "显示对象长度",
-      value: displayObjectSize,
-      onChange: (checked: boolean) => setDisplayObjectSize(checked),
-      group: "inline"
-    },
-    {
-      type: "switch",
-      label: "可编辑",
-      value: enableEdit,
-      onChange: (checked: boolean) => setEnableEdit(checked),
-      group: "inline"
-    },
-    {
-      type: "switch",
-      label: "可复制",
-      value: enableClipboard,
-      onChange: (checked: boolean) => setEnableClipboard(checked),
-      group: "inline"
-    },
-    {
-      type: "switch",
-      label: "排序key",
-      value: sortKeys,
-      onChange: (checked: boolean) => setSortKeys(checked),
-      group: "inline"
-    },
-    {
-      type: "switch",
-      label: (
-        <span>
-          key加引号
-          <span className="lh-text-[10px] lh-text-gray-400 lh-ml-1">
-            （部分主题有效）
-          </span>
-        </span>
-      ),
-      value: quotesOnKeys,
-      onChange: (checked: boolean) => setQuotesOnKeys(checked),
-      group: "inline"
-    }
-  ]
-
-  /**
-   * Output区上方操作栏按钮配置数组
-   * 每个对象代表一个操作按钮，包含label和onClick
-   * 通过map循环渲染，维护和扩展极其方便
-   */
-  type OutputAction = { label: string; onClick: () => void }
-  const outputActions: OutputAction[] = [
-    { label: "复制全部", onClick: () => handleCopyAll(false) },
-    { label: "复制压缩", onClick: () => handleCopyAll(true) },
-    { label: "一键格式化", onClick: handleFormat },
-    { label: "一键压缩", onClick: handleCompress },
-    { label: "导出JSON", onClick: handleExport },
-    { label: "导入JSON", onClick: () => fileInputRef.current?.click() }
-  ]
+  // 使用 useJsonViewConfig 统一管理 json-view 配置
+  const {
+    theme: useJsonViewTheme,
+    iconStyle: useJsonViewIconStyle,
+    indentWidth: useJsonViewIndentWidth,
+    collapsed: useJsonViewCollapsed,
+    collapseStringsAfterLength: useJsonViewCollapseStringsAfterLength,
+    displayDataTypes: useJsonViewDisplayDataTypes,
+    displayObjectSize: useJsonViewDisplayObjectSize,
+    enableEdit: useJsonViewEnableEdit,
+    enableClipboard: useJsonViewEnableClipboard,
+    sortKeys: useJsonViewSortKeys,
+    quotesOnKeys: useJsonViewQuotesOnKeys,
+    configList: useJsonViewConfigList,
+    outputActions: useJsonViewOutputActions
+  } = useJsonViewConfig({
+    data: data || "{}",
+    setData,
+    fileInputRef
+  })
 
   return (
     <SonnerProvider>
@@ -470,7 +192,7 @@ export default function JsonFormatter() {
                       保证按钮顺序、功能、样式统一，后续维护更方便
                     */}
                     <div className="lh-flex lh-items-center lh-mb-2 lh-gap-2">
-                      {outputActions.map((action, idx) => (
+                      {useJsonViewOutputActions.map((action, idx) => (
                         <Button
                           key={action.label}
                           size="sm"
@@ -496,23 +218,23 @@ export default function JsonFormatter() {
                           return {}
                         }
                       })()}
-                      theme={theme as any}
-                      iconStyle={iconStyle}
-                      indentWidth={indentWidth}
-                      collapsed={collapsed}
+                      theme={useJsonViewTheme as any}
+                      iconStyle={useJsonViewIconStyle}
+                      indentWidth={useJsonViewIndentWidth}
+                      collapsed={useJsonViewCollapsed}
                       collapseStringsAfterLength={
-                        collapseStringsAfterLength > 0
-                          ? collapseStringsAfterLength
+                        useJsonViewCollapseStringsAfterLength > 0
+                          ? useJsonViewCollapseStringsAfterLength
                           : false
                       }
-                      displayDataTypes={displayDataTypes}
-                      displayObjectSize={displayObjectSize}
-                      enableClipboard={enableClipboard}
-                      onEdit={enableEdit ? () => {} : false}
-                      onAdd={enableEdit ? () => {} : false}
-                      onDelete={enableEdit ? () => {} : false}
-                      sortKeys={sortKeys}
-                      quotesOnKeys={quotesOnKeys}
+                      displayDataTypes={useJsonViewDisplayDataTypes}
+                      displayObjectSize={useJsonViewDisplayObjectSize}
+                      enableClipboard={useJsonViewEnableClipboard}
+                      onEdit={useJsonViewEnableEdit ? () => {} : false}
+                      onAdd={useJsonViewEnableEdit ? () => {} : false}
+                      onDelete={useJsonViewEnableEdit ? () => {} : false}
+                      sortKeys={useJsonViewSortKeys}
+                      quotesOnKeys={useJsonViewQuotesOnKeys}
                       style={{
                         background: "transparent",
                         fontFamily: "menlo, consolas, monospace",
@@ -532,7 +254,7 @@ export default function JsonFormatter() {
             <div
               className="lh-w-48 lh-bg-white lh-border lh-border-gray-200 lh-p-4 lh-flex lh-flex-col lh-space-y-4 lh-max-h-[calc(100vh-220px)]  lh-rounded-xl lh-shadow-xl lh-z-10 lh-bg-gradient-to-b lh-from-gray-50 lh-to-white"
               style={{ marginTop: "40px" }}>
-              {configList.map((item, idx) =>
+              {useJsonViewConfigList.map((item, idx) =>
                 item.group === "block" ? (
                   <div
                     key={idx}
