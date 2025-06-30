@@ -1,6 +1,5 @@
 # Horizon-Hop
 
-![Horizon-Hop Logo](./assets/icon.png)
 
 ## 项目简介
 
