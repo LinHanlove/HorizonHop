@@ -1,17 +1,17 @@
 // 隐藏滚动条
 .hide-scrollbar {
   &::-webkit-scrollbar {
-    width: 0;
+    width: 0 !important;
     /* 将宽度设置为0 */
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: transparent;
+    background-color: transparent !important;
     /* 将滑块背景设置为透明 */
   }
 
   &::-webkit-scrollbar-track {
-    background-color: transparent;
+    background-color: transparent !important;
     /* 将轨道背景设置为透明 */
   }
 }

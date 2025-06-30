@@ -375,7 +375,7 @@ export default function TableMarkdown() {
               </div>
             </div>
             <div
-              className="lh-w-48 lh-bg-white lh-border lh-border-gray-200 lh-p-4 lh-flex lh-flex-col lh-space-y-4 lh-max-h-[calc(100vh-220px)]  lh-rounded-xl lh-shadow-xl lh-z-10 lh-bg-gradient-to-b lh-from-gray-50 lh-to-white"
+              className="lh-w-[190px] lh-bg-white lh-border lh-border-gray-200 lh-p-4 lh-flex lh-flex-col lh-space-y-4 lh-max-h-[calc(100vh-220px)] lh-overflow-y-scroll lh-hide-scrollbar  lh-rounded-xl lh-shadow-xl lh-z-10 lh-bg-gradient-to-b lh-from-gray-50 lh-to-white"
               style={{ marginTop: "40px" }}>
               {configList.map((item, idx) =>
                 item.group === "block" ? (
