@@ -214,16 +214,15 @@ export default function BookmarkSearch({ open, setOpen }) {
         <DialogDescription>
           <div className="lh-flex lh-flex-col lh-items-center lh-justify-center lh-space-y-2 lh-mb-2">
             <p className="lh-text-sm lh-text-center lh-text-slate-600 lh-font-medium lh-tracking-wide lh-leading-relaxed lh-max-w-[90%]">
-              <span className="lh-bg-gradient-to-r lh-from-slate-700 lh-to-slate-500 lh-bg-clip-text lh-text-transparent">
-                全局模糊搜索书签
-              </span>
-              ，输入关键词即可实时查找所有书签。
+              全局模糊搜索书签，输入关键词即可实时查找所有书签。
             </p>
             <div className="lh-flex lh-items-center lh-justify-center lh-space-x-2 lh-text-xs lh-text-slate-400 lh-mt-1">
               <span className="lh-flex lh-items-center lh-space-x-1">
-                <Icon icon="mdi:keyboard-tab" className="lh-w-4 lh-h-4" />
+                <kbd className="lh-px-1.5 lh-py-0.5 lh-bg-slate-100 lh-rounded lh-border lh-border-slate-200/60 lh-text-slate-600 lh-font-mono lh-text-[10px]">
+                  <Icon icon="mdi:keyboard-tab" className="lh-w-4 lh-h-4" />
+                </kbd>
                 <span>Tab</span>
-                <span>切换高亮</span>
+                <span>切换选中</span>
               </span>
               <span className="lh-h-3 lh-w-px lh-bg-slate-200 lh-mx-2"></span>
               <span className="lh-flex lh-items-center lh-space-x-1">
@@ -243,65 +242,72 @@ export default function BookmarkSearch({ open, setOpen }) {
           className="lh-mb-2"
         />
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList>
-            {tabList.map((tab) => (
-              <TabsTrigger value={tab.id} key={tab.id} className="lh-relative">
-                {tab.title}
-                {activeTab === tab.id && <SelectedCornerMark />}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-          {tabList.map((tab) => (
-            <TabsContent value={tab.id} key={tab.id}>
-              <div className="lh-max-h-96 lh-overflow-y-auto lh-space-y-2">
-                {search ? (
-                  <div className="lh-space-y-2">
-                    {getMatchedBookmarks(bookmarks, search).map((item) => (
-                      <div
-                        key={item.id}
-                        className={
-                          "lh-relative lh-flex lh-items-center lh-gap-2 lh-p-2 lh-rounded hover:lh-bg-slate-100 lh-cursor-pointer lh-transition-all" +
-                          (selectedBookmarkId === item.id
-                            ? " lh-border lh-border-slate-400"
-                            : "")
-                        }
-                        ref={(el) => (bookmarkRefs.current[item.id] = el)}
-                        onClick={() => window.open(item.url, "_blank")}>
-                        <Icon
-                          icon="mdi:bookmark-outline"
-                          className="lh-h-5 lh-w-5"
-                        />
-                        <span
-                          className="lh-font-medium lh-text-slate-700 lh-whitespace-nowrap lh-overflow-hidden lh-text-ellipsis"
-                          style={{
-                            maxWidth: "400px",
-                            display: "inline-block"
-                          }}>
-                          {item.title}
-                        </span>
-                        {selectedBookmarkId === item.id && (
-                          <div className="lh-absolute lh-top-0 lh-right-0">
-                            <SelectedCornerMark />
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                    {getMatchedBookmarks(bookmarks, search).length === 0 && (
-                      <div className="lh-text-center lh-text-slate-400">
-                        暂无结果
-                      </div>
-                    )}
-                  </div>
-                ) : tab.children && tab.children.length > 0 ? (
-                  renderAccordion(tab.children)
-                ) : (
-                  <div className="lh-text-center lh-text-slate-400">
-                    暂无结果
-                  </div>
-                )}
-              </div>
-            </TabsContent>
-          ))}
+          {tabList && tabList.length > 0 ? (
+            <TabsList>
+              {tabList &&
+                tabList.map((tab) => (
+                  <TabsTrigger
+                    value={tab.id}
+                    key={tab.id}
+                    className="lh-relative">
+                    {tab.title}
+                  </TabsTrigger>
+                ))}
+            </TabsList>
+          ) : null}
+
+          {tabList && tabList.length ? (
+            tabList.map((tab) => (
+              <TabsContent value={tab.id} key={tab.id}>
+                <div className="lh-max-h-96 lh-overflow-y-auto lh-space-y-2">
+                  {search ? (
+                    <div className="lh-space-y-2">
+                      {getMatchedBookmarks(bookmarks, search).map((item) => (
+                        <div
+                          key={item.id}
+                          className={
+                            "lh-relative lh-flex lh-items-center lh-gap-2 lh-p-2 lh-rounded hover:lh-bg-slate-100 lh-cursor-pointer lh-transition-all lh-overflow-hidden" +
+                            (selectedBookmarkId === item.id
+                              ? " lh-border lh-border-slate-400"
+                              : "")
+                          }
+                          ref={(el) => (bookmarkRefs.current[item.id] = el)}
+                          onClick={() => window.open(item.url, "_blank")}>
+                          <Icon
+                            icon="mdi:bookmark-outline"
+                            className="lh-h-5 lh-w-5"
+                          />
+                          <span
+                            className="lh-font-medium lh-text-slate-700 lh-whitespace-nowrap lh-overflow-hidden lh-text-ellipsis"
+                            style={{
+                              maxWidth: "400px",
+                              display: "inline-block"
+                            }}>
+                            {item.title}
+                          </span>
+                          {selectedBookmarkId === item.id && (
+                            <div className="lh-absolute lh-top-[-1px] lh-right-[-1px]">
+                              <SelectedCornerMark />
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : tab.children && tab.children.length > 0 ? (
+                    renderAccordion(tab.children)
+                  ) : (
+                    <div className="lh-text-center lh-text-slate-400">
+                      暂无结果
+                    </div>
+                  )}
+                </div>
+              </TabsContent>
+            ))
+          ) : (
+            <div className="lh-w-full lh-text-center lh-text-slate-400">
+              暂无结果
+            </div>
+          )}
         </Tabs>
       </DialogContent>
     </Dialog>
