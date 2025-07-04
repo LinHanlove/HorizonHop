@@ -12,6 +12,7 @@ import {
   TooltipTrigger
 } from "~/components/ui/tooltip"
 import { useSearchContext } from "~components/base/Layout"
+import SelectedCornerMark from "~components/base/SelectedCornerMark"
 import { Button } from "~components/ui/button"
 import { menuList, MODEL_TYPE, SEND_FROM, SHORTCUT_TYPE_MAP } from "~constants"
 import { sendMessage } from "~utils"
@@ -235,11 +236,7 @@ export default function Content() {
                   )}
                   onClick={() => onSelectShortcut(shortcut)}>
                   {/* 选中角标 */}
-                  {searchTarget?.id === shortcut.id && (
-                    <div className="lh-absolute lh-top-0 lh-right-0 lh-w-3 lh-h-3 lh-bg-slate-800 lh-rounded-bl-[4px] lh-rounded-tr-[4px] lh-flex lh-items-center lh-justify-center">
-                      <div className="lh-w-1.5 lh-h-1.5 lh-bg-white lh-rounded-full"></div>
-                    </div>
-                  )}
+                  {searchTarget?.id === shortcut.id && <SelectedCornerMark />}
                   <div
                     className={cn(
                       "lh-flex lh-items-center lh-justify-center lh-w-6 lh-h-6 lh-mb-2 lh-text-2xl lh-transition-transform lh-group-hover:scale-110 group-hover:lh-rotate-12",

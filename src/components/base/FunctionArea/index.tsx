@@ -4,6 +4,7 @@ import Dialog, {
   DialogHeader,
   DialogTitle
 } from "@/components/base/Dialog"
+import SelectedCornerMark from "@/components/base/SelectedCornerMark"
 import { cn } from "@/utils/shadcn"
 import { Icon } from "@iconify/react"
 import { motion } from "framer-motion"
@@ -11,15 +12,6 @@ import React, { useEffect, useState } from "react"
 
 import { menuList, MODEL_TYPE, SEND_FROM, SHORTCUT_TYPE_MAP } from "~constants"
 import { sendMessageRuntime } from "~utils"
-
-// 选中角标组件
-const SelectedCorner = () => {
-  return (
-    <div className="lh-absolute z-[999999] lh-top-0 lh-right-0 lh-w-3 lh-h-3 lh-bg-slate-800 lh-rounded-bl-[4px] lh-rounded-tr-[4px] lh-flex lh-items-center lh-justify-center">
-      <div className="lh-w-1.5 lh-h-1.5 lh-bg-white lh-rounded-full"></div>
-    </div>
-  )
-}
 
 export default function FunctionArea({ ...props }) {
   const { open, setOpen } = props
@@ -178,7 +170,7 @@ export default function FunctionArea({ ...props }) {
                       : "lh-from-slate-50/0 lh-to-slate-100/0 lh-opacity-0 group-hover:lh-from-slate-50/50 group-hover:lh-to-slate-100/50 group-hover:lh-opacity-100"
                   )}
                 />
-                {selectedFunction === func.id && <SelectedCorner />}
+                {selectedFunction === func.id && <SelectedCornerMark />}
                 <div
                   className={cn(
                     "lh-flex lh-items-center lh-justify-center lh-w-7 lh-h-7 lh-mb-1.5 lh-rounded-lg lh-bg-gradient-to-br lh-text-slate-600 lh-transition-all lh-shadow-sm lh-relative lh-z-10",

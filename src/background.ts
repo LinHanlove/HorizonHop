@@ -29,6 +29,14 @@ chrome.commands.onCommand.addListener((command) => {
       origin: SEND_FROM.background,
       chrome
     })
+
+  // 打开书签搜索面板
+  if (command === "openBookmarkSearch")
+    sendMessage({
+      type: MODEL_TYPE.bookmarkSearch,
+      origin: SEND_FROM.background,
+      chrome
+    })
 })
 
 /**
@@ -52,6 +60,13 @@ const onMessage = (
       lightIcon({
         chrome
       })
+    }
+    // 新增：处理获取书签请求
+    if (type === "getBookmarks") {
+      chrome.bookmarks.getTree((nodes) => {
+        sendResponse({ bookmarks: nodes })
+      })
+      return true
     }
   }
 }

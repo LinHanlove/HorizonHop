@@ -1,4 +1,11 @@
-import { Code, DiamondMinus, FileText, Github, Trash2 } from "lucide-react"
+import {
+  Code,
+  DiamondMinus,
+  FileText,
+  Github,
+  Search,
+  Trash2
+} from "lucide-react"
 
 import { createTab, openGitHubDev, sendMessage } from "~utils"
 import { getUUID } from "~utils/public"
@@ -318,6 +325,20 @@ export const presetIcons: string[] = [
  * @constant 功能菜单配置
  */
 export const menuList: TYPE.FunctionMenu[] = [
+  {
+    id: getUUID(),
+    title: "BookmarkSearch",
+    icon: Search,
+    description: "搜索并打开书签",
+    category: SHORTCUT_TYPE.other,
+    event: () => {
+      sendMessage({
+        type: MODEL_TYPE.bookmarkSearch,
+        origin: SEND_FROM.popup,
+        chrome
+      })
+    }
+  },
   {
     id: getUUID(),
     title: "JsonFormatter",

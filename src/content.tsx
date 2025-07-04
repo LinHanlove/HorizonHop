@@ -2,6 +2,7 @@ import cssText from "data-text:~/style.css"
 import type { PlasmoCSConfig } from "plasmo"
 import { useEffect, useState } from "react"
 
+import BookmarkSearch from "~components/base/BookmarkSearch"
 import DeleteShortcut from "~components/base/DeleteShortcut"
 import FunctionArea from "~components/base/FunctionArea"
 import NewAddShortcut from "~components/base/NewAddShortcut"
@@ -62,7 +63,8 @@ export default function IndexContent() {
         MODEL_TYPE.addNewShortcut,
         MODEL_TYPE.setting,
         MODEL_TYPE.deleteShortcut,
-        MODEL_TYPE.functionArea
+        MODEL_TYPE.functionArea,
+        MODEL_TYPE.bookmarkSearch
       ].includes(message.type)
 
       // 来自popup
@@ -145,6 +147,12 @@ export default function IndexContent() {
         />
       )}
       {/* E 功能选区 */}
+
+      {/* S 书签搜索 */}
+      {dialogName === MODEL_TYPE.bookmarkSearch && (
+        <BookmarkSearch open={isDialogOpen} setOpen={closeDialog} />
+      )}
+      {/* E 书签搜索 */}
     </SonnerProvider>
   )
 }

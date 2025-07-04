@@ -35,8 +35,6 @@ export const sendMessage = (option: TYPE.SendMessage) => {
  */
 export const sendMessageRuntime = (option: TYPE.SendMessage) => {
   const { type, origin, data, chrome } = option
-  console.log(option)
-
   return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage(
       {
@@ -59,9 +57,11 @@ export const onListenerMessage = (
     message: TYPE.ListenerMessageOption,
     sender: chrome.runtime.MessageSender,
     sendResponse: (response?: any) => void
-  ) => void
+  ) => boolean | void
 ) => {
-  chrome.runtime.onMessage.addListener(callback)
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    return callback(message, sender, sendResponse)
+  })
 }
 
 /**
