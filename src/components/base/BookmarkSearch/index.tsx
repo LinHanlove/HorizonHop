@@ -19,6 +19,49 @@ import React, { useEffect, useRef, useState } from "react"
 import { SEND_FROM } from "~constants"
 import { sendMessageRuntime } from "~utils"
 
+const RenderAccordion = ({ groups }) => {
+  const [active, setActive] = React.useState("")
+  return (
+    <Accordion
+      type="single"
+      collapsible
+      value={active}
+      onValueChange={setActive}>
+      {groups.map((group) =>
+        group.children && group.children.length > 0 ? (
+          <AccordionItem value={group.id} key={group.id}>
+            <div className="lh-relative">
+              <AccordionTrigger>
+                <span className="lh-font-bold lh-text-base lh-text-slate-700 lh-flex lh-items-center">
+                  {group.title}
+                  {active === group.id && <SelectedCornerMark />}
+                </span>
+              </AccordionTrigger>
+            </div>
+            <AccordionContent>
+              <div className="lh-space-y-2 lh-pl-2">
+                <RenderAccordion groups={group.children} />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        ) : (
+          <div
+            key={group.id}
+            className="lh-flex lh-items-center lh-gap-2 lh-p-2 lh-rounded hover:lh-bg-slate-100 lh-cursor-pointer lh-transition-all"
+            onClick={() => window.open(group.url, "_blank")}>
+            <Icon icon="mdi:bookmark-outline" className="lh-h-5 lh-w-5" />
+            <span
+              className="lh-font-medium lh-text-slate-700 lh-whitespace-nowrap lh-overflow-hidden lh-text-ellipsis"
+              style={{ maxWidth: "400px", display: "inline-block" }}>
+              {group.title}
+            </span>
+          </div>
+        )
+      )}
+    </Accordion>
+  )
+}
+
 export default function BookmarkSearch({ open, setOpen }) {
   const [bookmarks, setBookmarks] = useState([])
   const [search, setSearch] = useState("")
@@ -139,66 +182,6 @@ export default function BookmarkSearch({ open, setOpen }) {
     }
   }, [selectedBookmarkId, search])
 
-  // 渲染分组（Accordion）
-  const renderAccordion = (groups) => (
-    <Accordion
-      type="single"
-      collapsible
-      value={activeAccordion}
-      onValueChange={setActiveAccordion}>
-      {groups.map((group) =>
-        group.children && group.children.length > 0 ? (
-          <AccordionItem value={group.id} key={group.id}>
-            <div className="lh-relative">
-              <AccordionTrigger>
-                <span className="lh-font-bold lh-text-base lh-text-slate-700 lh-flex lh-items-center">
-                  {group.title}
-                  {activeAccordion === group.id && <SelectedCornerMark />}
-                </span>
-              </AccordionTrigger>
-            </div>
-            <AccordionContent>
-              <div className="lh-space-y-2 lh-pl-2">
-                {group.children.map((item) =>
-                  item.children && item.children.length > 0 ? (
-                    renderAccordion([item])
-                  ) : (
-                    <div
-                      key={item.id}
-                      className="lh-flex lh-items-center lh-gap-2 lh-p-2 lh-rounded hover:lh-bg-slate-100 lh-cursor-pointer lh-transition-all"
-                      onClick={() => window.open(item.url, "_blank")}>
-                      <Icon
-                        icon="mdi:bookmark-outline"
-                        className="lh-h-5 lh-w-5"
-                      />
-                      <span
-                        className="lh-font-medium lh-text-slate-700 lh-whitespace-nowrap lh-overflow-hidden lh-text-ellipsis"
-                        style={{ maxWidth: "400px", display: "inline-block" }}>
-                        {item.title}
-                      </span>
-                    </div>
-                  )
-                )}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        ) : (
-          <div
-            key={group.id}
-            className="lh-flex lh-items-center lh-gap-2 lh-p-2 lh-rounded hover:lh-bg-slate-100 lh-cursor-pointer lh-transition-all"
-            onClick={() => window.open(group.url, "_blank")}>
-            <Icon icon="mdi:bookmark-outline" className="lh-h-5 lh-w-5" />
-            <span
-              className="lh-font-medium lh-text-slate-700 lh-whitespace-nowrap lh-overflow-hidden lh-text-ellipsis"
-              style={{ maxWidth: "400px", display: "inline-block" }}>
-              {group.title}
-            </span>
-          </div>
-        )
-      )}
-    </Accordion>
-  )
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:lh-max-w-[500px] lh-w-[500px]">
@@ -294,7 +277,7 @@ export default function BookmarkSearch({ open, setOpen }) {
                       ))}
                     </div>
                   ) : tab.children && tab.children.length > 0 ? (
-                    renderAccordion(tab.children)
+                    <RenderAccordion groups={tab.children} />
                   ) : (
                     <div className="lh-text-center lh-text-slate-400">
                       暂无结果
