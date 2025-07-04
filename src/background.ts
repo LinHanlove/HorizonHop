@@ -60,11 +60,13 @@ onListenerMessage(onMessage)
 /**
  * @function 创建右键菜单
  */
-menuList.forEach((item) => {
-  chrome.contextMenus.create({
-    id: item.id,
-    title: item.title,
-    contexts: ["all"]
+chrome.contextMenus.removeAll(() => {
+  menuList.forEach((item) => {
+    chrome.contextMenus.create({
+      id: item.id,
+      title: item.title,
+      contexts: ["all"]
+    })
   })
 })
 
