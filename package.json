@@ -1,7 +1,7 @@
 {
   "name": "horizon-hop",
   "displayName": "Horizon hop",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "Develop more efficient and aesthetically pleasing browser plugins",
   "author": "LinHanPro",
   "scripts": {

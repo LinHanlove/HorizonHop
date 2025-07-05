@@ -63,8 +63,9 @@ const onMessage = (
     }
     // 新增：处理获取书签请求
     if (type === "getBookmarks") {
-      chrome.bookmarks.getTree((nodes) => {
-        sendResponse({ bookmarks: nodes })
+      chrome.bookmarks.getTree(async (nodes) => {
+        const updated = await updateBookmark(nodes[0])
+        sendResponse({ bookmarks: updated })
       })
       return true
     }
@@ -92,3 +93,32 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   const active = menuList.find((item) => item.id === info.menuItemId)
   if (active) active.event()
 })
+
+/**
+ * @function 递归处理单个节点
+ * @param node
+ */
+const updateBookmark = async (node: chrome.bookmarks.BookmarkTreeNode) => {
+  try {
+    if (node.url) {
+      // 这是书签，获取父文件夹名称并更新
+      const parentId = node.parentId
+      if (parentId) {
+        const parentArr = await chrome.bookmarks.get(parentId)
+        if (parentArr && parentArr.length) {
+          const parentTitle = parentArr[0].title
+          const newTitle = `${node.title} ✫ ${parentTitle}`
+          node.title = newTitle
+        }
+      }
+    } else if (node.children && node.children.length) {
+      // 这是文件夹，递归处理每个子节点
+      for (const child of node.children) {
+        await updateBookmark(child)
+      }
+    }
+    return node
+  } catch (e) {
+    return []
+  }
+}

@@ -19,6 +19,11 @@ import React, { useEffect, useRef, useState } from "react"
 import { SEND_FROM } from "~constants"
 import { sendMessageRuntime } from "~utils"
 
+/**
+ * @function BookmarkSearch 书签搜索
+ * @param param0 { open, setOpen }
+ * @returns
+ */
 const RenderAccordion = ({ groups }) => {
   const [active, setActive] = React.useState("")
   return (
@@ -28,7 +33,7 @@ const RenderAccordion = ({ groups }) => {
       value={active}
       onValueChange={setActive}>
       {groups.map((group) =>
-        group.children && group.children.length > 0 ? (
+        group.children && group.children.length ? (
           <AccordionItem value={group.id} key={group.id}>
             <div className="lh-relative">
               <AccordionTrigger>
@@ -44,7 +49,7 @@ const RenderAccordion = ({ groups }) => {
               </div>
             </AccordionContent>
           </AccordionItem>
-        ) : (
+        ) : group.url ? (
           <div
             key={group.id}
             className="lh-flex lh-items-center lh-gap-2 lh-p-2 lh-rounded hover:lh-bg-slate-100 lh-cursor-pointer lh-transition-all"
@@ -56,37 +61,55 @@ const RenderAccordion = ({ groups }) => {
               {group.title}
             </span>
           </div>
-        )
+        ) : null
       )}
     </Accordion>
   )
 }
 
+// 定义书签类型
+interface BookmarkNode {
+  id: string
+  title: string
+  url?: string
+  children?: BookmarkNode[]
+  [key: string]: any
+}
+
 export default function BookmarkSearch({ open, setOpen }) {
-  const [bookmarks, setBookmarks] = useState([])
+  const [bookmarks, setBookmarks] = useState<{ children: BookmarkNode[] }>({
+    children: []
+  })
   const [search, setSearch] = useState("")
-  const [filtered, setFiltered] = useState([])
+  const [filtered, setFiltered] = useState<{ children: BookmarkNode[] }>({
+    children: []
+  })
   const [activeTab, setActiveTab] = useState("1") // 默认tab为书签栏id
-  const [activeAccordion, setActiveAccordion] = useState("") // 当前展开的分组id
   const [selectedBookmarkId, setSelectedBookmarkId] = useState<string | null>(
     null
   )
   const matchedBookmarksRef = useRef<any[]>([])
   const bookmarkRefs = useRef<{ [id: string]: HTMLDivElement | null }>({})
   const inputRef = useRef<HTMLInputElement>(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (open) {
+      setLoading(true)
       sendMessageRuntime({
         type: "getBookmarks",
         origin: SEND_FROM.content,
         chrome
-      }).then((res) => {
-        const result = res as { bookmarks?: any[] }
-        if (result?.bookmarks) {
-          setBookmarks(result.bookmarks)
-        }
       })
+        .then((res) => {
+          const result = res as { bookmarks }
+          if (result?.bookmarks) {
+            setBookmarks(result.bookmarks)
+          }
+        })
+        .finally(() => {
+          setLoading(false)
+        })
       if (inputRef.current) {
         inputRef.current.focus()
       }
@@ -97,31 +120,33 @@ export default function BookmarkSearch({ open, setOpen }) {
     if (!search) {
       setFiltered(bookmarks)
     } else {
-      // 搜索时递归所有分组，保留结构
-      const filterBookmarks = (nodes) => {
-        return nodes
-          .map((node) => {
-            if (node.children) {
-              const filteredChildren = filterBookmarks(node.children)
-              if (filteredChildren.length > 0) {
-                return { ...node, children: filteredChildren }
-              }
-              return null
-            } else if (
-              node.title?.toLowerCase().includes(search.toLowerCase())
-            ) {
-              return node
-            }
-            return null
-          })
-          .filter(Boolean)
+      // 递归过滤，返回对象结构
+      const filterBookmarks = (node) => {
+        if (!node) return null
+        if (node.children) {
+          const filteredChildren = node.children
+            .map(filterBookmarks)
+            .filter(Boolean)
+          if (filteredChildren.length > 0) {
+            return { ...node, children: filteredChildren }
+          }
+          // 如果自己是分组但没有匹配的子项，且自己不是匹配项，则不返回
+          if (node.title?.toLowerCase().includes(search.toLowerCase())) {
+            return { ...node, children: [] }
+          }
+          return null
+        } else if (node.title?.toLowerCase().includes(search.toLowerCase())) {
+          return node
+        }
+        return null
       }
-      setFiltered(filterBookmarks(bookmarks))
+      const filteredResult = filterBookmarks(bookmarks)
+      setFiltered(filteredResult || { children: [] })
     }
   }, [search, bookmarks])
 
   // 获取tab列表（顶层children）
-  const tabList = filtered[0]?.children || []
+  const tabList = filtered.children || []
 
   // 获取所有匹配的书签项（递归所有分组，返回一维数组）
   const getMatchedBookmarks = (nodes, keyword) => {
@@ -167,7 +192,7 @@ export default function BookmarkSearch({ open, setOpen }) {
       matchedBookmarksRef.current = []
       return
     }
-    const matched = getMatchedBookmarks(bookmarks, search)
+    const matched = getMatchedBookmarks(bookmarks.children, search)
     matchedBookmarksRef.current = matched
     setSelectedBookmarkId(matched[0]?.id || null)
     bookmarkRefs.current = {}
@@ -215,6 +240,35 @@ export default function BookmarkSearch({ open, setOpen }) {
                 <span>打开书签</span>
               </span>
             </div>
+            {loading && (
+              <div className="lh-w-full lh-flex lh-flex-col lh-items-center lh-justify-center lh-my-6">
+                <span className="lh-flex lh-items-center lh-gap-2 lh-text-lg lh-font-bold lh-text-blue-500">
+                  <svg
+                    className="lh-animate-spin"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="#3B82F6"
+                      strokeWidth="4"
+                      opacity="0.2"
+                    />
+                    <path
+                      d="M22 12a10 10 0 0 1-10 10"
+                      stroke="#3B82F6"
+                      strokeWidth="4"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  正在加载书签...
+                </span>
+              </div>
+            )}
           </div>
         </DialogDescription>
         <Input
@@ -228,14 +282,23 @@ export default function BookmarkSearch({ open, setOpen }) {
           {tabList && tabList.length > 0 ? (
             <TabsList>
               {tabList &&
-                tabList.map((tab) => (
-                  <TabsTrigger
-                    value={tab.id}
-                    key={tab.id}
-                    className="lh-relative">
-                    {tab.title}
-                  </TabsTrigger>
-                ))}
+                tabList
+                  .filter(
+                    (tab) =>
+                      !(
+                        Array.isArray(tab.children) &&
+                        tab.children.length === 0 &&
+                        !tab.url
+                      )
+                  )
+                  .map((tab) => (
+                    <TabsTrigger
+                      value={tab.id}
+                      key={tab.id}
+                      className="lh-relative">
+                      {tab.title}
+                    </TabsTrigger>
+                  ))}
             </TabsList>
           ) : null}
 
@@ -245,36 +308,38 @@ export default function BookmarkSearch({ open, setOpen }) {
                 <div className="lh-max-h-96 lh-overflow-y-auto lh-space-y-2">
                   {search ? (
                     <div className="lh-space-y-2">
-                      {getMatchedBookmarks(bookmarks, search).map((item) => (
-                        <div
-                          key={item.id}
-                          className={
-                            "lh-relative lh-flex lh-items-center lh-gap-2 lh-p-2 lh-rounded hover:lh-bg-slate-100 lh-cursor-pointer lh-transition-all lh-overflow-hidden" +
-                            (selectedBookmarkId === item.id
-                              ? " lh-border lh-border-slate-400"
-                              : "")
-                          }
-                          ref={(el) => (bookmarkRefs.current[item.id] = el)}
-                          onClick={() => window.open(item.url, "_blank")}>
-                          <Icon
-                            icon="mdi:bookmark-outline"
-                            className="lh-h-5 lh-w-5"
-                          />
-                          <span
-                            className="lh-font-medium lh-text-slate-700 lh-whitespace-nowrap lh-overflow-hidden lh-text-ellipsis"
-                            style={{
-                              maxWidth: "400px",
-                              display: "inline-block"
-                            }}>
-                            {item.title}
-                          </span>
-                          {selectedBookmarkId === item.id && (
-                            <div className="lh-absolute lh-top-[-1px] lh-right-[-1px]">
-                              <SelectedCornerMark />
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                      {getMatchedBookmarks(bookmarks.children, search).map(
+                        (item) => (
+                          <div
+                            key={item.id}
+                            className={
+                              "lh-relative lh-flex lh-items-center lh-gap-2 lh-p-2 lh-rounded hover:lh-bg-slate-100 lh-cursor-pointer lh-transition-all lh-overflow-hidden" +
+                              (selectedBookmarkId === item.id
+                                ? " lh-border lh-border-slate-400"
+                                : "")
+                            }
+                            ref={(el) => (bookmarkRefs.current[item.id] = el)}
+                            onClick={() => window.open(item.url, "_blank")}>
+                            <Icon
+                              icon="mdi:bookmark-outline"
+                              className="lh-h-5 lh-w-5"
+                            />
+                            <span
+                              className="lh-font-medium lh-text-slate-700 lh-whitespace-nowrap lh-overflow-hidden lh-text-ellipsis"
+                              style={{
+                                maxWidth: "400px",
+                                display: "inline-block"
+                              }}>
+                              {item.title}
+                            </span>
+                            {selectedBookmarkId === item.id && (
+                              <div className="lh-absolute lh-top-[-1px] lh-right-[-1px]">
+                                <SelectedCornerMark />
+                              </div>
+                            )}
+                          </div>
+                        )
+                      )}
                     </div>
                   ) : tab.children && tab.children.length > 0 ? (
                     <RenderAccordion groups={tab.children} />
