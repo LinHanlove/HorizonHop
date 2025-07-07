@@ -171,3 +171,22 @@ export const closePopup = (option) => {
     }
   })
 }
+
+/**
+ * @function 主动打开侧边栏
+ * @param option {chrome}
+ */
+export const openSidePanel = (option) => {
+  const { chrome } = option
+  if (chrome?.sidePanel?.open && chrome?.tabs?.query) {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0] && tabs[0].id !== undefined) {
+        chrome.sidePanel.open({ tabId: tabs[0].id })
+      } else {
+        console.warn("无法获取当前标签页ID")
+      }
+    })
+  } else {
+    console.warn("当前浏览器不支持 sidePanel API")
+  }
+}

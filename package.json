@@ -1,7 +1,7 @@
 {
   "name": "horizon-hop",
   "displayName": "Horizon hop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Develop more efficient and aesthetically pleasing browser plugins",
   "author": "LinHanPro",
   "scripts": {
@@ -66,7 +66,8 @@
       "storage",
       "contextMenus",
       "notifications",
-      "bookmarks"
+      "bookmarks",
+      "sidePanel"
     ],
     "commands": {
       "openPopup": {
@@ -92,6 +93,14 @@
           "windows": "Alt+B"
         },
         "description": "打开书签搜索"
+      },
+      "openSidePanel": {
+        "suggested_key": {
+          "default": "Alt+S",
+          "mac": "Alt+S",
+          "windows": "Alt+S"
+        },
+        "description": "打开侧边栏"
       }
     }
   }

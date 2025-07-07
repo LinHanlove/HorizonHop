@@ -1,5 +1,17 @@
-import { menuList, MODEL_TYPE, SEND_FROM } from "~constants"
-import { closePopup, lightIcon, onListenerMessage, sendMessage } from "~utils"
+import {
+  menuList,
+  MESSAGE_TYPE,
+  MODEL_TYPE,
+  SEND_FROM,
+  SHORTCUT_TYPE
+} from "~constants"
+import {
+  closePopup,
+  lightIcon,
+  onListenerMessage,
+  openSidePanel,
+  sendMessage
+} from "~utils"
 
 let isPopupOpen = true
 
@@ -8,7 +20,7 @@ let isPopupOpen = true
  */
 chrome.commands.onCommand.addListener((command) => {
   // 打开popup
-  if (command === "openPopup") {
+  if (command === SHORTCUT_TYPE.openPopup) {
     // 获取当前popup状态
     chrome.action.getPopup({}, (popupPath) => {
       if (!isPopupOpen) {
@@ -23,7 +35,7 @@ chrome.commands.onCommand.addListener((command) => {
     })
   }
   // 打开功能面板
-  if (command === "openFunctionArea")
+  if (command === SHORTCUT_TYPE.openFunctionArea)
     sendMessage({
       type: MODEL_TYPE.functionArea,
       origin: SEND_FROM.background,
@@ -31,12 +43,17 @@ chrome.commands.onCommand.addListener((command) => {
     })
 
   // 打开书签搜索面板
-  if (command === "openBookmarkSearch")
+  if (command === SHORTCUT_TYPE.openBookmarkSearch)
     sendMessage({
       type: MODEL_TYPE.bookmarkSearch,
       origin: SEND_FROM.background,
       chrome
     })
+
+  // 打开/关闭侧边栏
+  if (command === SHORTCUT_TYPE.openSidePanel) {
+    openSidePanel({ chrome })
+  }
 })
 
 /**
@@ -61,14 +78,22 @@ const onMessage = (
         chrome
       })
     }
-    // 新增：处理获取书签请求
-    if (type === "getBookmarks") {
+    // 获取书签
+    if (type === MESSAGE_TYPE.getBookmarks) {
       chrome.bookmarks.getTree(async (nodes) => {
         const updated = await updateBookmark(nodes[0])
         sendResponse({ bookmarks: updated })
       })
       return true
     }
+  }
+  // 从popup发送的消息
+  if (origin === SEND_FROM.popup) {
+    // 打开侧边栏
+    if (message.type === MODEL_TYPE.sidePanel)
+      openSidePanel({
+        chrome
+      })
   }
 }
 onListenerMessage(onMessage)
@@ -77,13 +102,15 @@ onListenerMessage(onMessage)
  * @function 创建右键菜单
  */
 chrome.contextMenus.removeAll(() => {
-  menuList.forEach((item) => {
-    chrome.contextMenus.create({
-      id: item.id,
-      title: item.title,
-      contexts: ["all"]
+  menuList
+    .filter((i) => i.hasContextMenus)
+    .forEach((item) => {
+      chrome.contextMenus.create({
+        id: item.id,
+        title: item.title,
+        contexts: ["all"]
+      })
     })
-  })
 })
 
 /**
@@ -91,7 +118,10 @@ chrome.contextMenus.removeAll(() => {
  */
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   const active = menuList.find((item) => item.id === info.menuItemId)
-  if (active) active.event()
+  if (active)
+    active.event({
+      isBack: true
+    })
 })
 
 /**

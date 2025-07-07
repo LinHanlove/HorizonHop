@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 import { toast } from "~components/base/Sonner"
-import { defaultShortcuts } from "~constants"
+import { defaultShortcuts, LOCAL_KEY } from "~constants"
 import { closePopup, copyText, getLocal, notify, setLocal } from "~utils"
 
 export const useSetting = () => {
@@ -82,7 +82,7 @@ export const useSetting = () => {
    */
   const exportData = () => {
     getLocal({
-      key: "shortcutsSearch",
+      key: LOCAL_KEY.shortcutsSearch,
       chrome: chrome
     }).then((data) => {
       console.log("要导出的数据", data)
@@ -98,7 +98,7 @@ export const useSetting = () => {
    */
   const loadShortcutsToDelete = () => {
     getLocal({
-      key: "shortcutsSearch",
+      key: LOCAL_KEY.shortcutsSearch,
       chrome: chrome
     })
       .then((data) => {
@@ -126,7 +126,7 @@ export const useSetting = () => {
 
     // 更新本地存储
     setLocal({
-      key: "shortcutsSearch",
+      key: LOCAL_KEY.shortcutsSearch,
       value: JSON.stringify(updatedShortcuts),
       chrome: chrome
     })
@@ -146,7 +146,7 @@ export const useSetting = () => {
    */
   const importData = () => {
     setLocal({
-      key: "shortcutsSearch",
+      key: LOCAL_KEY.shortcutsSearch,
       value: JSON.stringify([...defaultShortcuts, ...shortcuts]),
       chrome
     }).then(() => {

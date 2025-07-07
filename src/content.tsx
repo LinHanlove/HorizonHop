@@ -6,6 +6,7 @@ import BookmarkSearch from "~components/base/BookmarkSearch"
 import DeleteShortcut from "~components/base/DeleteShortcut"
 import FunctionArea from "~components/base/FunctionArea"
 import NewAddShortcut from "~components/base/NewAddShortcut"
+import SalaryCalculation from "~components/base/SalaryCalculation"
 import Setting from "~components/base/Setting"
 import { SonnerProvider } from "~components/base/Sonner"
 import { MODEL_TYPE, SEND_FROM } from "~constants"
@@ -22,7 +23,6 @@ export const getStyle = (): HTMLStyleElement => {
   const remRegex = /([\d.]+)rem/g
   updatedCssText = updatedCssText.replace(remRegex, (match, remValue) => {
     const pixelsValue = parseFloat(remValue) * baseFontSize
-
     return `${pixelsValue}px`
   })
 
@@ -64,7 +64,8 @@ export default function IndexContent() {
         MODEL_TYPE.setting,
         MODEL_TYPE.deleteShortcut,
         MODEL_TYPE.functionArea,
-        MODEL_TYPE.bookmarkSearch
+        MODEL_TYPE.bookmarkSearch,
+        MODEL_TYPE.salaryCalculation
       ].includes(message.type)
 
       // 来自popup
@@ -93,6 +94,15 @@ export default function IndexContent() {
           document.body.click()
           window.focus()
           document.body.focus()
+        }
+      }
+
+      // 来自侧边栏
+      if (message.origin === SEND_FROM.sidebar) {
+        // 打开弹窗
+        if (!!message.type && isOpenModel) {
+          setDialogName(message.type)
+          setIsDialogOpen(true)
         }
       }
     }
@@ -153,6 +163,15 @@ export default function IndexContent() {
         <BookmarkSearch open={isDialogOpen} setOpen={closeDialog} />
       )}
       {/* E 书签搜索 */}
+
+      {/* S 工资计算器 */}
+      {dialogName === MODEL_TYPE.salaryCalculation && (
+        <SalaryCalculation
+          open={isDialogOpen}
+          setOpen={(flag) => closeDialog(flag)}
+        />
+      )}
+      {/* E 工资计算器 */}
     </SonnerProvider>
   )
 }

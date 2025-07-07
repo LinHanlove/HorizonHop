@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 
 import { toast } from "~components/base/Sonner"
+import { LOCAL_KEY } from "~constants"
 import { getLocal, setLocal } from "~utils"
 import { getUUID } from "~utils/public"
 
@@ -26,14 +27,14 @@ export const useNewAddShortcut = (option: TYPE.InitConfig) => {
   useEffect(() => {
     // 在组件挂载后异步获取数据
     getLocal({
-      key: "shortcutsSearch",
+      key: LOCAL_KEY.shortcutsSearch,
       chrome: chrome
     }).then((data) => {
       setShortcutsSearchLocal(data || [])
     })
 
     getLocal({
-      key: "activeCategory",
+      key: LOCAL_KEY.activeCategory,
       chrome
     }).then((data) => {
       setNewShortcut({
@@ -72,7 +73,7 @@ export const useNewAddShortcut = (option: TYPE.InitConfig) => {
     }
     // 储存到本地
     setLocal({
-      key: "shortcutsSearch",
+      key: LOCAL_KEY.shortcutsSearch,
       value: JSON.stringify([...shortcutsSearchLocal, shortcut]),
       chrome
     })

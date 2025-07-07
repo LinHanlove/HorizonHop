@@ -16,7 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Icon } from "@iconify/react"
 import React, { useEffect, useRef, useState } from "react"
 
-import { SEND_FROM } from "~constants"
+import { MESSAGE_TYPE, SEND_FROM } from "~constants"
 import { sendMessageRuntime } from "~utils"
 
 /**
@@ -97,7 +97,7 @@ export default function BookmarkSearch({ open, setOpen }) {
     if (open) {
       setLoading(true)
       sendMessageRuntime({
-        type: "getBookmarks",
+        type: MESSAGE_TYPE.getBookmarks,
         origin: SEND_FROM.content,
         chrome
       })

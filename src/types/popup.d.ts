@@ -33,5 +33,6 @@ declare namespace TYPE {
     description: string
     category: string
     event: (chrome?: any) => void
+    hasContextMenus?: boolean
   }
 }

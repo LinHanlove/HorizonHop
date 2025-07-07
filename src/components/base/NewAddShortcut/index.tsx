@@ -11,7 +11,7 @@ import React from "react"
 
 import { Input } from "~components/ui/input"
 import { presetIcons, SHORTCUT_TYPE_MAP } from "~constants"
-import { useNewAddShortcut, useSearch } from "~hooks"
+import { useNewAddShortcut } from "~hooks"
 import { cn } from "~utils/shadcn"
 
 export default function NewAddShortcut({ ...props }) {

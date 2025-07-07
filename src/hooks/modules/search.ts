@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { SEND_FROM } from "~constants"
+import { LOCAL_KEY, SEND_FROM } from "~constants"
 import { getLocal, sendMessage, setLocal } from "~utils"
 
 interface Option {
@@ -35,7 +35,7 @@ export const useSearch = (option?: Option) => {
   // 初始化时从本地存储加载数据
   useEffect(() => {
     getLocal({
-      key: "searchTarget",
+      key: LOCAL_KEY.searchTarget,
       chrome
     }).then((data) => {
       setSearchTarget(data || null)
@@ -43,7 +43,7 @@ export const useSearch = (option?: Option) => {
     })
 
     getLocal({
-      key: "activeCategory",
+      key: LOCAL_KEY.activeCategory,
       chrome
     }).then((data) => {
       setActiveCategory(data || null)
@@ -67,12 +67,12 @@ export const useSearch = (option?: Option) => {
   // 监听搜索值变化
   useEffect(() => {
     setLocal({
-      key: "searchTarget",
+      key: LOCAL_KEY.searchTarget,
       value: JSON.stringify(searchTarget),
       chrome
     })
     setLocal({
-      key: "activeCategory",
+      key: LOCAL_KEY.activeCategory,
       value: JSON.stringify(activeCategory),
       chrome
     })

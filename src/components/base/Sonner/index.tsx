@@ -1,19 +1,8 @@
 // 导入 Lucide 图标
 import { CheckCircle, Info, XCircle } from "lucide-react"
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState
-} from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 
 import { cn } from "~utils/shadcn"
-
-// 可以根据需要导入图标组件或 SVG
-// 假设你有一个 Icons 组件或 SVG 集合，例如：
-// import { CheckCircleIcon, XCircleIcon, InfoCircleIcon } from '~components/icons'; // 示例导入
 
 // 定义通知的数据结构
 interface Toast {
@@ -25,19 +14,6 @@ interface Toast {
   // 用于动画状态的管理
   state?: "entering" | "idle" | "leaving"
 }
-
-// 定义 Context 的类型 (如果采用 Context 方式，现在改为全局函数方式)
-// interface ToastContextType { /* ... */ }
-
-// 创建 Context (如果采用 Context 方式)
-// const ToastContext = createContext<ToastContextType | undefined>(undefined);
-
-// Custom hook to use the context (如果采用 Context 方式)
-// export const useToast = () => { /* ... */ };
-
-// 主 Sonner 组件 (现在推荐使用 SonnerProvider)
-// interface SonnerProps { children?: React.ReactNode; }
-// export function Sonner({ children }: SonnerProps) { /* ... */ }
 
 // 全局变量，用于存储 addToast 函数的引用
 let globalAddToast: ((toast: Toast) => void) | null = null
@@ -243,67 +219,3 @@ export function Sonner(props: SonnerProps) {
 }
 
 export default Sonner
-
-// 添加一些中文注释
-
-// 定义通知的数据结构
-// id: 通知唯一标识
-// message: 通知内容 (现在主要用作描述)
-// title: 通知标题 (可选)
-// type: 通知类型 (default, success, error, info)
-// duration: 通知显示时长 (毫秒)
-// state: 动画状态 (entering, idle, leaving)
-
-// useToast 钩子（如果采用 Context 方式，现在改为全局函数方式）
-// export const useToast = () => { /* ... */ };
-
-// 主 Sonner 组件 (现在推荐使用 SonnerProvider)
-// SonnerProvider 组件负责管理通知状态和渲染通知容器
-
-// 全局 toast 函数，用于在应用任何地方触发通知
-// message: 通知内容 (现在主要用作描述)
-// options: 可选参数，如 type, duration, title
-// 注意：此函数只有在 SonnerProvider 被渲染后才能正常工作。
-
-// 全局变量，用于存储 addToast 函数的引用
-// let globalAddToast: ((toast: Omit<Toast, 'id'>) => string) | null = null;
-
-// 自动移除通知的 useEffect 逻辑：
-// 当 toasts 数组变化时触发。
-// 如果有通知，则设置一个定时器，在第一个通知的 duration 后移除它。
-// 清理函数用于在组件卸载或依赖变化时清除定时器。
-
-// 通知容器的样式：
-// lh-fixed, lh-top-4, lh-right-4: 固定在右上角
-// lh-z-[60]: 设置 z-index 确保在其他元素之上
-// lh-flex, lh-flex-col, lh-gap-2: 垂直排列，间距为 2
-
-// 单个通知的样式：
-// lh-relative: 用于定位内部元素的 absolute
-// lh-p-4: 内边距
-// lh-rounded-md: 圆角
-// lh-shadow-lg: 阴影
-// lh-border: 边框
-// lh-bg-card: 背景颜色 (通常为白色或浅色)
-// lh-text-card-foreground: 主要文本颜色 (通常为深色)
-// lh-flex lh-items-center lh-justify-between lh-space-x-4: 布局排版，调整 space-x
-// 根据 type 应用不同的边框颜色
-// 内部结构包含标题和描述的 div，以及关闭按钮
-// 标题使用 lh-font-medium 和 lh-text-card-foreground
-// 描述使用 lh-text-muted-foreground (次要文本颜色)
-// 关闭按钮样式调整，例如 lh-p-1 lh-rounded-sm, 并在 hover 时显示 (opacity-0 group-hover:lh-opacity-100)
-// 动画类：根据 state 应用 lh-animate-in/out 和滑入/滑出类
-// onAnimationEnd 事件用于精确控制状态转换和移除
-
-// SonnerProvider 组件：
-// 使用 useState 管理 toasts 数组
-// addToast 函数：添加新通知到数组，生成唯一 id
-// removeToast 函数：从数组中移除指定 id 的通知
-// useEffect 注册和注销 globalAddToast
-// useEffect 实现自动移除通知
-// 渲染 children 和通知容器
-// position 参数：可选，控制通知显示位置 ("top-right", "top-left", "bottom-right", "bottom-left")，默认为 "top-right"
-
-// Sonner 组件（兼容性或简单入口）：
-// 仅渲染 SonnerProvider
-// 提示推荐使用 SonnerProvider

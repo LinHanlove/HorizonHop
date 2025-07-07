@@ -3,11 +3,18 @@ import {
   DiamondMinus,
   FileText,
   Github,
+  Menu,
+  PanelRightOpen,
   Search,
   Trash2
 } from "lucide-react"
 
-import { createTab, openGitHubDev, sendMessage } from "~utils"
+import {
+  createTab,
+  openGitHubDev,
+  sendMessage,
+  sendMessageRuntime
+} from "~utils"
 import { getUUID } from "~utils/public"
 
 import packageJson from "../../../package.json"
@@ -337,7 +344,8 @@ export const menuList: TYPE.FunctionMenu[] = [
         origin: SEND_FROM.popup,
         chrome
       })
-    }
+    },
+    hasContextMenus: true
   },
   {
     id: getUUID(),
@@ -346,13 +354,12 @@ export const menuList: TYPE.FunctionMenu[] = [
     description: "JSON格式化",
     category: SHORTCUT_TYPE.dev,
     event: () => {
-      console.log("JSON格式化", chrome)
-
       createTab({
         chrome,
         url: "JsonFormatter"
       })
-    }
+    },
+    hasContextMenus: true
   },
   {
     id: getUUID(),
@@ -365,7 +372,23 @@ export const menuList: TYPE.FunctionMenu[] = [
         chrome,
         url: "CompressHero"
       })
-    }
+    },
+    hasContextMenus: true
+  },
+  {
+    id: getUUID(),
+    title: "SidePanel",
+    icon: PanelRightOpen,
+    description: "打开侧边栏",
+    category: SHORTCUT_TYPE.other,
+    event: () => {
+      sendMessageRuntime({
+        type: MODEL_TYPE.sidePanel,
+        origin: SEND_FROM.popup,
+        chrome
+      })
+    },
+    hasContextMenus: false
   },
   {
     id: getUUID(),
@@ -373,7 +396,8 @@ export const menuList: TYPE.FunctionMenu[] = [
     icon: Github,
     description: "github源码查看",
     category: SHORTCUT_TYPE.dev,
-    event: () => openGitHubDev()
+    event: () => openGitHubDev(),
+    hasContextMenus: true
   },
   {
     id: getUUID(),
@@ -386,7 +410,8 @@ export const menuList: TYPE.FunctionMenu[] = [
         chrome,
         url: "TableMarkdown"
       })
-    }
+    },
+    hasContextMenus: true
   },
   {
     id: getUUID(),
@@ -400,6 +425,7 @@ export const menuList: TYPE.FunctionMenu[] = [
         origin: SEND_FROM.popup,
         chrome
       })
-    }
+    },
+    hasContextMenus: true
   }
 ]
