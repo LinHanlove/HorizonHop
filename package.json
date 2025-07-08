@@ -1,7 +1,7 @@
 {
   "name": "horizon-hop",
   "displayName": "Horizon hop",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Develop more efficient and aesthetically pleasing browser plugins",
   "author": "LinHanPro",
   "scripts": {
@@ -26,6 +26,7 @@
     "babel-plugin-transform-remove-console": "^6.9.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
     "framer-motion": "^12.12.2",
     "jszip": "^3.10.1",
     "lodash-es": "^4.17.21",

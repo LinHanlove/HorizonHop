@@ -24,7 +24,7 @@ export default function SalaryCalculation({
   open: boolean
   setOpen: (v: boolean) => void
 }) {
-  const { config, setConfig, saveConfig, loading } = useSalaryConfig(open)
+  const { config, setConfig, saveConfig } = useSalaryConfig(open)
 
   const handleChange = (key: string, value: any) => {
     setConfig((prev: any) => ({ ...prev, [key]: value }))
@@ -60,7 +60,7 @@ export default function SalaryCalculation({
                 <TimePickerInput
                   value={config.workStart}
                   onChange={(e) => handleChange("workStart", e.target.value)}
-                  className="lh-w-[130px] lh-rounded-xl"
+                  className="!lh-w-[120px] lh-rounded-xl"
                 />
               </div>
               <div className="lh-flex lh-items-center lh-justify-between">
@@ -70,7 +70,7 @@ export default function SalaryCalculation({
                 <TimePickerInput
                   value={config.workEnd}
                   onChange={(e) => handleChange("workEnd", e.target.value)}
-                  className="lh-w-[130px] lh-rounded-xl"
+                  className="!lh-w-[120px] lh-rounded-xl"
                 />
               </div>
               <div className="lh-flex lh-items-center lh-justify-between">
@@ -78,12 +78,11 @@ export default function SalaryCalculation({
                   月薪（元）
                 </span>
                 <Input
-                  type="number"
                   value={config.monthSalary}
                   onChange={(e) =>
                     handleChange("monthSalary", Number(e.target.value))
                   }
-                  className="lh-w-[130px] lh-rounded-xl"
+                  className="!lh-w-[120px] lh-rounded-xl"
                 />
               </div>
             </div>
@@ -125,14 +124,14 @@ export default function SalaryCalculation({
                   加班时长（小时/天）
                 </span>
                 <Input
-                  type="number"
-                  min={0}
                   max={12}
                   value={config.overtimeHours}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    if (Number(e.target.value) < 0)
+                      handleChange("overtimeHours", 0)
                     handleChange("overtimeHours", Number(e.target.value))
-                  }
-                  className="lh-w-[130px] lh-rounded-xl"
+                  }}
+                  className="!lh-w-[120px] lh-rounded-xl"
                 />
               </div>
             )}

@@ -47,7 +47,7 @@ const TimePickerInput = React.forwardRef<
       onChange={onChange}
       onBlur={handleBlur}
       step={step}
-      className={`lh-w-20 lh-text-center lh-px-2 lh-py-1 lh-rounded-md lh-text-base ${props.className ?? ""}`}
+      className={`lh-w-[120px] lh-text-center lh-px-2 lh-py-1 lh-rounded-md lh-text-base ${props.className ?? ""}`}
       {...props}
     />
   )

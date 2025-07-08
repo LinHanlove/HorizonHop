@@ -210,7 +210,9 @@ export default function Content() {
             <div className="lh-flex lh-items-center lh-justify-center lh-h-full lh-underline">
               <p
                 className=" lh-font-bold lh-text-sm lh-cursor-pointer "
-                onClick={() => importData()}>
+                onClick={() => {
+                  importData(setActiveCategory(null))
+                }}>
                 一键导入预设
               </p>
               <Icon

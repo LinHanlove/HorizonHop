@@ -144,7 +144,7 @@ export const useSetting = () => {
   /**
    * @function 一件导入预设
    */
-  const importData = () => {
+  const importData = (cb) => {
     setLocal({
       key: LOCAL_KEY.shortcutsSearch,
       value: JSON.stringify([...defaultShortcuts, ...shortcuts]),
@@ -158,6 +158,7 @@ export const useSetting = () => {
         closePopup({
           chrome
         })
+        cb && cb()
       }, 500)
     })
   }
