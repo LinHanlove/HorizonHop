@@ -66,7 +66,6 @@ export default function JsonFormatter() {
     reader.readAsText(file)
   }
 
-  // 使用 useJsonViewConfig 统一管理 json-view 配置
   const {
     theme: useJsonViewTheme,
     iconStyle: useJsonViewIconStyle,
@@ -80,7 +79,8 @@ export default function JsonFormatter() {
     sortKeys: useJsonViewSortKeys,
     quotesOnKeys: useJsonViewQuotesOnKeys,
     configList: useJsonViewConfigList,
-    outputActions: useJsonViewOutputActions
+    outputActions: useJsonViewOutputActions,
+    objectToJsLiteral: useJsonViewObjectToJsLiteral
   } = useJsonViewConfig({
     data: data || "{}",
     setData,
@@ -229,7 +229,7 @@ export default function JsonFormatter() {
                       }
                       displayDataTypes={useJsonViewDisplayDataTypes}
                       displayObjectSize={useJsonViewDisplayObjectSize}
-                      enableClipboard={useJsonViewEnableClipboard}
+                      enableClipboard={false}
                       onEdit={useJsonViewEnableEdit ? () => {} : false}
                       onAdd={useJsonViewEnableEdit ? () => {} : false}
                       onDelete={useJsonViewEnableEdit ? () => {} : false}

@@ -6,6 +6,12 @@ import { getLocal, sendMessage, setLocal } from "~utils"
 interface Option {
   shortcuts?: TYPE.Shortcuts[]
 }
+/**
+ * 搜索相关的自定义hook，管理搜索状态和快捷方式。
+ * @param {object} [option] - 可选参数
+ * @param {TYPE.Shortcuts[]} [option.shortcuts] - 快捷方式列表
+ * @returns {object} 搜索相关状态和操作
+ */
 export const useSearch = (option?: Option) => {
   const { shortcuts } = option
   // 搜索值

@@ -5,6 +5,11 @@ import { LOCAL_KEY } from "~constants"
 import { getLocal, setLocal } from "~utils"
 import { getUUID } from "~utils/public"
 
+/**
+ * 新增快捷方式的自定义hook。
+ * @param {TYPE.InitConfig} option - 初始化配置
+ * @returns {object} 新增快捷方式相关状态和操作
+ */
 export const useNewAddShortcut = (option: TYPE.InitConfig) => {
   const { chrome } = option
   // 新增的快捷方式

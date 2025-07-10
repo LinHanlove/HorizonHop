@@ -44,9 +44,73 @@ export type UseJsonViewConfigReturn = {
   quotesOnKeys: boolean
   configList: ConfigItem[]
   outputActions: OutputAction[]
+  objectToJsLiteral: (obj: any, indent?: number, level?: number) => string // 新增类型声明
 }
 
-export function useJsonViewConfig({
+/**
+ * @typedef {Object} UseJsonViewConfigParams
+ * @property {string} data - 输入的 JSON 字符串
+ * @property {(v: string) => void} setData - 设置 JSON 字符串的方法
+ * @property {React.RefObject<HTMLInputElement>} fileInputRef - 文件 input 的 ref
+ */
+
+/**
+ * @function objectToJsLiteral
+ * @description 将 JS 对象转为 JS 字面量字符串（key 不加引号）。
+ * @param {any} obj - 需要转换的对象
+ * @param {number} indent - 缩进宽度
+ * @param {number} level - 当前递归层级
+ * @returns {string}
+ */
+const objectToJsLiteral = (obj: any, indent = 2, level = 0): string => {
+  const pad = (n: number) => " ".repeat(n)
+  if (Array.isArray(obj)) {
+    if (obj.length === 0) return "[]"
+    return (
+      "[\n" +
+      obj
+        .map(
+          (item) =>
+            pad((level + 1) * indent) +
+            objectToJsLiteral(item, indent, level + 1)
+        )
+        .join(",\n") +
+      "\n" +
+      pad(level * indent) +
+      "]"
+    )
+  } else if (typeof obj === "object" && obj !== null) {
+    const keys = Object.keys(obj)
+    if (keys.length === 0) return "{}"
+    return (
+      "{\n" +
+      keys
+        .map(
+          (k) =>
+            pad((level + 1) * indent) +
+            k +
+            ": " +
+            objectToJsLiteral(obj[k], indent, level + 1)
+        )
+        .join(",\n") +
+      "\n" +
+      pad(level * indent) +
+      "}"
+    )
+  } else {
+    return JSON.stringify(obj)
+  }
+}
+
+/**
+ * 统一管理 json-view 配置和操作。
+ * @param {Object} params - 配置参数
+ * @param {string} params.data - 输入的 JSON 字符串
+ * @param {(v: string) => void} params.setData - 设置 JSON 字符串的方法
+ * @param {React.RefObject<HTMLInputElement>} params.fileInputRef - 文件 input 的 ref
+ * @returns {UseJsonViewConfigReturn}
+ */
+export const useJsonViewConfig = ({
   data,
   setData,
   fileInputRef
@@ -54,7 +118,7 @@ export function useJsonViewConfig({
   data: string
   setData: (v: string) => void
   fileInputRef: React.RefObject<HTMLInputElement>
-}): UseJsonViewConfigReturn {
+}): UseJsonViewConfigReturn => {
   // 主题、icon风格、缩进、折叠等配置
   const themeOptions = [
     "rjv-default",
@@ -188,22 +252,39 @@ export function useJsonViewConfig({
     }
   ]
 
-  // Output区操作栏
+  /**
+   * @function handleFormat
+   * @description 一键格式化 JSON
+   */
   const handleFormat = () => {
     try {
       setData(JSON.stringify(JSON.parse(data), null, 2))
     } catch {}
   }
+  /**
+   * @function handleCompress
+   * @description 一键压缩 JSON
+   */
   const handleCompress = () => {
     try {
       setData(JSON.stringify(JSON.parse(data)))
     } catch {}
   }
+  /**
+   * @function handleCopyAll
+   * @description 复制全部内容，按 quotesOnKeys 决定 key 是否加引号
+   * @param {boolean} minify - 是否压缩
+   */
   const handleCopyAll = (minify = false) => {
     try {
-      const text = minify
-        ? JSON.stringify(JSON.parse(data))
-        : JSON.stringify(JSON.parse(data), null, 2)
+      const obj = JSON.parse(data)
+      let text = ""
+      if (quotesOnKeys) {
+        text = minify ? JSON.stringify(obj) : JSON.stringify(obj, null, 2)
+      } else {
+        text = objectToJsLiteral(obj, indentWidth)
+        if (minify) text = text.replace(/\s+/g, "")
+      }
       copyText(text).then(() => {
         toast("复制成功", { type: "success" })
       })
@@ -211,6 +292,10 @@ export function useJsonViewConfig({
       toast("复制失败，JSON格式有误", { type: "error" })
     }
   }
+  /**
+   * @function handleExport
+   * @description 导出 JSON 文件（始终标准 JSON）
+   */
   const handleExport = () => {
     try {
       const blob = new Blob([JSON.stringify(JSON.parse(data), null, 2)], {
@@ -248,6 +333,7 @@ export function useJsonViewConfig({
     sortKeys,
     quotesOnKeys,
     configList,
-    outputActions
+    outputActions,
+    objectToJsLiteral
   }
 }

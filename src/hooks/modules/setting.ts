@@ -4,6 +4,10 @@ import { toast } from "~components/base/Sonner"
 import { defaultShortcuts, LOCAL_KEY } from "~constants"
 import { closePopup, copyText, getLocal, notify, setLocal } from "~utils"
 
+/**
+ * 设置相关的自定义hook，管理主题、动画、快捷方式等设置项。
+ * @returns {object} 设置项及操作方法
+ */
 export const useSetting = () => {
   // 是否启用明亮模式
   const [isLightModeEnabled, setIsLightModeEnabled] = useState(true)

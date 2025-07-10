@@ -20,10 +20,10 @@ export const defaultSalaryConfig: TYPE.SalaryConfig = {
 
 /**
  * 工资配置读取/保存 hook
- * @param open 是否自动读取配置
- * @returns { config, setConfig, saveConfig, loading }
+ * @param {boolean} [open] 是否自动读取配置
+ * @returns {{ config: TYPE.SalaryConfig, setConfig: Function, saveConfig: Function, loading: boolean }}
  */
-export function useSalaryConfig(open?: boolean) {
+export const useSalaryConfig = (open?: boolean) => {
   const [config, setConfig] = useState<TYPE.SalaryConfig>(defaultSalaryConfig)
   const [loading, setLoading] = useState(false)
 
@@ -59,9 +59,9 @@ export function useSalaryConfig(open?: boolean) {
 
 /**
  * 工资计算核心hook，统一输出所有工资相关数据
- * @returns 工资相关数据和操作
+ * @returns {object} 工资相关数据和操作
  */
-export function useSalaryCalculation() {
+export const useSalaryCalculation = () => {
   const {
     config: salaryConfig,
     setConfig,
@@ -252,10 +252,12 @@ export function useSalaryCalculation() {
 
 /**
  * 计算本月所有工作日（返回日期字符串数组）
- * @param restType 休息类型
- * @returns 工作日日期字符串数组
+ * @param {TYPE.SalaryConfig["restType"]} restType 休息类型
+ * @returns {string[]} 工作日日期字符串数组
  */
-function getWorkDaysOfMonth(restType: TYPE.SalaryConfig["restType"]): string[] {
+const getWorkDaysOfMonth = (
+  restType: TYPE.SalaryConfig["restType"]
+): string[] => {
   const now = dayjs()
   const year = now.year()
   const month = now.month() // 0-based
@@ -285,16 +287,16 @@ function getWorkDaysOfMonth(restType: TYPE.SalaryConfig["restType"]): string[] {
 
 /**
  * 计算本月所有工作日（返回日期字符串数组）
- * @param restType 休息类型
- * @param start 工资月开始日期
- * @param end 工资月结束日期
- * @returns 工作日日期字符串数组
+ * @param {TYPE.SalaryConfig["restType"]} restType 休息类型
+ * @param {dayjs.Dayjs} start 工资月开始日期
+ * @param {dayjs.Dayjs} end 工资月结束日期
+ * @returns {string[]} 工作日日期字符串数组
  */
-function getWorkDaysOfMonthInRange(
+const getWorkDaysOfMonthInRange = (
   restType: TYPE.SalaryConfig["restType"],
   start: dayjs.Dayjs,
   end: dayjs.Dayjs
-): string[] {
+): string[] => {
   const workDays: string[] = []
   let currentDate = start
   while (currentDate.isBefore(end) || currentDate.isSame(end, "day")) {
@@ -321,18 +323,18 @@ function getWorkDaysOfMonthInRange(
 
 /**
  * 计算今日已上班秒数
- * @param workStart 上班时间
- * @param workEnd 下班时间
- * @param overtime 是否加班
- * @param overtimeHours 加班时长
- * @returns 已上班秒数
+ * @param {string} workStart 上班时间
+ * @param {string} workEnd 下班时间
+ * @param {boolean} overtime 是否加班
+ * @param {number} overtimeHours 加班时长
+ * @returns {number} 已上班秒数
  */
-function getTodayWorkedSeconds(
+const getTodayWorkedSeconds = (
   workStart: string,
   workEnd: string,
   overtime: boolean,
   overtimeHours: number
-) {
+) => {
   const now = dayjs()
   const today = now.format("YYYY-MM-DD")
   const start = dayjs(`${today} ${workStart}`)
@@ -345,18 +347,18 @@ function getTodayWorkedSeconds(
 
 /**
  * 计算总上班秒数
- * @param workStart 上班时间
- * @param workEnd 下班时间
- * @param overtime 是否加班
- * @param overtimeHours 加班时长
- * @returns 总上班秒数
+ * @param {string} workStart 上班时间
+ * @param {string} workEnd 下班时间
+ * @param {boolean} overtime 是否加班
+ * @param {number} overtimeHours 加班时长
+ * @returns {number} 总上班秒数
  */
-function getTotalWorkSeconds(
+const getTotalWorkSeconds = (
   workStart: string,
   workEnd: string,
   overtime: boolean,
   overtimeHours: number
-) {
+) => {
   const baseDay = "2000-01-01"
   const start = dayjs(`${baseDay} ${workStart}`)
   let end = dayjs(`${baseDay} ${workEnd}`)
@@ -366,10 +368,10 @@ function getTotalWorkSeconds(
 
 /**
  * 计算当前工资月的起止日期
- * @param payday 发薪日（1-31）
- * @returns { start: dayjs.Dayjs, end: dayjs.Dayjs }
+ * @param {number} payday 发薪日（1-31）
+ * @returns {{ start: dayjs.Dayjs, end: dayjs.Dayjs }}
  */
-function getSalaryMonthRange(payday: number) {
+const getSalaryMonthRange = (payday: number) => {
   const now = dayjs()
   const daysInThisMonth = now.daysInMonth()
   // 本月实际发薪日
