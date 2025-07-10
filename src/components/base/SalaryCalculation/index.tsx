@@ -85,6 +85,21 @@ export default function SalaryCalculation({
                   className="!lh-w-[120px] lh-rounded-xl"
                 />
               </div>
+              <div className="lh-flex lh-items-center lh-justify-between">
+                <span className="lh-text-sm lh-font-medium lh-text-slate-700">
+                  发薪日（1-31，月底为当月最后一天）
+                </span>
+                <Input
+                  type="number"
+                  min={1}
+                  max={31}
+                  value={config.payday}
+                  onChange={(e) =>
+                    handleChange("payday", Number(e.target.value))
+                  }
+                  className="!lh-w-[120px] lh-rounded-xl"
+                />
+              </div>
             </div>
           </div>
           <div>

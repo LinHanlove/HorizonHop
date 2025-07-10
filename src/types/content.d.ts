@@ -15,5 +15,7 @@ declare namespace TYPE {
     restType: "double" | "single" | "alt"
     overtime: boolean
     overtimeHours: number
+    /** 发薪日（1-31，>=当月天数则为月底） */
+    payday: number
   }
 }

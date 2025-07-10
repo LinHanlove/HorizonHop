@@ -14,7 +14,8 @@ export const defaultSalaryConfig: TYPE.SalaryConfig = {
   monthSalary: 8000,
   restType: "double", // double:双休, single:单休, alt:单双休轮
   overtime: false,
-  overtimeHours: 0
+  overtimeHours: 0,
+  payday: 15
 }
 
 /**
@@ -132,7 +133,10 @@ export function useSalaryCalculation() {
 
   useEffect(() => {
     if (!salaryConfig) return
-    const arr = getWorkDaysOfMonth(salaryConfig.restType)
+    // 计算工资月区间
+    const { start, end } = getSalaryMonthRange(salaryConfig.payday)
+    // 获取工资月内所有工作日
+    const arr = getWorkDaysOfMonthInRange(salaryConfig.restType, start, end)
     setWorkDaysArr(arr)
     setTotalWorkDays(arr.length)
     const daySalaryNum =
@@ -155,21 +159,33 @@ export function useSalaryCalculation() {
     const todayProgressVal = total > 0 ? Math.min(worked / total, 1) : 0
     setTodayProgress(todayProgressVal)
     const todayStr = dayjs().format("YYYY-MM-DD")
+    // 工资月内已过去的工作日数（不含今天）
     const daysBefore = arr.filter((d) =>
       dayjs(d).isBefore(dayjs(todayStr))
     ).length
     setDaysBeforeToday(daysBefore)
+    // 今天是否为工资月内的工作日
+    const isTodayWorkDay = arr.includes(todayStr)
+    // 进度：已过工作日+今天进度/总工作日
     const monthProgressVal =
-      arr.length > 0 ? (daysBefore + todayProgressVal) / arr.length : 0
+      arr.length > 0
+        ? (daysBefore + (isTodayWorkDay ? todayProgressVal : 0)) / arr.length
+        : 0
     setMonthProgress(monthProgressVal)
-    setTodaySalary(daySalaryNum * todayProgressVal)
-    setMonthAccum(daySalaryNum * (daysBefore + todayProgressVal))
+    // 累计工资：已过工作日+今天进度
+    setTodaySalary(isTodayWorkDay ? daySalaryNum * todayProgressVal : 0)
+    setMonthAccum(
+      daySalaryNum * (daysBefore + (isTodayWorkDay ? todayProgressVal : 0))
+    )
   }, [salaryConfig])
 
   useEffect(() => {
     const timer = setInterval(() => {
       if (!salaryConfig) return
-      const arr = getWorkDaysOfMonth(salaryConfig.restType)
+      // 计算工资月区间
+      const { start, end } = getSalaryMonthRange(salaryConfig.payday)
+      // 获取工资月内所有工作日
+      const arr = getWorkDaysOfMonthInRange(salaryConfig.restType, start, end)
       setWorkDaysArr(arr)
       setTotalWorkDays(arr.length)
       const daySalaryNum =
@@ -192,15 +208,24 @@ export function useSalaryCalculation() {
       const todayProgressVal = total > 0 ? Math.min(worked / total, 1) : 0
       setTodayProgress(todayProgressVal)
       const todayStr = dayjs().format("YYYY-MM-DD")
+      // 工资月内已过去的工作日数（不含今天）
       const daysBefore = arr.filter((d) =>
         dayjs(d).isBefore(dayjs(todayStr))
       ).length
       setDaysBeforeToday(daysBefore)
+      // 今天是否为工资月内的工作日
+      const isTodayWorkDay = arr.includes(todayStr)
+      // 进度：已过工作日+今天进度/总工作日
       const monthProgressVal =
-        arr.length > 0 ? (daysBefore + todayProgressVal) / arr.length : 0
+        arr.length > 0
+          ? (daysBefore + (isTodayWorkDay ? todayProgressVal : 0)) / arr.length
+          : 0
       setMonthProgress(monthProgressVal)
-      setTodaySalary(daySalaryNum * todayProgressVal)
-      setMonthAccum(daySalaryNum * (daysBefore + todayProgressVal))
+      // 累计工资：已过工作日+今天进度
+      setTodaySalary(isTodayWorkDay ? daySalaryNum * todayProgressVal : 0)
+      setMonthAccum(
+        daySalaryNum * (daysBefore + (isTodayWorkDay ? todayProgressVal : 0))
+      )
     }, 1000)
     return () => clearInterval(timer)
   }, [salaryConfig])
@@ -259,6 +284,42 @@ function getWorkDaysOfMonth(restType: TYPE.SalaryConfig["restType"]): string[] {
 }
 
 /**
+ * 计算本月所有工作日（返回日期字符串数组）
+ * @param restType 休息类型
+ * @param start 工资月开始日期
+ * @param end 工资月结束日期
+ * @returns 工作日日期字符串数组
+ */
+function getWorkDaysOfMonthInRange(
+  restType: TYPE.SalaryConfig["restType"],
+  start: dayjs.Dayjs,
+  end: dayjs.Dayjs
+): string[] {
+  const workDays: string[] = []
+  let currentDate = start
+  while (currentDate.isBefore(end) || currentDate.isSame(end, "day")) {
+    const day = currentDate.day()
+    // 以工资月第一天为week0
+    const weekIndex = Math.floor(currentDate.diff(start, "day") / 7)
+    if (restType === "double") {
+      if (day !== 0 && day !== 6)
+        workDays.push(currentDate.format("YYYY-MM-DD"))
+    } else if (restType === "single") {
+      if (day !== 0) workDays.push(currentDate.format("YYYY-MM-DD"))
+    } else if (restType === "alt") {
+      // 工资月内 weekIndex 计算单双休
+      if (
+        (weekIndex % 2 === 0 && day !== 0 && day !== 6) ||
+        (weekIndex % 2 === 1 && day !== 0)
+      )
+        workDays.push(currentDate.format("YYYY-MM-DD"))
+    }
+    currentDate = currentDate.add(1, "day")
+  }
+  return workDays
+}
+
+/**
  * 计算今日已上班秒数
  * @param workStart 上班时间
  * @param workEnd 下班时间
@@ -301,4 +362,35 @@ function getTotalWorkSeconds(
   let end = dayjs(`${baseDay} ${workEnd}`)
   if (overtime) end = end.add(overtimeHours, "hour")
   return end.diff(start, "second")
+}
+
+/**
+ * 计算当前工资月的起止日期
+ * @param payday 发薪日（1-31）
+ * @returns { start: dayjs.Dayjs, end: dayjs.Dayjs }
+ */
+function getSalaryMonthRange(payday: number) {
+  const now = dayjs()
+  const daysInThisMonth = now.daysInMonth()
+  // 本月实际发薪日
+  const thisMonthPayday = payday >= daysInThisMonth ? daysInThisMonth : payday
+  const paydayThisMonth = now.date(thisMonthPayday)
+  // 判断今天是否在本月发薪日之后
+  if (now.date() > thisMonthPayday) {
+    // 工资月为本月发薪日+1到下月发薪日
+    const start = paydayThisMonth.add(1, "day")
+    const nextMonth = now.add(1, "month")
+    const daysInNextMonth = nextMonth.daysInMonth()
+    const nextMonthPayday = payday >= daysInNextMonth ? daysInNextMonth : payday
+    const end = nextMonth.date(nextMonthPayday)
+    return { start, end }
+  } else {
+    // 工资月为上月发薪日+1到本月发薪日
+    const lastMonth = now.subtract(1, "month")
+    const daysInLastMonth = lastMonth.daysInMonth()
+    const lastMonthPayday = payday >= daysInLastMonth ? daysInLastMonth : payday
+    const start = lastMonth.date(lastMonthPayday).add(1, "day")
+    const end = paydayThisMonth
+    return { start, end }
+  }
 }
