@@ -1,8 +1,8 @@
-import * as React from "react"
 import * as LabelPrimitive from "@radix-ui/react-label"
 import { cva, type VariantProps } from "class-variance-authority"
+import * as React from "react"
 
-import { cn } from "@/utils/shadcn.ts"
+import { cn } from "~utils/shadcn"
 
 const labelVariants = cva(
   "lh-text-sm lh-font-medium lh-leading-none peer-disabled:lh-cursor-not-allowed peer-disabled:lh-opacity-70"

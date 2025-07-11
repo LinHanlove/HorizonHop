@@ -1,7 +1,7 @@
-import * as React from "react"
 import * as SwitchPrimitives from "@radix-ui/react-switch"
+import * as React from "react"
 
-import { cn } from "@/utils/shadcn.ts"
+import { cn } from "~utils/shadcn"
 
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
@@ -13,8 +13,7 @@ const Switch = React.forwardRef<
       className
     )}
     {...props}
-    ref={ref}
-  >
+    ref={ref}>
     <SwitchPrimitives.Thumb
       className={cn(
         "lh-pointer-events-none lh-block lh-h-4 lh-w-4 lh-rounded-full lh-bg-background lh-shadow-lg lh-ring-0 lh-transition-transform data-[state=checked]:lh-translate-x-4 data-[state=unchecked]:lh-translate-x-0"

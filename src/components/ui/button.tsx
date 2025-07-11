@@ -1,7 +1,8 @@
-import { cn } from "@/utils/shadcn.ts"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import * as React from "react"
+
+import { cn } from "~utils/shadcn"
 
 const buttonVariants = cva(
   "lh-inline-flex lh-items-center lh-justify-center lh-gap-2 lh-whitespace-nowrap lh-rounded-md lh-text-sm lh-font-medium lh-transition-colors focus-visible:lh-outline-none focus-visible:lh-ring-1 focus-visible:lh-ring-ring disabled:lh-pointer-events-none disabled:lh-opacity-50 [&_svg]:lh-pointer-events-none [&_svg]:lh-size-4 [&_svg]:lh-shrink-0",

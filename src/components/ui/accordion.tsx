@@ -1,8 +1,8 @@
-import * as React from "react"
 import * as AccordionPrimitive from "@radix-ui/react-accordion"
 import { ChevronDown } from "lucide-react"
+import * as React from "react"
 
-import { cn } from "@/utils/shadcn.ts"
+import { cn } from "~utils/shadcn"
 
 const Accordion = AccordionPrimitive.Root
 
@@ -29,8 +29,7 @@ const AccordionTrigger = React.forwardRef<
         "lh-flex lh-flex-1 lh-items-center lh-justify-between lh-py-4 lh-text-sm lh-font-medium lh-transition-all hover:lh-underline lh-text-left [&[data-state=open]>svg]:lh-rotate-180",
         className
       )}
-      {...props}
-    >
+      {...props}>
       {children}
       <ChevronDown className="lh-h-4 lh-w-4 lh-shrink-0 lh-text-muted-foreground lh-transition-transform lh-duration-200" />
     </AccordionPrimitive.Trigger>
@@ -45,8 +44,7 @@ const AccordionContent = React.forwardRef<
   <AccordionPrimitive.Content
     ref={ref}
     className="lh-overflow-hidden lh-text-sm data-[state=closed]:lh-animate-accordion-up data-[state=open]:lh-animate-accordion-down"
-    {...props}
-  >
+    {...props}>
     <div className={cn("lh-pb-4 lh-pt-0", className)}>{children}</div>
   </AccordionPrimitive.Content>
 ))
